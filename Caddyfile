@@ -1,0 +1,13 @@
+# BarberFlow - Reverse Proxy (HTTPS automático via Let's Encrypt)
+
+babia.oxineo.com.br {
+	# n8n — acessível em /n8n/
+	handle_path /n8n/* {
+		reverse_proxy n8n:5678
+	}
+
+	# BarberFlow app — tudo o resto
+	handle {
+		reverse_proxy barberflow-app:3000
+	}
+}

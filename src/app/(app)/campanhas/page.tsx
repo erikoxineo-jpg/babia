@@ -1,0 +1,357 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import {
+  Megaphone,
+  Plus,
+  Loader2,
+  Send,
+  Users,
+  ChevronRight,
+  X,
+  ExternalLink,
+} from "lucide-react";
+
+interface Campaign {
+  id: string;
+  name: string;
+  type: string;
+  status: string;
+  template: string;
+  sentCount: number;
+  recipientsCount: number;
+  sentAt: string | null;
+  createdAt: string;
+}
+
+interface WhatsAppLink {
+  clientName: string;
+  link: string | null;
+}
+
+const TEMPLATES = [
+  {
+    name: "Sentimos sua falta",
+    type: "reactivation" as const,
+    template:
+      "Olá {{client_name}}! Sentimos sua falta na {{barbershop_name}}. Já faz {{last_visit_days}} dias desde sua última visita. Que tal agendar um horário? Temos novidades esperando por você!",
+  },
+  {
+    name: "Promoção especial",
+    type: "reactivation" as const,
+    template:
+      "Oi {{client_name}}! A {{barbershop_name}} preparou uma promoção especial para você. Agende agora e aproveite condições exclusivas para clientes VIP!",
+  },
+  {
+    name: "Novidade no salão",
+    type: "promotion" as const,
+    template:
+      "{{client_name}}, novidade na {{barbershop_name}}! Temos novos serviços e profissionais. Venha conhecer! Agende pelo nosso site.",
+  },
+  {
+    name: "Convite de retorno",
+    type: "reactivation" as const,
+    template:
+      "Fala {{client_name}}! Aqui é da {{barbershop_name}}. Faz tempo que você não aparece! Bora marcar um horário? Estamos com a agenda aberta.",
+  },
+  {
+    name: "Preencher horários",
+    type: "fill_slots" as const,
+    template:
+      "Oi {{client_name}}! Temos horários disponíveis hoje na {{barbershop_name}}. Aproveite e agende agora! Vai ser um prazer te atender.",
+  },
+];
+
+const STATUS_BADGES: Record<string, { label: string; className: string }> = {
+  draft: { label: "Rascunho", className: "bg-gray-100 text-gray-600" },
+  sending: { label: "Enviando", className: "bg-warning-100 text-warning-700" },
+  sent: { label: "Enviada", className: "bg-success-100 text-success-700" },
+  completed: { label: "Concluída", className: "bg-primary-100 text-primary-700" },
+};
+
+export default function CampanhasPage() {
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showNew, setShowNew] = useState(false);
+  const [sending, setSending] = useState<string | null>(null);
+  const [links, setLinks] = useState<WhatsAppLink[] | null>(null);
+
+  // New campaign form
+  const [newName, setNewName] = useState("");
+  const [newTemplate, setNewTemplate] = useState("");
+  const [newType, setNewType] = useState<"reactivation" | "fill_slots" | "promotion">("reactivation");
+  const [creating, setCreating] = useState(false);
+
+  const fetchCampaigns = useCallback(async () => {
+    try {
+      const res = await fetch("/api/campaigns?status=all");
+      const json = await res.json();
+      if (json.success) setCampaigns(json.data);
+    } catch {
+      // silent
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCampaigns();
+  }, [fetchCampaigns]);
+
+  async function handleCreate() {
+    if (!newName.trim() || !newTemplate.trim()) return;
+    setCreating(true);
+    try {
+      const res = await fetch("/api/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newName, type: newType, template: newTemplate }),
+      });
+      if (res.ok) {
+        setShowNew(false);
+        setNewName("");
+        setNewTemplate("");
+        fetchCampaigns();
+      }
+    } catch {
+      // silent
+    } finally {
+      setCreating(false);
+    }
+  }
+
+  async function handleSend(id: string) {
+    setSending(id);
+    try {
+      const res = await fetch(`/api/campaigns/${id}/send`, { method: "POST" });
+      const json = await res.json();
+      if (json.success) {
+        setLinks(json.data.whatsappLinks ?? []);
+        fetchCampaigns();
+      }
+    } catch {
+      // silent
+    } finally {
+      setSending(null);
+    }
+  }
+
+  function selectTemplate(t: typeof TEMPLATES[number]) {
+    setNewName(t.name);
+    setNewTemplate(t.template);
+    setNewType(t.type);
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold text-gray-800">Campanhas</h1>
+        <button
+          onClick={() => setShowNew(true)}
+          className="flex items-center gap-1.5 px-3 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
+        >
+          <Plus size={16} />
+          Nova campanha
+        </button>
+      </div>
+
+      {/* New campaign drawer */}
+      {showNew && (
+        <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 bg-black/50" onClick={() => setShowNew(false)} />
+          <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl z-50 overflow-y-auto">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-800">Nova campanha</h2>
+                <button onClick={() => setShowNew(false)} className="text-gray-400 hover:text-gray-600">
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Templates */}
+              <p className="text-xs text-gray-500 mb-2">Templates prontos</p>
+              <div className="space-y-1.5 mb-4">
+                {TEMPLATES.map((t) => (
+                  <button
+                    key={t.name}
+                    onClick={() => selectTemplate(t)}
+                    className={`w-full text-left p-2.5 rounded-lg border transition-colors text-sm ${
+                      newName === t.name
+                        ? "border-primary-500 bg-primary-50"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <span className="font-medium text-gray-700">{t.name}</span>
+                    <p className="text-xs text-gray-400 mt-0.5 line-clamp-2">{t.template}</p>
+                  </button>
+                ))}
+              </div>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Nome da campanha</label>
+                  <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Tipo</label>
+                  <div className="flex gap-2">
+                    {([
+                      { v: "reactivation", l: "Reativação" },
+                      { v: "fill_slots", l: "Preencher vagos" },
+                      { v: "promotion", l: "Promoção" },
+                    ] as const).map((opt) => (
+                      <button
+                        key={opt.v}
+                        onClick={() => setNewType(opt.v)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                          newType === opt.v
+                            ? "bg-primary-500 text-white"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        }`}
+                      >
+                        {opt.l}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">
+                    Mensagem (variáveis: {"{{client_name}}"}, {"{{barbershop_name}}"}, {"{{last_visit_days}}"})
+                  </label>
+                  <textarea
+                    value={newTemplate}
+                    onChange={(e) => setNewTemplate(e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <button
+                  onClick={handleCreate}
+                  disabled={creating || !newName.trim() || !newTemplate.trim()}
+                  className="w-full py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  {creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+                  Criar campanha
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* WhatsApp Links modal */}
+      {links && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/50" onClick={() => setLinks(null)} />
+          <div className="bg-white rounded-lg shadow-xl z-50 w-full max-w-md max-h-[80vh] overflow-y-auto mx-4">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-sm font-semibold text-gray-800">
+                  Links de WhatsApp ({links.length})
+                </h2>
+                <button onClick={() => setLinks(null)} className="text-gray-400 hover:text-gray-600">
+                  <X size={18} />
+                </button>
+              </div>
+              <p className="text-xs text-gray-400 mb-3">
+                Clique em cada link para abrir o WhatsApp com a mensagem pronta.
+              </p>
+              <div className="space-y-1.5">
+                {links.map((l, i) => (
+                  <a
+                    key={i}
+                    href={l.link ?? "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="text-sm text-gray-700">{l.clientName}</span>
+                    <ExternalLink size={14} className="text-success-600" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Campaign list */}
+      {loading ? (
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+        </div>
+      ) : campaigns.length === 0 ? (
+        <div className="text-center py-16">
+          <Megaphone className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+          <p className="text-sm text-gray-400">Nenhuma campanha criada.</p>
+          <p className="text-xs text-gray-300 mt-1">Crie sua primeira campanha de reativação!</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {campaigns.map((c) => {
+            const badge = STATUS_BADGES[c.status] ?? STATUS_BADGES.draft;
+            return (
+              <div
+                key={c.id}
+                className="bg-white rounded-lg border border-gray-200 p-4"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-800 truncate">
+                        {c.name}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${badge.className}`}>
+                        {badge.label}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Users size={10} /> {c.sentCount || c.recipientsCount} destinatário{c.sentCount !== 1 ? "s" : ""}
+                      </span>
+                      {c.sentAt && (
+                        <span className="text-xs text-gray-400">
+                          Enviada em {new Date(c.sentAt).toLocaleDateString("pt-BR")}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {c.status === "draft" && (
+                    <button
+                      onClick={() => handleSend(c.id)}
+                      disabled={sending === c.id}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-success-500 text-white text-xs font-medium rounded-lg hover:bg-success-600 disabled:opacity-50 transition-colors ml-3"
+                    >
+                      {sending === c.id ? (
+                        <Loader2 size={12} className="animate-spin" />
+                      ) : (
+                        <Send size={12} />
+                      )}
+                      Disparar
+                    </button>
+                  )}
+
+                  {c.status === "sent" && (
+                    <div className="flex items-center gap-1 text-xs text-success-600 ml-3">
+                      <ChevronRight size={14} />
+                      {c.sentCount} enviado{c.sentCount !== 1 ? "s" : ""}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

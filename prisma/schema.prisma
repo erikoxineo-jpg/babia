@@ -1,0 +1,575 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum TenantPlan {
+  free
+  starter
+  professional
+  premium
+}
+
+enum TenantStatus {
+  active
+  suspended
+  cancelled
+}
+
+enum UserRole {
+  owner
+  admin
+  professional
+  receptionist
+}
+
+enum ClientStatus {
+  active
+  at_risk
+  inactive
+}
+
+enum AppointmentStatus {
+  pending
+  confirmed
+  completed
+  cancelled
+  no_show
+}
+
+enum AppointmentSource {
+  public
+  internal
+  campaign
+}
+
+enum PreferredPeriod {
+  morning
+  afternoon
+  evening
+}
+
+enum WaitlistStatus {
+  waiting
+  notified
+  scheduled
+  expired
+}
+
+enum CampaignType {
+  reactivation
+  fill_slots
+  promotion
+}
+
+enum CampaignStatus {
+  draft
+  sending
+  sent
+  completed
+}
+
+enum CampaignMessageStatus {
+  pending
+  sent
+  delivered
+  responded
+}
+
+enum ClientPlanStatus {
+  active
+  expired
+  cancelled
+}
+
+enum TransactionType {
+  service
+  plan
+  product
+}
+
+enum PaymentMethod {
+  cash
+  credit_card
+  debit_card
+  pix
+  plan_session
+}
+
+enum NotificationType {
+  confirmation
+  reminder
+  reactivation
+  waitlist
+}
+
+enum NotificationChannel {
+  whatsapp
+  sms
+  email
+}
+
+enum NotificationStatus {
+  pending
+  sent
+  failed
+}
+
+// ==========================================
+// TABLES
+// ==========================================
+
+model Tenant {
+  id        String       @id @default(uuid()) @db.Uuid
+  name      String       @db.VarChar(200)
+  slug      String       @unique @db.VarChar(100)
+  phone     String       @db.VarChar(20)
+  whatsapp  String?      @db.VarChar(20)
+  email     String       @unique @db.VarChar(255)
+  address   String?
+  city      String?      @db.VarChar(100)
+  state     String?      @db.Char(2)
+  logoUrl   String?      @map("logo_url")
+  timezone  String       @default("America/Sao_Paulo") @db.VarChar(50)
+  plan      TenantPlan   @default(free)
+  status    TenantStatus @default(active)
+  onboardingStep      Int      @default(0) @map("onboarding_step")
+  onboardingCompleted Boolean  @default(false) @map("onboarding_completed")
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt DateTime?    @map("deleted_at") @db.Timestamptz
+
+  users          User[]
+  professionals  Professional[]
+  services       Service[]
+  clients        Client[]
+  appointments   Appointment[]
+  campaigns      Campaign[]
+  plans          Plan[]
+  transactions   Transaction[]
+  waitlist       Waitlist[]
+  notifications  Notification[]
+  settings       TenantSettings?
+
+  @@index([status])
+  @@index([plan])
+  @@map("tenants")
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  name         String   @db.VarChar(200)
+  email        String   @db.VarChar(255)
+  phone        String?  @db.VarChar(20)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  role         UserRole @default(professional)
+  avatarUrl    String?  @map("avatar_url")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant              Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sessions            Session[]
+  professional        Professional?
+  appointmentHistory  AppointmentHistory[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([tenantId, role])
+  @@index([tenantId, isActive])
+  @@map("users")
+}
+
+model Session {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  token      String   @unique @db.VarChar(500)
+  ipAddress  String?  @map("ip_address") @db.VarChar(45)
+  userAgent  String?  @map("user_agent")
+  expiresAt  DateTime @map("expires_at") @db.Timestamptz
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  lastUsedAt DateTime @default(now()) @map("last_used_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model Professional {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  userId       String?   @unique @map("user_id") @db.Uuid
+  name         String    @db.VarChar(200)
+  phone        String?   @db.VarChar(20)
+  avatarUrl    String?   @map("avatar_url")
+  specialty    String?   @db.VarChar(200)
+  isActive     Boolean   @default(true) @map("is_active")
+  displayOrder Int       @default(0) @map("display_order")
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
+
+  tenant     Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user       User?                  @relation(fields: [userId], references: [id], onDelete: SetNull)
+  schedules  ProfessionalSchedule[]
+  breaks     ProfessionalBreak[]
+  services   ProfessionalService[]
+  appointments Appointment[]
+  blocks     ScheduleBlock[]
+  waitlist   Waitlist[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId])
+  @@index([tenantId, displayOrder])
+  @@map("professionals")
+}
+
+model ProfessionalSchedule {
+  id             String  @id @default(uuid()) @db.Uuid
+  professionalId String  @map("professional_id") @db.Uuid
+  dayOfWeek      Int     @map("day_of_week") @db.SmallInt
+  startTime      String  @map("start_time") @db.VarChar(5)
+  endTime        String  @map("end_time") @db.VarChar(5)
+  isActive       Boolean @default(true) @map("is_active")
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@unique([professionalId, dayOfWeek])
+  @@index([professionalId])
+  @@map("professional_schedules")
+}
+
+model ProfessionalBreak {
+  id             String @id @default(uuid()) @db.Uuid
+  professionalId String @map("professional_id") @db.Uuid
+  dayOfWeek      Int    @map("day_of_week") @db.SmallInt
+  startTime      String @map("start_time") @db.VarChar(5)
+  endTime        String @map("end_time") @db.VarChar(5)
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId, dayOfWeek])
+  @@map("professional_breaks")
+}
+
+model Service {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(200)
+  description     String?
+  durationMinutes Int      @map("duration_minutes")
+  price           Decimal  @db.Decimal(10, 2)
+  category        String?  @db.VarChar(100)
+  intervalMinutes Int      @default(0) @map("interval_minutes")
+  isActive        Boolean  @default(true) @map("is_active")
+  displayOrder    Int      @default(0) @map("display_order")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant        Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  professionals ProfessionalService[]
+  appointments  Appointment[]
+  waitlist      Waitlist[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId])
+  @@index([tenantId, category])
+  @@index([tenantId, displayOrder])
+  @@map("services")
+}
+
+model ProfessionalService {
+  professionalId String @map("professional_id") @db.Uuid
+  serviceId      String @map("service_id") @db.Uuid
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  service      Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([professionalId, serviceId])
+  @@index([serviceId])
+  @@map("professional_services")
+}
+
+model Client {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  name          String       @db.VarChar(200)
+  phone         String       @db.VarChar(20)
+  email         String?      @db.VarChar(255)
+  notes         String?
+  status        ClientStatus @default(active)
+  firstVisit    DateTime?    @map("first_visit") @db.Date
+  lastVisit     DateTime?    @map("last_visit") @db.Date
+  totalVisits   Int          @default(0) @map("total_visits")
+  totalSpent    Decimal      @default(0) @map("total_spent") @db.Decimal(10, 2)
+  averageTicket Decimal      @default(0) @map("average_ticket") @db.Decimal(10, 2)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime?    @map("deleted_at") @db.Timestamptz
+
+  tenant           Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  appointments     Appointment[]
+  waitlist         Waitlist[]
+  campaignMessages CampaignMessage[]
+  clientPlans      ClientPlan[]
+  transactions     Transaction[]
+  notifications    Notification[]
+
+  @@unique([tenantId, phone])
+  @@index([tenantId, status])
+  @@index([tenantId, lastVisit])
+  @@index([tenantId])
+  @@index([tenantId, name])
+  @@index([tenantId, email])
+  @@map("clients")
+}
+
+model Appointment {
+  id             String            @id @default(uuid()) @db.Uuid
+  tenantId       String            @map("tenant_id") @db.Uuid
+  clientId       String            @map("client_id") @db.Uuid
+  professionalId String            @map("professional_id") @db.Uuid
+  serviceId      String            @map("service_id") @db.Uuid
+  date           DateTime          @db.Date
+  startTime      String            @map("start_time") @db.VarChar(5)
+  endTime        String            @map("end_time") @db.VarChar(5)
+  status         AppointmentStatus @default(pending)
+  price          Decimal           @db.Decimal(10, 2)
+  notes          String?
+  source         AppointmentSource @default(internal)
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  confirmedAt    DateTime?         @map("confirmed_at") @db.Timestamptz
+  cancelledAt    DateTime?         @map("cancelled_at") @db.Timestamptz
+  completedAt    DateTime?         @map("completed_at") @db.Timestamptz
+
+  tenant       Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  client       Client               @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  professional Professional         @relation(fields: [professionalId], references: [id], onDelete: Restrict)
+  service      Service              @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  history      AppointmentHistory[]
+  transactions Transaction[]
+  notifications Notification[]
+
+  @@index([tenantId, date])
+  @@index([professionalId, date])
+  @@index([clientId])
+  @@index([tenantId, status])
+  @@index([tenantId])
+  @@index([tenantId, date, status])
+  @@index([tenantId, source])
+  @@index([professionalId, date, startTime, endTime])
+  @@map("appointments")
+}
+
+model AppointmentHistory {
+  id            String             @id @default(uuid()) @db.Uuid
+  appointmentId String             @map("appointment_id") @db.Uuid
+  fromStatus    AppointmentStatus? @map("from_status")
+  toStatus      AppointmentStatus  @map("to_status")
+  changedBy     String?            @map("changed_by") @db.Uuid
+  reason        String?
+  createdAt     DateTime           @default(now()) @map("created_at") @db.Timestamptz
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  user        User?       @relation(fields: [changedBy], references: [id], onDelete: SetNull)
+
+  @@index([appointmentId])
+  @@index([createdAt])
+  @@map("appointment_history")
+}
+
+model ScheduleBlock {
+  id             String   @id @default(uuid()) @db.Uuid
+  professionalId String   @map("professional_id") @db.Uuid
+  date           DateTime @db.Date
+  startTime      String   @map("start_time") @db.VarChar(5)
+  endTime        String   @map("end_time") @db.VarChar(5)
+  reason         String?  @db.VarChar(500)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId, date])
+  @@map("schedule_blocks")
+}
+
+model Waitlist {
+  id             String          @id @default(uuid()) @db.Uuid
+  tenantId       String          @map("tenant_id") @db.Uuid
+  clientId       String          @map("client_id") @db.Uuid
+  serviceId      String          @map("service_id") @db.Uuid
+  professionalId String?         @map("professional_id") @db.Uuid
+  preferredDate  DateTime        @map("preferred_date") @db.Date
+  preferredPeriod PreferredPeriod @map("preferred_period")
+  status         WaitlistStatus  @default(waiting)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  service      Service       @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  professional Professional? @relation(fields: [professionalId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, status])
+  @@index([tenantId, preferredDate])
+  @@index([clientId])
+  @@index([professionalId])
+  @@map("waitlist")
+}
+
+model Campaign {
+  id            String         @id @default(uuid()) @db.Uuid
+  tenantId      String         @map("tenant_id") @db.Uuid
+  name          String         @db.VarChar(200)
+  type          CampaignType
+  template      String
+  targetSegment Json           @default("{}") @map("target_segment")
+  status        CampaignStatus @default(draft)
+  sentCount     Int            @default(0) @map("sent_count")
+  responseCount Int            @default(0) @map("response_count")
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  sentAt        DateTime?      @map("sent_at") @db.Timestamptz
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  messages CampaignMessage[]
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([tenantId, type])
+  @@map("campaigns")
+}
+
+model CampaignMessage {
+  id         String                @id @default(uuid()) @db.Uuid
+  campaignId String                @map("campaign_id") @db.Uuid
+  clientId   String                @map("client_id") @db.Uuid
+  status     CampaignMessageStatus @default(pending)
+  sentAt     DateTime?             @map("sent_at") @db.Timestamptz
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  client   Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, clientId])
+  @@index([campaignId])
+  @@index([campaignId, status])
+  @@index([clientId])
+  @@map("campaign_messages")
+}
+
+model Plan {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  name          String   @db.VarChar(200)
+  description   String?
+  price         Decimal  @db.Decimal(10, 2)
+  durationDays  Int      @map("duration_days")
+  totalSessions Int      @map("total_sessions")
+  services      Json     @default("[]")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  clientPlans ClientPlan[]
+
+  @@index([tenantId])
+  @@index([tenantId, isActive])
+  @@map("plans")
+}
+
+model ClientPlan {
+  id            String           @id @default(uuid()) @db.Uuid
+  clientId      String           @map("client_id") @db.Uuid
+  planId        String           @map("plan_id") @db.Uuid
+  sessionsUsed  Int              @default(0) @map("sessions_used")
+  sessionsTotal Int              @map("sessions_total")
+  startDate     DateTime         @map("start_date") @db.Date
+  endDate       DateTime         @map("end_date") @db.Date
+  status        ClientPlanStatus @default(active)
+  createdAt     DateTime         @default(now()) @map("created_at") @db.Timestamptz
+
+  client       Client        @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  plan         Plan          @relation(fields: [planId], references: [id], onDelete: Restrict)
+  transactions Transaction[]
+
+  @@index([clientId])
+  @@index([clientId, status])
+  @@index([endDate])
+  @@index([planId])
+  @@map("client_plans")
+}
+
+model Transaction {
+  id            String          @id @default(uuid()) @db.Uuid
+  tenantId      String          @map("tenant_id") @db.Uuid
+  appointmentId String?         @map("appointment_id") @db.Uuid
+  clientPlanId  String?         @map("client_plan_id") @db.Uuid
+  clientId      String          @map("client_id") @db.Uuid
+  type          TransactionType
+  amount        Decimal         @db.Decimal(10, 2)
+  paymentMethod PaymentMethod   @map("payment_method")
+  date          DateTime        @db.Date
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  appointment Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  clientPlan  ClientPlan?  @relation(fields: [clientPlanId], references: [id], onDelete: SetNull)
+  client      Client       @relation(fields: [clientId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId])
+  @@index([tenantId, date])
+  @@index([clientId])
+  @@index([appointmentId])
+  @@index([tenantId, paymentMethod])
+  @@index([tenantId, type])
+  @@map("transactions")
+}
+
+model TenantSettings {
+  id                       String   @id @default(uuid()) @db.Uuid
+  tenantId                 String   @unique @map("tenant_id") @db.Uuid
+  bookingAdvanceDays       Int      @default(30) @map("booking_advance_days")
+  cancellationPolicyHours  Int      @default(2) @map("cancellation_policy_hours")
+  confirmationEnabled      Boolean  @default(true) @map("confirmation_enabled")
+  reminderHoursBefore      Int      @default(2) @map("reminder_hours_before")
+  inactiveDaysThreshold    Int      @default(45) @map("inactive_days_threshold")
+  workingDays              Json     @default("[1,2,3,4,5,6]") @map("working_days")
+  viewMode                 String   @default("solo") @map("view_mode") @db.VarChar(10)
+  createdAt                DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_settings")
+}
+
+model Notification {
+  id            String              @id @default(uuid()) @db.Uuid
+  tenantId      String              @map("tenant_id") @db.Uuid
+  type          NotificationType
+  appointmentId String?             @map("appointment_id") @db.Uuid
+  clientId      String              @map("client_id") @db.Uuid
+  channel       NotificationChannel @default(whatsapp)
+  status        NotificationStatus  @default(pending)
+  scheduledFor  DateTime            @map("scheduled_for") @db.Timestamptz
+  sentAt        DateTime?           @map("sent_at") @db.Timestamptz
+  createdAt     DateTime            @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  appointment Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  client      Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([status, scheduledFor])
+  @@index([tenantId])
+  @@index([appointmentId])
+  @@index([clientId])
+  @@index([tenantId, type])
+  @@map("notifications")
+}
