@@ -1,6 +1,6 @@
 services:
   evolution-api:
-    image: atendai/evolution-api:v2.2.3
+    image: evoapicloud/evolution-api:v2.3.2
     container_name: evolution-api
     restart: unless-stopped
     network_mode: host
@@ -14,7 +14,7 @@ services:
       - DATABASE_SAVE_DATA_INSTANCE=true
       - DATABASE_SAVE_DATA_NEW_MESSAGE=true
       - DATABASE_SAVE_DATA_CONTACTS=true
-      - LOG_LEVEL=DEBUG
+      - LOG_LEVEL=WARN
     depends_on:
       evolution-db:
         condition: service_healthy
