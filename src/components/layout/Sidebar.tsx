@@ -33,9 +33,10 @@ const navItems = [
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  logoUrl?: string | null;
 }
 
-export function Sidebar({ open, onClose }: SidebarProps) {
+export function Sidebar({ open, onClose, logoUrl }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user as Record<string, unknown> | undefined;
@@ -50,7 +51,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
   const nav = (
     <nav className="flex flex-col gap-1 px-3 py-4">
-      <div className="px-3 mb-6">
+      <div className="px-3 mb-6 flex items-center gap-3">
+        {logoUrl && (
+          <img src={logoUrl} alt="Logo" className="w-9 h-9 rounded-full object-cover ring-2 ring-primary-700" />
+        )}
         <h1 className="text-xl font-bold text-white">
           Bab<span className="text-secondary-400">IA</span>
         </h1>

@@ -12,6 +12,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [tenantLogoUrl, setTenantLogoUrl] = useState<string | null>(null);
 
   const user = session?.user as Record<string, unknown> | undefined;
   const needsOnboarding = status === "authenticated" && user?.role === "owner" && user?.onboardingCompleted === false;
@@ -21,6 +22,17 @@ function AppShell({ children }: { children: React.ReactNode }) {
       router.push("/login");
     }
   }, [status, router]);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetch("/api/tenant")
+        .then((r) => r.json())
+        .then((json) => {
+          if (json.success) setTenantLogoUrl(json.data.logoUrl ?? null);
+        })
+        .catch(() => {});
+    }
+  }, [status, pathname]);
 
   useEffect(() => {
     if (needsOnboarding) {
@@ -53,12 +65,13 @@ function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} logoUrl={tenantLogoUrl} />
       <div className="lg:pl-[256px]">
         <TopBar
           tenantName={(user?.tenantName as string) ?? "BabIA"}
           userName={user?.name as string ?? "Usuário"}
           onMenuClick={() => setSidebarOpen(true)}
+          logoUrl={tenantLogoUrl}
         />
         <main className="p-4 lg:p-6">{children}</main>
       </div>

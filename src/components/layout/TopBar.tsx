@@ -7,9 +7,10 @@ interface TopBarProps {
   tenantName: string;
   userName: string;
   onMenuClick: () => void;
+  logoUrl?: string | null;
 }
 
-export function TopBar({ tenantName, userName, onMenuClick }: TopBarProps) {
+export function TopBar({ tenantName, userName, onMenuClick, logoUrl }: TopBarProps) {
   const initials = userName
     .split(" ")
     .map((n) => n[0])
@@ -26,6 +27,9 @@ export function TopBar({ tenantName, userName, onMenuClick }: TopBarProps) {
         >
           <Menu size={20} />
         </button>
+        {logoUrl && (
+          <img src={logoUrl} alt="Logo" className="w-8 h-8 rounded-full object-cover" />
+        )}
         <h2 className="text-sm font-semibold text-gray-800">{tenantName}</h2>
       </div>
 

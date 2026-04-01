@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   Loader2,
   Save,
@@ -52,6 +53,7 @@ const WEEKDAYS = [
 ];
 
 export default function ConfiguracoesPage() {
+  const router = useRouter();
   const [data, setData] = useState<TenantData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
@@ -192,6 +194,7 @@ export default function ConfiguracoesPage() {
       if (res.ok && json.success) {
         setLogoUrl(json.data.logoUrl);
         showSuccess("logo");
+        router.refresh();
       } else {
         setLogoError(json.error || "Erro ao fazer upload.");
       }
@@ -211,6 +214,7 @@ export default function ConfiguracoesPage() {
       if (res.ok) {
         setLogoUrl(null);
         showSuccess("logo");
+        router.refresh();
       }
     } catch {
       setLogoError("Erro ao remover logo.");
