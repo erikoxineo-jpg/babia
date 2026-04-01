@@ -53,6 +53,9 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 # Install Prisma CLI globally for migrations
 RUN npm install -g prisma@6
 
+# Create uploads directory with correct permissions
+RUN mkdir -p /app/uploads/logos && chown -R nextjs:nodejs /app/uploads
+
 # Copy entrypoint script
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh

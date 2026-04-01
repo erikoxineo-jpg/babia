@@ -2,10 +2,14 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { put, del } from "@vercel/blob";
+import { writeFile, mkdir, unlink } from "fs/promises";
+import { join } from "path";
+import { existsSync } from "fs";
+import { randomBytes } from "crypto";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
+const UPLOADS_DIR = join(process.cwd(), "uploads", "logos");
 
 // POST — upload de logo
 export async function POST(request: Request) {
@@ -58,30 +62,39 @@ export async function POST(request: Request) {
 
     if (tenant?.logoUrl) {
       try {
-        await del(tenant.logoUrl);
+        const oldPath = tenant.logoUrl.replace("/api/uploads/", "");
+        const oldFile = join(process.cwd(), "uploads", oldPath);
+        if (existsSync(oldFile)) await unlink(oldFile);
       } catch {
-        // Ignora erro ao deletar blob anterior (pode já não existir)
+        // Ignora erro ao deletar arquivo anterior
       }
     }
 
-    // Upload para Vercel Blob
-    const ext = file.name.split(".").pop() || "jpg";
-    const filename = `logos/${tenantId}.${ext}`;
+    // Garantir que diretório existe
+    if (!existsSync(UPLOADS_DIR)) {
+      await mkdir(UPLOADS_DIR, { recursive: true });
+    }
 
-    const blob = await put(filename, file, {
-      access: "public",
-      addRandomSuffix: true,
-    });
+    // Salvar arquivo
+    const ext = file.name.split(".").pop() || "jpg";
+    const suffix = randomBytes(6).toString("hex");
+    const filename = `${tenantId}-${suffix}.${ext}`;
+    const filepath = join(UPLOADS_DIR, filename);
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(filepath, buffer);
+
+    const logoUrl = `/api/uploads/logos/${filename}`;
 
     // Atualizar no banco
     await prisma.tenant.update({
       where: { id: tenantId },
-      data: { logoUrl: blob.url },
+      data: { logoUrl },
     });
 
     return NextResponse.json({
       success: true,
-      data: { logoUrl: blob.url },
+      data: { logoUrl },
     });
   } catch (error) {
     console.error("Upload logo error:", error);
@@ -118,9 +131,11 @@ export async function DELETE() {
 
     if (tenant?.logoUrl) {
       try {
-        await del(tenant.logoUrl);
+        const oldPath = tenant.logoUrl.replace("/api/uploads/", "");
+        const oldFile = join(process.cwd(), "uploads", oldPath);
+        if (existsSync(oldFile)) await unlink(oldFile);
       } catch {
-        // Ignora erro ao deletar blob (pode já não existir)
+        // Ignora erro ao deletar arquivo
       }
     }
 
