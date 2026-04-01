@@ -101,8 +101,8 @@ export default function ConcluidoPage() {
               <p className="text-sm font-medium text-secondary-800">
                 Seu link de agendamento
               </p>
-              <p className="text-sm text-secondary-600 mt-0.5">
-                babia.com.br/{summary?.slug}
+              <p className="text-sm text-secondary-600 mt-0.5 break-all">
+                {window.location.origin}/agendar/{summary?.slug}
               </p>
               <p className="text-xs text-secondary-500 mt-1">
                 Compartilhe com seus clientes para receber agendamentos online.
