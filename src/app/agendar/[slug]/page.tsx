@@ -131,8 +131,8 @@ const AVATAR_COLORS = [
   "from-secondary-400 to-secondary-600",
   "from-success-400 to-success-600",
   "from-warning-400 to-warning-600",
-  "from-pink-400 to-pink-600",
-  "from-cyan-400 to-cyan-600",
+  "from-primary-300 to-primary-500",
+  "from-secondary-300 to-secondary-500",
 ];
 
 // ==========================================
@@ -705,8 +705,8 @@ export default function PublicBookingPage({
           </div>
 
           {error && (
-            <div className="p-3 bg-danger-50 border border-danger-200 rounded-xl mb-4">
-              <p className="text-xs text-danger-600">{error}</p>
+            <div className="p-3 bg-secondary-50 border border-secondary-200 rounded-xl mb-4">
+              <p className="text-xs text-secondary-600">{error}</p>
             </div>
           )}
 

@@ -52,8 +52,8 @@ const WEEKDAYS = [
   { value: 6, short: "Sáb" },
 ];
 
-const inputClass = "w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
-const smallInputClass = "w-20 px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
+const inputClass = "w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
+const smallInputClass = "w-20 px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
 
 export default function ConfiguracoesPage() {
   const router = useRouter();
@@ -243,14 +243,14 @@ export default function ConfiguracoesPage() {
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-gray-800">Configurações</h1>
         <p className="text-sm text-gray-400 mt-0.5">Gerencie os dados do seu estabelecimento</p>
       </div>
 
       {/* Logo */}
-      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Camera size={16} className="text-primary-500" />
@@ -283,7 +283,7 @@ export default function ConfiguracoesPage() {
               {logoUrl && !logoUploading && (
                 <button
                   onClick={handleLogoRemove}
-                  className="flex items-center gap-1.5 px-3 py-2 border border-red-200 text-red-500 text-xs font-medium rounded-xl hover:bg-red-50 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 border border-secondary-200 text-secondary-500 text-xs font-medium rounded-xl hover:bg-secondary-50 transition-colors"
                 >
                   <Trash2 size={12} />
                   Remover
@@ -291,7 +291,7 @@ export default function ConfiguracoesPage() {
               )}
             </div>
             <p className="text-xs text-gray-400">JPG, PNG ou WebP. Máx 2 MB.</p>
-            {logoError && <p className="text-xs text-red-500">{logoError}</p>}
+            {logoError && <p className="text-xs text-secondary-500">{logoError}</p>}
           </div>
         </div>
 
@@ -305,7 +305,7 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Tenant Data */}
-      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Building2 size={16} className="text-primary-500" />
@@ -319,7 +319,7 @@ export default function ConfiguracoesPage() {
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-xs text-gray-500 mb-1.5 block">Telefone</label>
               <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} />
@@ -340,7 +340,7 @@ export default function ConfiguracoesPage() {
             <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className={inputClass} />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-xs text-gray-500 mb-1.5 block">Cidade</label>
               <input type="text" value={city} onChange={(e) => setCity(e.target.value)} className={inputClass} />
@@ -366,7 +366,7 @@ export default function ConfiguracoesPage() {
           <button
             onClick={saveTenantData}
             disabled={saving === "tenant"}
-            className="flex items-center gap-1.5 px-5 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1.5 px-5 py-3 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
           >
             {saving === "tenant" ? <Loader2 size={14} className="animate-spin" /> : success === "tenant" ? <Check size={14} /> : <Save size={14} />}
             {success === "tenant" ? "Salvo!" : "Salvar dados"}
@@ -375,7 +375,7 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Working Hours */}
-      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Clock size={16} className="text-primary-500" />
@@ -403,7 +403,7 @@ export default function ConfiguracoesPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-xs text-gray-500 mb-1.5 block">Antecedência máx. agendamento</label>
               <div className="flex items-center gap-2">
@@ -423,7 +423,7 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Notifications */}
-      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Bell size={16} className="text-primary-500" />
@@ -462,7 +462,7 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Cancellation Policy */}
-      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <ShieldAlert size={16} className="text-primary-500" />
@@ -484,7 +484,7 @@ export default function ConfiguracoesPage() {
         <button
           onClick={saveSettings}
           disabled={saving === "settings"}
-          className="flex items-center gap-1.5 px-5 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
+          className="flex items-center gap-1.5 px-5 py-3 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
         >
           {saving === "settings" ? <Loader2 size={14} className="animate-spin" /> : success === "settings" ? <Check size={14} /> : <Save size={14} />}
           {success === "settings" ? "Salvo!" : "Salvar configurações"}

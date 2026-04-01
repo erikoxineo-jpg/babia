@@ -157,7 +157,7 @@ export default function CampanhasPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Campanhas</h1>
@@ -165,7 +165,7 @@ export default function CampanhasPage() {
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-1.5 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
+          className="flex items-center gap-1.5 px-4 py-3 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 transition-colors"
         >
           <Plus size={16} />
           Nova campanha
@@ -192,7 +192,7 @@ export default function CampanhasPage() {
                   <button
                     key={t.name}
                     onClick={() => selectTemplate(t)}
-                    className={`w-full text-left p-3 rounded-xl border transition-colors text-sm ${
+                    className={`w-full text-left p-3 rounded-2xl border transition-colors text-sm ${
                       newName === t.name
                         ? "border-primary-500 bg-primary-50"
                         : "border-gray-100 hover:border-gray-200"
@@ -211,7 +211,7 @@ export default function CampanhasPage() {
                     type="text"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                   />
                 </div>
 
@@ -246,14 +246,14 @@ export default function CampanhasPage() {
                     value={newTemplate}
                     onChange={(e) => setNewTemplate(e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none"
                   />
                 </div>
 
                 <button
                   onClick={handleCreate}
                   disabled={creating || !newName.trim() || !newTemplate.trim()}
-                  className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3.5 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                 >
                   {creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
                   Criar campanha
@@ -268,8 +268,8 @@ export default function CampanhasPage() {
       {sendResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="fixed inset-0 bg-black/40" onClick={() => setSendResult(null)} />
-          <div className="bg-white rounded-2xl shadow-xl z-50 w-full max-w-sm mx-4 p-6 text-center">
-            <div className="w-14 h-14 bg-success-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="bg-white rounded-3xl shadow-xl z-50 w-full max-w-sm mx-4 p-6 text-center">
+            <div className="w-14 h-14 bg-success-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
               <Send className="w-6 h-6 text-success-600" />
             </div>
             <h2 className="text-lg font-heading font-bold text-gray-800 mb-1">Campanha enviada!</h2>
@@ -283,14 +283,14 @@ export default function CampanhasPage() {
               </div>
               {(sendResult.failedCount ?? 0) > 0 && (
                 <div>
-                  <p className="text-2xl font-bold text-red-500">{sendResult.failedCount}</p>
+                  <p className="text-2xl font-bold text-secondary-500">{sendResult.failedCount}</p>
                   <p className="text-xs text-gray-400">falhas</p>
                 </div>
               )}
             </div>
             <button
               onClick={() => setSendResult(null)}
-              className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
+              className="w-full py-3.5 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 transition-colors"
             >
               Fechar
             </button>
@@ -302,7 +302,7 @@ export default function CampanhasPage() {
       {links && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="fixed inset-0 bg-black/40" onClick={() => setLinks(null)} />
-          <div className="bg-white rounded-2xl shadow-xl z-50 w-full max-w-md max-h-[80vh] overflow-y-auto mx-4">
+          <div className="bg-white rounded-3xl shadow-xl z-50 w-full max-w-md max-h-[80vh] overflow-y-auto mx-4">
             <div className="p-5">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold text-gray-800">
@@ -341,7 +341,7 @@ export default function CampanhasPage() {
         </div>
       ) : campaigns.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+          <div className="w-14 h-14 rounded-3xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
             <Megaphone className="w-6 h-6 text-gray-300" />
           </div>
           <p className="text-sm font-medium text-gray-500">Nenhuma campanha criada.</p>
@@ -354,7 +354,7 @@ export default function CampanhasPage() {
             return (
               <div
                 key={c.id}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5"
+                className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6"
               >
                 <div className="flex items-center justify-between">
                   <div className="min-w-0 flex-1">
@@ -382,7 +382,7 @@ export default function CampanhasPage() {
                     <button
                       onClick={() => handleSend(c.id)}
                       disabled={sending === c.id}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-success-500 text-white text-xs font-medium rounded-xl hover:bg-success-600 disabled:opacity-50 transition-colors ml-3"
+                      className="flex items-center gap-1.5 px-4 py-2 bg-success-500 text-white text-xs font-medium rounded-2xl hover:bg-success-600 disabled:opacity-50 transition-colors ml-3"
                     >
                       {sending === c.id ? (
                         <Loader2 size={12} className="animate-spin" />

@@ -123,27 +123,27 @@ export function DashboardContent() {
       value: String(data.week_no_shows),
       sub: `${data.at_risk_clients} em risco`,
       icon: UserX,
-      color: "text-red-500",
-      bg: "bg-red-50",
+      color: "text-secondary-500",
+      bg: "bg-secondary-50",
     },
   ];
 
   const severityStyles = {
     info: { border: "border-l-primary-400", bg: "bg-primary-50/60", icon: <Clock size={16} className="text-primary-500" /> },
     warning: { border: "border-l-warning-400", bg: "bg-warning-50/60", icon: <AlertTriangle size={16} className="text-warning-600" /> },
-    danger: { border: "border-l-red-400", bg: "bg-red-50/60", icon: <AlertTriangle size={16} className="text-red-500" /> },
+    danger: { border: "border-l-secondary-400", bg: "bg-secondary-50/60", icon: <AlertTriangle size={16} className="text-secondary-500" /> },
   };
 
   const statusBreakdown = [
     { label: "Pendentes", value: data.appointments.pending, color: "bg-warning-100 text-warning-700" },
     { label: "Confirmados", value: data.appointments.confirmed, color: "bg-success-100 text-success-700" },
     { label: "Concluídos", value: data.appointments.completed, color: "bg-primary-100 text-primary-700" },
-    { label: "Faltas", value: data.appointments.no_show, color: "bg-red-100 text-red-600" },
+    { label: "Faltas", value: data.appointments.no_show, color: "bg-secondary-100 text-secondary-600" },
     { label: "Cancelados", value: data.appointments.cancelled, color: "bg-gray-100 text-gray-500" },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -159,13 +159,13 @@ export function DashboardContent() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         {kpis.map((kpi) => {
           const Icon = kpi.icon;
           return (
             <div
               key={kpi.label}
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5"
+              className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6"
             >
               <div className="flex items-center gap-2 mb-3">
                 <div
@@ -183,7 +183,7 @@ export function DashboardContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Next Appointment */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
           <h2 className="text-base font-semibold text-gray-800 mb-4">
             Próximo agendamento
           </h2>
@@ -213,7 +213,7 @@ export function DashboardContent() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
           <h2 className="text-base font-semibold text-gray-800 mb-4">
             Ações rápidas
           </h2>
@@ -258,8 +258,8 @@ export function DashboardContent() {
                 className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-red-50 rounded-xl flex items-center justify-center">
-                    <Users size={14} className="text-red-500" />
+                  <div className="w-8 h-8 bg-secondary-50 rounded-xl flex items-center justify-center">
+                    <Users size={14} className="text-secondary-500" />
                   </div>
                   <span className="text-sm text-gray-700">
                     Reativar {data.at_risk_clients} cliente{data.at_risk_clients > 1 ? "s" : ""} em risco
@@ -285,7 +285,7 @@ export function DashboardContent() {
               return (
                 <div
                   key={`${alert.type}-${i}`}
-                  className={`border-l-4 ${s.border} ${s.bg} rounded-r-2xl p-4`}
+                  className={`border-l-4 ${s.border} ${s.bg} rounded-r-3xl p-4`}
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5">{s.icon}</div>
@@ -314,7 +314,7 @@ export function DashboardContent() {
       )}
 
       {/* Today breakdown */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
         <h2 className="text-base font-semibold text-gray-800 mb-4">
           Resumo de hoje
         </h2>

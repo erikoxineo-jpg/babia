@@ -81,7 +81,7 @@ const PAYMENT_ICONS: Record<string, typeof DollarSign> = {
 };
 
 const PAYMENT_COLORS: Record<string, string> = {
-  pix: "bg-teal-500",
+  pix: "bg-primary-500",
   cash: "bg-success-500",
   credit_card: "bg-primary-500",
   debit_card: "bg-primary-400",
@@ -90,7 +90,7 @@ const PAYMENT_COLORS: Record<string, string> = {
 };
 
 const PAYMENT_DOT_COLORS: Record<string, string> = {
-  pix: "bg-teal-500",
+  pix: "bg-primary-500",
   cash: "bg-success-500",
   credit_card: "bg-primary-500",
   debit_card: "bg-primary-400",
@@ -273,13 +273,13 @@ export default function FinanceiroPage() {
               <div className="flex items-center gap-2 mb-3">
                 <div
                   className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                    growthPct !== null && growthPct >= 0 ? "bg-success-50" : "bg-red-50"
+                    growthPct !== null && growthPct >= 0 ? "bg-primary-50" : "bg-secondary-50"
                   }`}
                 >
                   {growthPct !== null && growthPct >= 0 ? (
                     <TrendingUp size={16} className="text-success-600" />
                   ) : (
-                    <TrendingDown size={16} className="text-red-500" />
+                    <TrendingDown size={16} className="text-secondary-500" />
                   )}
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function FinanceiroPage() {
                 className={`text-2xl font-bold ${
                   growthPct !== null && growthPct >= 0
                     ? "text-success-600"
-                    : "text-red-500"
+                    : "text-secondary-500"
                 }`}
               >
                 {growthPct !== null

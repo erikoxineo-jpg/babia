@@ -150,26 +150,26 @@ function EditDrawer({
           <div>
             <label className="block text-xs text-gray-500 mb-1.5">Nome</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1.5">Telefone</label>
             <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1.5">E-mail</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1.5">Observações</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none" />
           </div>
           {error && <p className="text-xs text-error-600">{error}</p>}
           <button onClick={handleSave} disabled={saving || !name.trim() || !phone.trim()}
-            className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
+            className="w-full py-3.5 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             {saving ? "Salvando..." : "Salvar"}
           </button>
@@ -254,7 +254,7 @@ export default function ClienteDetailPage({
   const totalHistoryPages = Math.ceil(historyTotal / 10);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/clientes" className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
@@ -286,35 +286,35 @@ export default function ClienteDetailPage({
           href={whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-success-50 text-success-600 text-xs font-medium rounded-xl hover:bg-success-100 transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-success-50 text-success-600 text-xs font-medium rounded-xl hover:bg-success-100 transition-colors"
         >
           <MessageCircle size={14} /> WhatsApp
         </a>
         <Link
           href="/agenda"
-          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-primary-50 text-primary-600 text-xs font-medium rounded-xl hover:bg-primary-100 transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-primary-50 text-primary-600 text-xs font-medium rounded-xl hover:bg-primary-100 transition-colors"
         >
           <CalendarPlus size={14} /> Agendar
         </Link>
         <button
           onClick={() => setEditing(true)}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-gray-50 text-gray-600 text-xs font-medium rounded-xl hover:bg-gray-100 transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-gray-50 text-gray-600 text-xs font-medium rounded-xl hover:bg-gray-100 transition-colors"
         >
           <Edit3 size={14} /> Editar
         </button>
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-5 text-center">
           <p className="text-xl font-bold text-gray-800">{client.totalVisits}</p>
           <p className="text-xs text-gray-400 mt-0.5">Visitas</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-5 text-center">
           <p className="text-xl font-bold text-gray-800">{formatCurrency(client.totalSpent)}</p>
           <p className="text-xs text-gray-400 mt-0.5">Total gasto</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-5 text-center">
           <p className="text-xl font-bold text-gray-800">{formatCurrency(client.averageTicket)}</p>
           <p className="text-xs text-gray-400 mt-0.5">Ticket médio</p>
         </div>
@@ -323,7 +323,7 @@ export default function ClienteDetailPage({
       {/* Info cards */}
       <div className="space-y-2">
         {client.nextAppointment && (
-          <div className="bg-primary-50 rounded-2xl border border-primary-100 p-4">
+          <div className="bg-primary-50 rounded-3xl border border-primary-100 p-5">
             <p className="text-xs font-medium text-primary-600 mb-1">Próximo agendamento</p>
             <p className="text-sm text-primary-800">
               {new Date(client.nextAppointment.date + "T12:00:00").toLocaleDateString("pt-BR")} {client.nextAppointment.startTime} — {client.nextAppointment.service} com {client.nextAppointment.professional}
@@ -332,7 +332,7 @@ export default function ClienteDetailPage({
         )}
 
         {client.preferredProfessional && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-5 flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center">
               <User size={16} className="text-gray-400" />
             </div>
@@ -344,7 +344,7 @@ export default function ClienteDetailPage({
         )}
 
         {client.preferredServices.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-5 flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center">
               <Scissors size={16} className="text-gray-400" />
             </div>
@@ -358,7 +358,7 @@ export default function ClienteDetailPage({
         )}
 
         {client.lastVisit && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-5 flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center">
               <Calendar size={16} className="text-gray-400" />
             </div>
@@ -376,16 +376,16 @@ export default function ClienteDetailPage({
         )}
 
         {client.noShowCount > 0 && (
-          <div className="bg-red-50 rounded-2xl border border-red-100 p-4 flex items-center gap-3">
-            <AlertTriangle size={16} className="text-red-500" />
-            <p className="text-xs text-red-600 font-medium">
+          <div className="bg-secondary-50 rounded-3xl border border-secondary-100 p-5 flex items-center gap-3">
+            <AlertTriangle size={16} className="text-secondary-500" />
+            <p className="text-xs text-secondary-600 font-medium">
               {client.noShowCount} falta{client.noShowCount > 1 ? "s" : ""}
             </p>
           </div>
         )}
 
         {client.notes && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-5">
             <p className="text-xs text-gray-400 mb-1">Observações</p>
             <p className="text-sm text-gray-700">{client.notes}</p>
           </div>
@@ -393,7 +393,7 @@ export default function ClienteDetailPage({
       </div>
 
       {/* History */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold text-gray-800">Histórico</h2>
           {historyTotal > 0 && (
