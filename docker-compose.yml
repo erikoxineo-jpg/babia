@@ -26,7 +26,7 @@ services:
           memory: 512M
 
   # ──────────────────────────────────────────
-  # Next.js App (standalone)
+  # Next.js App (standalone) — roteado pelo Traefik do n8n
   # ──────────────────────────────────────────
   barberflow-app:
     build:
@@ -42,38 +42,21 @@ services:
     networks:
       - barberflow-net
       - n8n_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.barberflow.rule=Host(`babia.oxineo.com.br`)"
+      - "traefik.http.routers.barberflow.entrypoints=web,websecure"
+      - "traefik.http.routers.barberflow.tls=true"
+      - "traefik.http.routers.barberflow.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.barberflow.loadbalancer.server.port=3000"
     deploy:
       resources:
         limits:
           memory: 512M
 
-  # ──────────────────────────────────────────
-  # Caddy (reverse proxy)
-  # ──────────────────────────────────────────
-  barberflow-caddy:
-    image: caddy:2-alpine
-    container_name: barberflow-caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - barberflow-net
-      - n8n_default
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-
 volumes:
   barberflow_pgdata:
   barberflow_backups:
-  caddy_data:
-  caddy_config:
 
 networks:
   barberflow-net:
