@@ -11,13 +11,14 @@ import {
   Scissors,
   User,
   Clock,
-  DollarSign,
   MessageCircle,
   CalendarPlus,
   Edit3,
   CheckCircle,
   XCircle,
   AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -75,6 +76,10 @@ const APT_STATUS_ICONS: Record<string, { icon: React.ElementType; className: str
   pending: { icon: Clock, className: "text-warning-500" },
   confirmed: { icon: CheckCircle, className: "text-primary-500" },
 };
+
+function formatCurrency(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
 
 // ==========================================
 // Edit Drawer (inline)
@@ -137,34 +142,34 @@ function EditDrawer({
     <div className="fixed inset-0 z-50">
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl flex flex-col animate-slide-in-right">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <h2 className="text-lg font-heading font-semibold text-gray-800">Editar Cliente</h2>
-          <button onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700">Fechar</button>
+          <button onClick={onClose} className="text-sm text-gray-400 hover:text-gray-600">Fechar</button>
         </div>
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+            <label className="block text-xs text-gray-500 mb-1.5">Nome</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+            <label className="block text-xs text-gray-500 mb-1.5">Telefone</label>
             <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+            <label className="block text-xs text-gray-500 mb-1.5">E-mail</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Observações</label>
+            <label className="block text-xs text-gray-500 mb-1.5">Observações</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none" />
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none" />
           </div>
           {error && <p className="text-xs text-error-600">{error}</p>}
           <button onClick={handleSave} disabled={saving || !name.trim() || !phone.trim()}
-            className="w-full py-2.5 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
+            className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             {saving ? "Salvando..." : "Salvar"}
           </button>
@@ -246,12 +251,13 @@ export default function ClienteDetailPage({
 
   const statusBadge = STATUS_CONFIG[client.status] ?? STATUS_CONFIG.active;
   const whatsappLink = `https://wa.me/55${client.phone.replace(/\D/g, "")}`;
+  const totalHistoryPages = Math.ceil(historyTotal / 10);
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <Link href="/clientes" className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100">
+      <div className="flex items-center gap-3">
+        <Link href="/clientes" className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1 min-w-0">
@@ -262,11 +268,11 @@ export default function ClienteDetailPage({
             </span>
           </div>
           <div className="flex items-center gap-3 mt-0.5">
-            <span className="text-xs text-gray-500 flex items-center gap-1">
+            <span className="text-xs text-gray-400 flex items-center gap-1">
               <Phone size={10} /> {client.phone}
             </span>
             {client.email && (
-              <span className="text-xs text-gray-500 flex items-center gap-1">
+              <span className="text-xs text-gray-400 flex items-center gap-1">
                 <Mail size={10} /> {client.email}
               </span>
             )}
@@ -275,49 +281,49 @@ export default function ClienteDetailPage({
       </div>
 
       {/* Quick Actions */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2">
         <a
           href={whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-success-50 text-success-600 text-xs font-medium rounded-lg hover:bg-success-100 transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-success-50 text-success-600 text-xs font-medium rounded-xl hover:bg-success-100 transition-colors"
         >
           <MessageCircle size={14} /> WhatsApp
         </a>
         <Link
-          href={`/agenda`}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-primary-50 text-primary-600 text-xs font-medium rounded-lg hover:bg-primary-100 transition-colors"
+          href="/agenda"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-primary-50 text-primary-600 text-xs font-medium rounded-xl hover:bg-primary-100 transition-colors"
         >
           <CalendarPlus size={14} /> Agendar
         </Link>
         <button
           onClick={() => setEditing(true)}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg hover:bg-gray-100 transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-gray-50 text-gray-600 text-xs font-medium rounded-xl hover:bg-gray-100 transition-colors"
         >
           <Edit3 size={14} /> Editar
         </button>
       </div>
 
-      {/* Métricas */}
-      <div className="grid grid-cols-3 gap-2 mb-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-3 text-center">
-          <p className="text-lg font-bold text-gray-800">{client.totalVisits}</p>
-          <p className="text-[10px] text-gray-500">Visitas</p>
+      {/* Metrics */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
+          <p className="text-xl font-bold text-gray-800">{client.totalVisits}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Visitas</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-3 text-center">
-          <p className="text-lg font-bold text-gray-800">R$ {client.totalSpent.toFixed(0)}</p>
-          <p className="text-[10px] text-gray-500">Total gasto</p>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
+          <p className="text-xl font-bold text-gray-800">{formatCurrency(client.totalSpent)}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Total gasto</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-3 text-center">
-          <p className="text-lg font-bold text-gray-800">R$ {client.averageTicket.toFixed(0)}</p>
-          <p className="text-[10px] text-gray-500">Ticket médio</p>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
+          <p className="text-xl font-bold text-gray-800">{formatCurrency(client.averageTicket)}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Ticket médio</p>
         </div>
       </div>
 
       {/* Info cards */}
-      <div className="space-y-2 mb-4">
+      <div className="space-y-2">
         {client.nextAppointment && (
-          <div className="bg-primary-50 rounded-lg border border-primary-200 p-3">
+          <div className="bg-primary-50 rounded-2xl border border-primary-100 p-4">
             <p className="text-xs font-medium text-primary-600 mb-1">Próximo agendamento</p>
             <p className="text-sm text-primary-800">
               {new Date(client.nextAppointment.date + "T12:00:00").toLocaleDateString("pt-BR")} {client.nextAppointment.startTime} — {client.nextAppointment.service} com {client.nextAppointment.professional}
@@ -326,21 +332,25 @@ export default function ClienteDetailPage({
         )}
 
         {client.preferredProfessional && (
-          <div className="bg-white rounded-lg border border-gray-200 p-3 flex items-center gap-3">
-            <User size={14} className="text-gray-400" />
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center">
+              <User size={16} className="text-gray-400" />
+            </div>
             <div>
-              <p className="text-xs text-gray-500">Profissional preferido</p>
-              <p className="text-sm text-gray-800">{client.preferredProfessional.name}</p>
+              <p className="text-xs text-gray-400">Profissional preferido</p>
+              <p className="text-sm font-medium text-gray-800">{client.preferredProfessional.name}</p>
             </div>
           </div>
         )}
 
         {client.preferredServices.length > 0 && (
-          <div className="bg-white rounded-lg border border-gray-200 p-3 flex items-center gap-3">
-            <Scissors size={14} className="text-gray-400" />
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center">
+              <Scissors size={16} className="text-gray-400" />
+            </div>
             <div>
-              <p className="text-xs text-gray-500">Serviços frequentes</p>
-              <p className="text-sm text-gray-800">
+              <p className="text-xs text-gray-400">Serviços frequentes</p>
+              <p className="text-sm font-medium text-gray-800">
                 {client.preferredServices.map((s) => s.name).join(", ")}
               </p>
             </div>
@@ -348,11 +358,13 @@ export default function ClienteDetailPage({
         )}
 
         {client.lastVisit && (
-          <div className="bg-white rounded-lg border border-gray-200 p-3 flex items-center gap-3">
-            <Calendar size={14} className="text-gray-400" />
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center">
+              <Calendar size={16} className="text-gray-400" />
+            </div>
             <div>
-              <p className="text-xs text-gray-500">Última visita</p>
-              <p className="text-sm text-gray-800">
+              <p className="text-xs text-gray-400">Última visita</p>
+              <p className="text-sm font-medium text-gray-800">
                 {new Date(client.lastVisit + "T12:00:00").toLocaleDateString("pt-BR", {
                   day: "2-digit",
                   month: "long",
@@ -364,29 +376,32 @@ export default function ClienteDetailPage({
         )}
 
         {client.noShowCount > 0 && (
-          <div className="bg-error-50 rounded-lg border border-error-200 p-3 flex items-center gap-3">
-            <AlertTriangle size={14} className="text-error-500" />
-            <div>
-              <p className="text-xs text-error-600">
-                {client.noShowCount} falta{client.noShowCount > 1 ? "s" : ""}
-              </p>
-            </div>
+          <div className="bg-red-50 rounded-2xl border border-red-100 p-4 flex items-center gap-3">
+            <AlertTriangle size={16} className="text-red-500" />
+            <p className="text-xs text-red-600 font-medium">
+              {client.noShowCount} falta{client.noShowCount > 1 ? "s" : ""}
+            </p>
           </div>
         )}
 
         {client.notes && (
-          <div className="bg-white rounded-lg border border-gray-200 p-3">
-            <p className="text-xs text-gray-500 mb-1">Observações</p>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+            <p className="text-xs text-gray-400 mb-1">Observações</p>
             <p className="text-sm text-gray-700">{client.notes}</p>
           </div>
         )}
       </div>
 
-      {/* Histórico */}
-      <div>
-        <h2 className="text-base font-semibold text-gray-700 mb-3">
-          Histórico <span className="text-xs font-normal text-gray-400">({historyTotal})</span>
-        </h2>
+      {/* History */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-semibold text-gray-800">Histórico</h2>
+          {historyTotal > 0 && (
+            <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
+              {historyTotal}
+            </span>
+          )}
+        </div>
 
         {loadingHistory ? (
           <div className="flex items-center justify-center py-8">
@@ -395,45 +410,45 @@ export default function ClienteDetailPage({
         ) : history.length === 0 ? (
           <p className="text-sm text-gray-400 text-center py-8">Nenhum atendimento registrado.</p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-1">
             {history.map((h) => {
               const statusInfo = APT_STATUS_ICONS[h.status] ?? APT_STATUS_ICONS.pending;
               const Icon = statusInfo.icon;
               return (
-                <div key={h.id} className="bg-white rounded-lg border border-gray-200 p-3 flex items-start gap-3">
-                  <Icon size={16} className={`mt-0.5 shrink-0 ${statusInfo.className}`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-800">{h.service.name}</span>
-                      <span className="text-xs font-medium text-gray-600">R$ {h.price.toFixed(2)}</span>
+                <div key={h.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Icon size={16} className={`shrink-0 ${statusInfo.className}`} />
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">{h.service.name}</p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(h.date + "T12:00:00").toLocaleDateString("pt-BR")} {h.startTime} — {h.professional.name}
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {new Date(h.date + "T12:00:00").toLocaleDateString("pt-BR")} {h.startTime} — {h.professional.name}
-                    </p>
                   </div>
+                  <span className="text-sm font-bold text-gray-800">{formatCurrency(h.price)}</span>
                 </div>
               );
             })}
 
-            {/* Paginação do histórico */}
-            {historyTotal > 10 && (
-              <div className="flex items-center justify-center gap-2 pt-2">
+            {/* Pagination */}
+            {totalHistoryPages > 1 && (
+              <div className="flex items-center justify-center gap-3 pt-3 mt-2 border-t border-gray-100">
                 <button
                   onClick={() => setHistoryPage((p) => Math.max(1, p - 1))}
                   disabled={historyPage <= 1}
-                  className="text-xs text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 >
-                  Anterior
+                  <ChevronLeft size={14} className="text-gray-600" />
                 </button>
-                <span className="text-xs text-gray-400">
-                  {historyPage} / {Math.ceil(historyTotal / 10)}
+                <span className="text-xs text-gray-500">
+                  {historyPage} de {totalHistoryPages}
                 </span>
                 <button
                   onClick={() => setHistoryPage((p) => p + 1)}
-                  disabled={historyPage >= Math.ceil(historyTotal / 10)}
-                  className="text-xs text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  disabled={historyPage >= totalHistoryPages}
+                  className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 >
-                  Próximo
+                  <ChevronRight size={14} className="text-gray-600" />
                 </button>
               </div>
             )}

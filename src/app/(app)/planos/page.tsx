@@ -21,6 +21,10 @@ interface PlanItem {
   activeClients: number;
 }
 
+function formatCurrency(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
 export default function PlanosPage() {
   const [plans, setPlans] = useState<PlanItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -90,12 +94,15 @@ export default function PlanosPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-gray-800">Planos</h1>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Planos</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Pacotes para fidelizar clientes</p>
+        </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-1.5 px-3 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
+          className="flex items-center gap-1.5 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
         >
           <Plus size={16} />
           Novo plano
@@ -105,73 +112,73 @@ export default function PlanosPage() {
       {/* New plan drawer */}
       {showNew && (
         <div className="fixed inset-0 z-50">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setShowNew(false)} />
+          <div className="fixed inset-0 bg-black/40" onClick={() => setShowNew(false)} />
           <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl z-50 overflow-y-auto">
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
+            <div className="p-5">
+              <div className="flex items-center justify-between mb-5">
                 <h2 className="text-lg font-heading font-semibold text-gray-800">Novo plano</h2>
-                <button onClick={() => setShowNew(false)} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setShowNew(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
                   <X size={20} />
                 </button>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <label className="text-xs text-gray-500 mb-1 block">Nome</label>
+                  <label className="text-xs text-gray-500 mb-1.5 block">Nome</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Ex: Plano Mensal Premium"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-gray-500 mb-1 block">Descrição</label>
+                  <label className="text-xs text-gray-500 mb-1.5 block">Descrição</label>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Preço (R$)</label>
+                    <label className="text-xs text-gray-500 mb-1.5 block">Preço (R$)</label>
                     <input
                       type="number"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
                       step="0.01"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Duração (dias)</label>
+                    <label className="text-xs text-gray-500 mb-1.5 block">Duração (dias)</label>
                     <input
                       type="number"
                       value={durationDays}
                       onChange={(e) => setDurationDays(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Sessões</label>
+                    <label className="text-xs text-gray-500 mb-1.5 block">Sessões</label>
                     <input
                       type="number"
                       value={totalSessions}
                       onChange={(e) => setTotalSessions(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                     />
                   </div>
                 </div>
 
                 {price && totalSessions && (
-                  <div className="bg-success-50 rounded-lg p-3">
+                  <div className="bg-success-50 rounded-xl p-3">
                     <p className="text-xs text-success-700">
-                      Valor por sessão: R$ {(parseFloat(price) / parseInt(totalSessions || "1")).toFixed(2)}
+                      Valor por sessão: {formatCurrency(parseFloat(price) / parseInt(totalSessions || "1"))}
                     </p>
                   </div>
                 )}
@@ -179,7 +186,7 @@ export default function PlanosPage() {
                 <button
                   onClick={handleCreate}
                   disabled={creating || !name.trim() || !price}
-                  className="w-full py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                 >
                   {creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
                   Criar plano
@@ -197,20 +204,22 @@ export default function PlanosPage() {
         </div>
       ) : plans.length === 0 ? (
         <div className="text-center py-16">
-          <CreditCard className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">Nenhum plano cadastrado.</p>
-          <p className="text-xs text-gray-300 mt-1">Crie planos para fidelizar seus clientes!</p>
+          <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+            <CreditCard className="w-6 h-6 text-gray-300" />
+          </div>
+          <p className="text-sm font-medium text-gray-500">Nenhum plano cadastrado.</p>
+          <p className="text-xs text-gray-400 mt-1">Crie planos para fidelizar seus clientes!</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`bg-white rounded-lg border p-4 ${
-                plan.isActive ? "border-gray-200" : "border-gray-100 opacity-60"
+              className={`bg-white rounded-2xl border shadow-sm p-5 ${
+                plan.isActive ? "border-gray-100" : "border-gray-100 opacity-60"
               }`}
             >
-              <div className="flex items-start justify-between mb-2">
+              <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="text-sm font-semibold text-gray-800">{plan.name}</h3>
                   {plan.description && (
@@ -219,10 +228,10 @@ export default function PlanosPage() {
                 </div>
                 <button
                   onClick={() => toggleActive(plan)}
-                  className={`p-1 rounded-md transition-colors ${
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
                     plan.isActive
-                      ? "text-success-600 hover:bg-success-50"
-                      : "text-gray-400 hover:bg-gray-100"
+                      ? "text-success-600 bg-success-50 hover:bg-success-100"
+                      : "text-gray-400 bg-gray-50 hover:bg-gray-100"
                   }`}
                   title={plan.isActive ? "Desativar" : "Ativar"}
                 >
@@ -230,18 +239,18 @@ export default function PlanosPage() {
                 </button>
               </div>
 
-              <div className="flex items-baseline gap-1 mb-3">
+              <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-2xl font-bold text-gray-800">
-                  R$ {plan.price.toFixed(2)}
+                  {formatCurrency(plan.price)}
                 </span>
                 <span className="text-xs text-gray-400">/ {plan.durationDays} dias</span>
               </div>
 
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-500">
+              <div className="flex items-center justify-between text-xs pt-3 border-t border-gray-50">
+                <span className="text-gray-400">
                   {plan.totalSessions} sessões
-                  <span className="text-gray-300 mx-1">|</span>
-                  R$ {(plan.price / plan.totalSessions).toFixed(2)}/sessão
+                  <span className="text-gray-200 mx-1">|</span>
+                  {formatCurrency(plan.price / plan.totalSessions)}/sessão
                 </span>
                 <span className="flex items-center gap-1 text-gray-400">
                   <Users size={10} /> {plan.activeClients} ativo{plan.activeClients !== 1 ? "s" : ""}

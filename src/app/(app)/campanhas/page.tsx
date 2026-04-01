@@ -157,12 +157,15 @@ export default function CampanhasPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-gray-800">Campanhas</h1>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Campanhas</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Reative clientes e preencha horários</p>
+        </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-1.5 px-3 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
+          className="flex items-center gap-1.5 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
         >
           <Plus size={16} />
           Nova campanha
@@ -172,27 +175,27 @@ export default function CampanhasPage() {
       {/* New campaign drawer */}
       {showNew && (
         <div className="fixed inset-0 z-50">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setShowNew(false)} />
+          <div className="fixed inset-0 bg-black/40" onClick={() => setShowNew(false)} />
           <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl z-50 overflow-y-auto">
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
+            <div className="p-5">
+              <div className="flex items-center justify-between mb-5">
                 <h2 className="text-lg font-heading font-semibold text-gray-800">Nova campanha</h2>
-                <button onClick={() => setShowNew(false)} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setShowNew(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
                   <X size={20} />
                 </button>
               </div>
 
               {/* Templates */}
-              <p className="text-xs text-gray-500 mb-2">Templates prontos</p>
-              <div className="space-y-1.5 mb-4">
+              <p className="text-xs text-gray-400 mb-2">Templates prontos</p>
+              <div className="space-y-1.5 mb-5">
                 {TEMPLATES.map((t) => (
                   <button
                     key={t.name}
                     onClick={() => selectTemplate(t)}
-                    className={`w-full text-left p-2.5 rounded-lg border transition-colors text-sm ${
+                    className={`w-full text-left p-3 rounded-xl border transition-colors text-sm ${
                       newName === t.name
                         ? "border-primary-500 bg-primary-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        : "border-gray-100 hover:border-gray-200"
                     }`}
                   >
                     <span className="font-medium text-gray-700">{t.name}</span>
@@ -201,20 +204,20 @@ export default function CampanhasPage() {
                 ))}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <label className="text-xs text-gray-500 mb-1 block">Nome da campanha</label>
+                  <label className="text-xs text-gray-500 mb-1.5 block">Nome da campanha</label>
                   <input
                     type="text"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-gray-500 mb-1 block">Tipo</label>
-                  <div className="flex gap-2">
+                  <label className="text-xs text-gray-500 mb-1.5 block">Tipo</label>
+                  <div className="inline-flex bg-gray-100 rounded-full p-1 gap-1">
                     {([
                       { v: "reactivation", l: "Reativação" },
                       { v: "fill_slots", l: "Preencher vagos" },
@@ -223,10 +226,10 @@ export default function CampanhasPage() {
                       <button
                         key={opt.v}
                         onClick={() => setNewType(opt.v)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                           newType === opt.v
-                            ? "bg-primary-500 text-white"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            ? "bg-white text-primary-700 shadow-sm"
+                            : "text-gray-500 hover:text-gray-700"
                         }`}
                       >
                         {opt.l}
@@ -236,21 +239,21 @@ export default function CampanhasPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs text-gray-500 mb-1 block">
+                  <label className="text-xs text-gray-500 mb-1.5 block">
                     Mensagem (variáveis: {"{{client_name}}"}, {"{{barbershop_name}}"}, {"{{last_visit_days}}"})
                   </label>
                   <textarea
                     value={newTemplate}
                     onChange={(e) => setNewTemplate(e.target.value)}
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none"
                   />
                 </div>
 
                 <button
                   onClick={handleCreate}
                   disabled={creating || !newName.trim() || !newTemplate.trim()}
-                  className="w-full py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                 >
                   {creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
                   Criar campanha
@@ -264,16 +267,16 @@ export default function CampanhasPage() {
       {/* Auto send result modal */}
       {sendResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setSendResult(null)} />
-          <div className="bg-white rounded-lg shadow-xl z-50 w-full max-w-sm mx-4 p-6 text-center">
-            <div className="w-14 h-14 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="fixed inset-0 bg-black/40" onClick={() => setSendResult(null)} />
+          <div className="bg-white rounded-2xl shadow-xl z-50 w-full max-w-sm mx-4 p-6 text-center">
+            <div className="w-14 h-14 bg-success-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Send className="w-6 h-6 text-success-600" />
             </div>
             <h2 className="text-lg font-heading font-bold text-gray-800 mb-1">Campanha enviada!</h2>
             <p className="text-sm text-gray-500 mb-4">
               Mensagens disparadas automaticamente via WhatsApp.
             </p>
-            <div className="flex justify-center gap-6 mb-4">
+            <div className="flex justify-center gap-6 mb-5">
               <div>
                 <p className="text-2xl font-bold text-success-600">{sendResult.sentCount}</p>
                 <p className="text-xs text-gray-400">enviadas</p>
@@ -287,7 +290,7 @@ export default function CampanhasPage() {
             </div>
             <button
               onClick={() => setSendResult(null)}
-              className="w-full py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
+              className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
             >
               Fechar
             </button>
@@ -298,28 +301,28 @@ export default function CampanhasPage() {
       {/* WhatsApp Links modal */}
       {links && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setLinks(null)} />
-          <div className="bg-white rounded-lg shadow-xl z-50 w-full max-w-md max-h-[80vh] overflow-y-auto mx-4">
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-semibold text-gray-800">
+          <div className="fixed inset-0 bg-black/40" onClick={() => setLinks(null)} />
+          <div className="bg-white rounded-2xl shadow-xl z-50 w-full max-w-md max-h-[80vh] overflow-y-auto mx-4">
+            <div className="p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-base font-semibold text-gray-800">
                   Links de WhatsApp ({links.length})
                 </h2>
-                <button onClick={() => setLinks(null)} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setLinks(null)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
                   <X size={18} />
                 </button>
               </div>
               <p className="text-xs text-gray-400 mb-3">
                 Clique em cada link para abrir o WhatsApp com a mensagem pronta.
               </p>
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 {links.map((l, i) => (
                   <a
                     key={i}
                     href={l.link ?? "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors"
                   >
                     <span className="text-sm text-gray-700">{l.clientName}</span>
                     <ExternalLink size={14} className="text-success-600" />
@@ -338,9 +341,11 @@ export default function CampanhasPage() {
         </div>
       ) : campaigns.length === 0 ? (
         <div className="text-center py-16">
-          <Megaphone className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">Nenhuma campanha criada.</p>
-          <p className="text-xs text-gray-300 mt-1">Crie sua primeira campanha de reativação!</p>
+          <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+            <Megaphone className="w-6 h-6 text-gray-300" />
+          </div>
+          <p className="text-sm font-medium text-gray-500">Nenhuma campanha criada.</p>
+          <p className="text-xs text-gray-400 mt-1">Crie sua primeira campanha de reativação!</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -349,20 +354,20 @@ export default function CampanhasPage() {
             return (
               <div
                 key={c.id}
-                className="bg-white rounded-lg border border-gray-200 p-4"
+                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5"
               >
-                <div className="flex items-start justify-between">
+                <div className="flex items-center justify-between">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-gray-800 truncate">
                         {c.name}
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${badge.className}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium shrink-0 ${badge.className}`}>
                         {badge.label}
                       </span>
                     </div>
                     <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <span className="text-xs text-gray-400 flex items-center gap-1">
                         <Users size={10} /> {c.sentCount || c.recipientsCount} destinatário{c.sentCount !== 1 ? "s" : ""}
                       </span>
                       {c.sentAt && (
@@ -377,7 +382,7 @@ export default function CampanhasPage() {
                     <button
                       onClick={() => handleSend(c.id)}
                       disabled={sending === c.id}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-success-500 text-white text-xs font-medium rounded-lg hover:bg-success-600 disabled:opacity-50 transition-colors ml-3"
+                      className="flex items-center gap-1.5 px-4 py-2 bg-success-500 text-white text-xs font-medium rounded-xl hover:bg-success-600 disabled:opacity-50 transition-colors ml-3"
                     >
                       {sending === c.id ? (
                         <Loader2 size={12} className="animate-spin" />

@@ -78,21 +78,21 @@ export function SoloHome() {
           <h1 className="text-xl font-bold text-gray-800">
             Tudo certo, {data.name}!
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-400 mt-1">
             A Babia cuida do resto.
           </p>
         </div>
 
         {/* Booking link card */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-xs text-gray-500 mb-1">Sua página está no ar!</p>
-          <p className="text-sm font-medium text-primary-600 truncate mb-3">
+        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+          <p className="text-xs text-gray-400 mb-1">Sua página está no ar!</p>
+          <p className="text-sm font-medium text-primary-600 truncate mb-4">
             {bookingUrl}
           </p>
           <div className="flex gap-2">
             <button
               onClick={copyLink}
-              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
             >
               {copied ? (
                 <>
@@ -110,7 +110,7 @@ export function SoloHome() {
               href={bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center px-3 py-2.5 border border-gray-100 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
             >
               <ExternalLink size={14} />
             </a>
@@ -118,7 +118,7 @@ export function SoloHome() {
         </div>
 
         {/* Stats */}
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-400">
           {data.stats.totalServices} serviço{data.stats.totalServices !== 1 ? "s" : ""} cadastrado{data.stats.totalServices !== 1 ? "s" : ""}
         </p>
 
@@ -126,31 +126,35 @@ export function SoloHome() {
         <div className="space-y-2">
           <Link
             href="/servicos"
-            className="flex items-center justify-between w-full px-4 py-3 bg-white rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+            className="flex items-center justify-between w-full px-5 py-3.5 bg-white rounded-2xl border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
           >
-            <span className="flex items-center gap-2">
-              <Scissors size={16} className="text-primary-500" />
+            <span className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
+                <Scissors size={14} className="text-primary-500" />
+              </div>
               Editar serviços
             </span>
-            <ChevronRight size={14} className="text-gray-400" />
+            <ChevronRight size={14} className="text-gray-300" />
           </Link>
 
           <Link
             href="/configuracoes"
-            className="flex items-center justify-between w-full px-4 py-3 bg-white rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+            className="flex items-center justify-between w-full px-5 py-3.5 bg-white rounded-2xl border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
           >
-            <span className="flex items-center gap-2">
-              <Settings size={16} className="text-primary-500" />
+            <span className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
+                <Settings size={14} className="text-primary-500" />
+              </div>
               Editar dados e logo
             </span>
-            <ChevronRight size={14} className="text-gray-400" />
+            <ChevronRight size={14} className="text-gray-300" />
           </Link>
         </div>
 
         {/* Full panel CTA */}
         <Link
           href="/agenda"
-          className="block w-full px-4 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-sm"
+          className="block w-full px-5 py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-2xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-sm"
         >
           Acessar painel completo
         </Link>

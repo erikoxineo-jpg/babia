@@ -136,21 +136,22 @@ export default function AgendaPage() {
     : professionals;
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-        <h1 className="text-2xl font-bold text-gray-800">Agenda</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Agenda</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Gerencie seus agendamentos do dia</p>
+        </div>
         <DateNavigator date={selectedDate} onChange={setSelectedDate} />
       </div>
 
-      {/* Filtro de profissional */}
-      <div className="mb-4">
-        <ProfessionalFilter
-          professionals={professionals.map((p) => ({ id: p.id, name: p.name }))}
-          selected={filterProfessional}
-          onChange={setFilterProfessional}
-        />
-      </div>
+      {/* Professional filter */}
+      <ProfessionalFilter
+        professionals={professionals.map((p) => ({ id: p.id, name: p.name }))}
+        selected={filterProfessional}
+        onChange={setFilterProfessional}
+      />
 
       {/* Grid */}
       {loading ? (
@@ -164,7 +165,7 @@ export default function AgendaPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
           <div className="flex min-w-0">
             {visibleProfessionals.map((pro) => {
               const proAppointments = (data?.appointments ?? []).filter(
@@ -190,14 +191,14 @@ export default function AgendaPage() {
       <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-30">
         <button
           onClick={handleNewBlockClick}
-          className="w-12 h-12 bg-gray-600 text-white rounded-full shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
+          className="w-12 h-12 bg-gray-600 text-white rounded-2xl shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
           title="Bloquear horário"
         >
           <Ban size={20} />
         </button>
         <button
           onClick={handleNewClick}
-          className="w-14 h-14 bg-primary-500 text-white rounded-full shadow-lg hover:bg-primary-600 transition-colors flex items-center justify-center"
+          className="w-14 h-14 bg-primary-500 text-white rounded-2xl shadow-lg hover:bg-primary-600 transition-colors flex items-center justify-center"
           title="Novo agendamento"
         >
           <Plus size={24} />

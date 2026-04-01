@@ -4,6 +4,9 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
+
+const inputClass = "w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
 
 export default function CadastroPage() {
   const router = useRouter();
@@ -66,21 +69,21 @@ export default function CadastroPage() {
         <h1 className="text-2xl font-bold text-gray-800">
           Bab<span className="text-secondary-500">IA</span>
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Sua secretária de cuidados pessoais</p>
+        <p className="text-sm text-gray-400 mt-1">Crie sua conta e comece agora</p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-4"
+        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4"
       >
         {error && (
-          <div className="bg-error-50 border border-error-200 text-error-700 text-sm px-4 py-2 rounded-md">
+          <div className="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-2.5 rounded-xl">
             {error}
           </div>
         )}
 
         <div>
-          <label htmlFor="barbershopName" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="barbershopName" className="block text-xs text-gray-500 mb-1.5">
             Nome do estabelecimento
           </label>
           <input
@@ -89,13 +92,13 @@ export default function CadastroPage() {
             required
             value={form.barbershopName}
             onChange={(e) => update("barbershopName", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className={inputClass}
             placeholder="Ex: Studio Maria, Barbearia do João"
           />
         </div>
 
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="name" className="block text-xs text-gray-500 mb-1.5">
             Seu nome
           </label>
           <input
@@ -104,13 +107,13 @@ export default function CadastroPage() {
             required
             value={form.name}
             onChange={(e) => update("name", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className={inputClass}
             placeholder="João Silva"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-xs text-gray-500 mb-1.5">
             Email
           </label>
           <input
@@ -119,13 +122,13 @@ export default function CadastroPage() {
             required
             value={form.email}
             onChange={(e) => update("email", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className={inputClass}
             placeholder="seu@email.com"
           />
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="phone" className="block text-xs text-gray-500 mb-1.5">
             Telefone
           </label>
           <input
@@ -134,13 +137,13 @@ export default function CadastroPage() {
             required
             value={form.phone}
             onChange={(e) => update("phone", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className={inputClass}
             placeholder="(11) 99999-9999"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-xs text-gray-500 mb-1.5">
             Senha
           </label>
           <input
@@ -150,7 +153,7 @@ export default function CadastroPage() {
             minLength={6}
             value={form.password}
             onChange={(e) => update("password", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className={inputClass}
             placeholder="Mínimo 6 caracteres"
           />
         </div>
@@ -158,13 +161,14 @@ export default function CadastroPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary-500 text-white py-2 px-4 rounded-md text-sm font-semibold hover:bg-primary-600 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-primary-500 text-white py-3 px-4 rounded-xl text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
+          {loading && <Loader2 size={14} className="animate-spin" />}
           {loading ? "Criando conta..." : "Criar conta"}
         </button>
       </form>
 
-      <p className="text-center text-sm text-gray-500 mt-4">
+      <p className="text-center text-sm text-gray-400 mt-5">
         Já tem conta?{" "}
         <Link href="/login" className="text-primary-500 hover:text-primary-600 font-medium">
           Fazer login

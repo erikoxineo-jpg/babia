@@ -52,6 +52,9 @@ const WEEKDAYS = [
   { value: 6, short: "Sáb" },
 ];
 
+const inputClass = "w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
+const smallInputClass = "w-20 px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
+
 export default function ConfiguracoesPage() {
   const router = useRouter();
   const [data, setData] = useState<TenantData | null>(null);
@@ -240,28 +243,27 @@ export default function ConfiguracoesPage() {
   }
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Configurações</h1>
+    <div className="max-w-2xl space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-800">Configurações</h1>
+        <p className="text-sm text-gray-400 mt-0.5">Gerencie os dados do seu estabelecimento</p>
+      </div>
 
-      {/* Logo da Barbearia */}
-      <section className="bg-white rounded-lg border border-gray-200 p-5 mb-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Camera size={18} className="text-primary-500" />
-          <h2 className="text-sm font-semibold text-gray-700">
-            Logo da barbearia
-          </h2>
+      {/* Logo */}
+      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
+            <Camera size={16} className="text-primary-500" />
+          </div>
+          <h2 className="text-base font-semibold text-gray-800">Logo da barbearia</h2>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shrink-0 overflow-hidden shadow-lg shadow-primary-500/20">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shrink-0 overflow-hidden shadow-lg shadow-primary-500/20">
             {logoUploading ? (
               <Loader2 className="w-6 h-6 text-white animate-spin" />
             ) : logoUrl ? (
-              <img
-                src={logoUrl}
-                alt="Logo"
-                className="w-full h-full object-cover"
-              />
+              <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" />
             ) : (
               <Scissors className="w-8 h-8 text-white" />
             )}
@@ -272,38 +274,24 @@ export default function ConfiguracoesPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={logoUploading}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-500 text-white text-xs font-medium rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 bg-primary-500 text-white text-xs font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
               >
-                {success === "logo" ? (
-                  <Check size={12} />
-                ) : (
-                  <Camera size={12} />
-                )}
-                {success === "logo"
-                  ? "Salvo!"
-                  : logoUrl
-                    ? "Alterar foto"
-                    : "Enviar foto"}
+                {success === "logo" ? <Check size={12} /> : <Camera size={12} />}
+                {success === "logo" ? "Salvo!" : logoUrl ? "Alterar foto" : "Enviar foto"}
               </button>
 
               {logoUrl && !logoUploading && (
                 <button
                   onClick={handleLogoRemove}
-                  className="flex items-center gap-1.5 px-3 py-1.5 border border-red-300 text-red-500 text-xs font-medium rounded-lg hover:bg-red-50 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 border border-red-200 text-red-500 text-xs font-medium rounded-xl hover:bg-red-50 transition-colors"
                 >
                   <Trash2 size={12} />
                   Remover
                 </button>
               )}
             </div>
-
-            <p className="text-xs text-gray-400">
-              JPG, PNG ou WebP. Máx 2 MB.
-            </p>
-
-            {logoError && (
-              <p className="text-xs text-red-500">{logoError}</p>
-            )}
+            <p className="text-xs text-gray-400">JPG, PNG ou WebP. Máx 2 MB.</p>
+            {logoError && <p className="text-xs text-red-500">{logoError}</p>}
           </div>
         </div>
 
@@ -316,98 +304,50 @@ export default function ConfiguracoesPage() {
         />
       </section>
 
-      {/* Dados da Barbearia */}
-      <section className="bg-white rounded-lg border border-gray-200 p-5 mb-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Building2 size={18} className="text-primary-500" />
-          <h2 className="text-sm font-semibold text-gray-700">
-            Dados da barbearia
-          </h2>
+      {/* Tenant Data */}
+      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
+            <Building2 size={16} className="text-primary-500" />
+          </div>
+          <h2 className="text-base font-semibold text-gray-800">Dados da barbearia</h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div>
-            <label className="text-xs text-gray-500 mb-1 block">Nome</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+            <label className="text-xs text-gray-500 mb-1.5 block">Nome</label>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-gray-500 mb-1 block">
-                Telefone
-              </label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
+              <label className="text-xs text-gray-500 mb-1.5 block">Telefone</label>
+              <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="text-xs text-gray-500 mb-1 block">
-                WhatsApp
-              </label>
-              <input
-                type="text"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                placeholder="Mesmo que telefone se vazio"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
+              <label className="text-xs text-gray-500 mb-1.5 block">WhatsApp</label>
+              <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="Mesmo que telefone se vazio" className={inputClass} />
             </div>
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 mb-1 block">E-mail</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+            <label className="text-xs text-gray-500 mb-1.5 block">E-mail</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 mb-1 block">
-              Endereço
-            </label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+            <label className="text-xs text-gray-500 mb-1.5 block">Endereço</label>
+            <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className={inputClass} />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-gray-500 mb-1 block">
-                Cidade
-              </label>
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
+              <label className="text-xs text-gray-500 mb-1.5 block">Cidade</label>
+              <input type="text" value={city} onChange={(e) => setCity(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="text-xs text-gray-500 mb-1 block">
-                Estado
-              </label>
-              <input
-                type="text"
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                maxLength={2}
-                placeholder="SP"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 uppercase"
-              />
+              <label className="text-xs text-gray-500 mb-1.5 block">Estado</label>
+              <input type="text" value={state} onChange={(e) => setState(e.target.value)} maxLength={2} placeholder="SP" className={`${inputClass} uppercase`} />
             </div>
           </div>
 
@@ -415,54 +355,46 @@ export default function ConfiguracoesPage() {
             <span className="text-xs text-gray-400">
               Slug: <strong>{data.slug}</strong>
             </span>
-            <span className="text-xs text-gray-400">|</span>
+            <span className="text-xs text-gray-300">|</span>
             <span className="text-xs text-gray-400">
               Plano: <strong>{data.plan}</strong>
             </span>
           </div>
         </div>
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-5">
           <button
             onClick={saveTenantData}
             disabled={saving === "tenant"}
-            className="flex items-center gap-1.5 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1.5 px-5 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
           >
-            {saving === "tenant" ? (
-              <Loader2 size={14} className="animate-spin" />
-            ) : success === "tenant" ? (
-              <Check size={14} />
-            ) : (
-              <Save size={14} />
-            )}
+            {saving === "tenant" ? <Loader2 size={14} className="animate-spin" /> : success === "tenant" ? <Check size={14} /> : <Save size={14} />}
             {success === "tenant" ? "Salvo!" : "Salvar dados"}
           </button>
         </div>
       </section>
 
-      {/* Horários de Funcionamento */}
-      <section className="bg-white rounded-lg border border-gray-200 p-5 mb-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Clock size={18} className="text-primary-500" />
-          <h2 className="text-sm font-semibold text-gray-700">
-            Horários e funcionamento
-          </h2>
+      {/* Working Hours */}
+      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
+            <Clock size={16} className="text-primary-500" />
+          </div>
+          <h2 className="text-base font-semibold text-gray-800">Horários e funcionamento</h2>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="text-xs text-gray-500 mb-2 block">
-              Dias de funcionamento
-            </label>
-            <div className="flex gap-1.5">
+            <label className="text-xs text-gray-500 mb-2 block">Dias de funcionamento</label>
+            <div className="inline-flex bg-gray-100 rounded-full p-1 gap-1">
               {WEEKDAYS.map((day) => (
                 <button
                   key={day.value}
                   onClick={() => toggleDay(day.value)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                     workingDays.includes(day.value)
-                      ? "bg-primary-500 text-white"
-                      : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                      ? "bg-white text-primary-700 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
                   }`}
                 >
                   {day.short}
@@ -473,38 +405,16 @@ export default function ConfiguracoesPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-gray-500 mb-1 block">
-                Antecedência máx. para agendamento
-              </label>
+              <label className="text-xs text-gray-500 mb-1.5 block">Antecedência máx. agendamento</label>
               <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  value={bookingAdvanceDays}
-                  onChange={(e) =>
-                    setBookingAdvanceDays(Number(e.target.value))
-                  }
-                  min={1}
-                  max={90}
-                  className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
+                <input type="number" value={bookingAdvanceDays} onChange={(e) => setBookingAdvanceDays(Number(e.target.value))} min={1} max={90} className={smallInputClass} />
                 <span className="text-xs text-gray-400">dias</span>
               </div>
             </div>
             <div>
-              <label className="text-xs text-gray-500 mb-1 block">
-                Threshold de inatividade
-              </label>
+              <label className="text-xs text-gray-500 mb-1.5 block">Threshold de inatividade</label>
               <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  value={inactiveDaysThreshold}
-                  onChange={(e) =>
-                    setInactiveDaysThreshold(Number(e.target.value))
-                  }
-                  min={7}
-                  max={365}
-                  className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
+                <input type="number" value={inactiveDaysThreshold} onChange={(e) => setInactiveDaysThreshold(Number(e.target.value))} min={7} max={365} className={smallInputClass} />
                 <span className="text-xs text-gray-400">dias sem visita</span>
               </div>
             </div>
@@ -512,20 +422,20 @@ export default function ConfiguracoesPage() {
         </div>
       </section>
 
-      {/* Notificações */}
-      <section className="bg-white rounded-lg border border-gray-200 p-5 mb-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Bell size={18} className="text-primary-500" />
-          <h2 className="text-sm font-semibold text-gray-700">Notificações</h2>
+      {/* Notifications */}
+      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
+            <Bell size={16} className="text-primary-500" />
+          </div>
+          <h2 className="text-base font-semibold text-gray-800">Notificações</h2>
         </div>
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-700">Confirmação automática</p>
-              <p className="text-xs text-gray-400">
-                Enviar confirmação após agendamento
-              </p>
+              <p className="text-xs text-gray-400">Enviar confirmação após agendamento</p>
             </div>
             <button
               onClick={() => setConfirmationEnabled(!confirmationEnabled)}
@@ -542,77 +452,47 @@ export default function ConfiguracoesPage() {
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 mb-1 block">
-              Lembrete antes do horário
-            </label>
+            <label className="text-xs text-gray-500 mb-1.5 block">Lembrete antes do horário</label>
             <div className="flex items-center gap-2">
-              <input
-                type="number"
-                value={reminderHoursBefore}
-                onChange={(e) =>
-                  setReminderHoursBefore(Number(e.target.value))
-                }
-                min={1}
-                max={48}
-                className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
+              <input type="number" value={reminderHoursBefore} onChange={(e) => setReminderHoursBefore(Number(e.target.value))} min={1} max={48} className={smallInputClass} />
               <span className="text-xs text-gray-400">horas antes</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Políticas */}
-      <section className="bg-white rounded-lg border border-gray-200 p-5 mb-4">
-        <div className="flex items-center gap-2 mb-4">
-          <ShieldAlert size={18} className="text-primary-500" />
-          <h2 className="text-sm font-semibold text-gray-700">
-            Política de cancelamento e no-show
-          </h2>
+      {/* Cancellation Policy */}
+      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
+            <ShieldAlert size={16} className="text-primary-500" />
+          </div>
+          <h2 className="text-base font-semibold text-gray-800">Política de cancelamento</h2>
         </div>
 
         <div>
-          <label className="text-xs text-gray-500 mb-1 block">
-            Cancelamento permitido até
-          </label>
+          <label className="text-xs text-gray-500 mb-1.5 block">Cancelamento permitido até</label>
           <div className="flex items-center gap-2">
-            <input
-              type="number"
-              value={cancellationPolicyHours}
-              onChange={(e) =>
-                setCancellationPolicyHours(Number(e.target.value))
-              }
-              min={0}
-              max={72}
-              className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-            <span className="text-xs text-gray-400">
-              horas antes do horário (0 = sem política)
-            </span>
+            <input type="number" value={cancellationPolicyHours} onChange={(e) => setCancellationPolicyHours(Number(e.target.value))} min={0} max={72} className={smallInputClass} />
+            <span className="text-xs text-gray-400">horas antes do horário (0 = sem política)</span>
           </div>
         </div>
       </section>
 
       {/* Save settings button */}
-      <div className="flex justify-end mb-8">
+      <div className="flex justify-end pb-4">
         <button
           onClick={saveSettings}
           disabled={saving === "settings"}
-          className="flex items-center gap-1.5 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors"
+          className="flex items-center gap-1.5 px-5 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors"
         >
-          {saving === "settings" ? (
-            <Loader2 size={14} className="animate-spin" />
-          ) : success === "settings" ? (
-            <Check size={14} />
-          ) : (
-            <Save size={14} />
-          )}
+          {saving === "settings" ? <Loader2 size={14} className="animate-spin" /> : success === "settings" ? <Check size={14} /> : <Save size={14} />}
           {success === "settings" ? "Salvo!" : "Salvar configurações"}
         </button>
       </div>
 
       {/* Stats */}
-      <div className="border-t border-gray-200 pt-4">
+      <div className="border-t border-gray-100 pt-4 pb-2">
         <p className="text-xs text-gray-400 mb-2">Estatísticas do sistema</p>
         <div className="flex gap-6">
           <span className="text-xs text-gray-500">

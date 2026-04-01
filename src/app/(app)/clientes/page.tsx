@@ -35,6 +35,10 @@ const FILTERS = [
   { value: "inactive", label: "Inativos" },
 ];
 
+function formatCurrency(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
 export default function ClientesPage() {
   const [clients, setClients] = useState<ClientItem[]>([]);
   const [meta, setMeta] = useState<Meta | null>(null);
@@ -78,39 +82,42 @@ export default function ClientesPage() {
   }, [fetchClients]);
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+      <div>
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold text-gray-800">Clientes</h1>
           {meta && (
-            <span className="text-sm text-gray-400">({meta.total})</span>
+            <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
+              {meta.total}
+            </span>
           )}
         </div>
+        <p className="text-sm text-gray-400 mt-0.5">Gerencie sua base de clientes</p>
       </div>
 
-      {/* Busca */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar por nome ou telefone..."
-          className="w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+          className="w-full pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-2xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         />
       </div>
 
-      {/* Filtros */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      {/* Filters */}
+      <div className="inline-flex bg-gray-100 rounded-full p-1 gap-1">
         {FILTERS.map((f) => (
           <button
             key={f.value}
             onClick={() => { setStatusFilter(f.value); setPage(1); }}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               statusFilter === f.value
-                ? "bg-primary-500 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-white text-primary-700 shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
             }`}
           >
             {f.label}
@@ -118,15 +125,17 @@ export default function ClientesPage() {
         ))}
       </div>
 
-      {/* Lista */}
+      {/* List */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
         </div>
       ) : clients.length === 0 ? (
         <div className="text-center py-16">
-          <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">
+          <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+            <Users className="w-6 h-6 text-gray-300" />
+          </div>
+          <p className="text-sm font-medium text-gray-500">
             {debouncedSearch
               ? `Nenhum resultado para "${debouncedSearch}"`
               : "Nenhum cliente encontrado."}
@@ -140,36 +149,46 @@ export default function ClientesPage() {
               <Link
                 key={client.id}
                 href={`/clientes/${client.id}`}
-                className="block bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors"
+                className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:bg-gray-50 transition-colors"
               >
-                <div className="flex items-start justify-between">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-800 truncate">
-                        {client.name}
-                      </span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${badge.className}`}>
-                        {badge.label}
-                      </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-xs font-bold text-primary-600 shrink-0">
+                      {client.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .slice(0, 2)
+                        .join("")
+                        .toUpperCase()}
                     </div>
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
-                        <Phone size={10} /> {client.phone}
-                      </span>
-                      {client.lastVisit && (
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
-                          <Calendar size={10} />
-                          {new Date(client.lastVisit + "T12:00:00").toLocaleDateString("pt-BR")}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-800 truncate">
+                          {client.name}
                         </span>
-                      )}
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium shrink-0 ${badge.className}`}>
+                          {badge.label}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 mt-0.5">
+                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                          <Phone size={10} /> {client.phone}
+                        </span>
+                        {client.lastVisit && (
+                          <span className="text-xs text-gray-400 flex items-center gap-1">
+                            <Calendar size={10} />
+                            {new Date(client.lastVisit + "T12:00:00").toLocaleDateString("pt-BR")}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="text-right shrink-0 ml-4">
-                    <p className="text-sm font-semibold text-gray-700">
+                    <p className="text-sm font-bold text-gray-800">
                       {client.totalVisits} <span className="text-xs font-normal text-gray-400">visitas</span>
                     </p>
                     <p className="text-xs text-gray-400">
-                      R$ {client.totalSpent.toFixed(2)}
+                      {formatCurrency(client.totalSpent)}
                     </p>
                   </div>
                 </div>
@@ -179,31 +198,26 @@ export default function ClientesPage() {
         </div>
       )}
 
-      {/* Paginação */}
+      {/* Pagination */}
       {meta && meta.totalPages > 1 && (
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-400">
-            {(page - 1) * meta.perPage + 1}-{Math.min(page * meta.perPage, meta.total)} de {meta.total}
-          </p>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page <= 1}
-              className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 disabled:opacity-30"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-xs text-gray-600 px-2">
-              {page} / {meta.totalPages}
-            </span>
-            <button
-              onClick={() => setPage((p) => Math.min(meta.totalPages, p + 1))}
-              disabled={page >= meta.totalPages}
-              className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 disabled:opacity-30"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
+        <div className="flex items-center justify-center gap-3 pt-2">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page <= 1}
+            className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronLeft size={16} className="text-gray-600" />
+          </button>
+          <span className="text-sm text-gray-500 min-w-[60px] text-center">
+            {page} de {meta.totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(meta.totalPages, p + 1))}
+            disabled={page >= meta.totalPages}
+            className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronRight size={16} className="text-gray-600" />
+          </button>
         </div>
       )}
     </div>
