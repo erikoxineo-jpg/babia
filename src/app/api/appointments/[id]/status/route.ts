@@ -72,7 +72,7 @@ export async function PUT(
         },
       });
 
-      // Se completado, atualizar métricas do cliente
+      // Se completado, atualizar métricas do cliente e criar transação
       if (status === "completed") {
         const newTotal = appointment.client.totalVisits + 1;
         const newSpent = Number(appointment.client.totalSpent) + Number(appointment.price);
@@ -84,6 +84,19 @@ export async function PUT(
             averageTicket: newSpent / newTotal,
             lastVisit: appointment.date,
             firstVisit: appointment.client.totalVisits === 0 ? appointment.date : undefined,
+          },
+        });
+
+        // Criar transação financeira automática
+        await tx.transaction.create({
+          data: {
+            tenantId,
+            appointmentId: id,
+            clientId: appointment.clientId,
+            type: "service",
+            amount: Number(appointment.price),
+            paymentMethod: "pix", // Padrão — dono pode editar depois
+            date: appointment.date,
           },
         });
       }
