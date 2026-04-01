@@ -13,22 +13,31 @@ export async function POST() {
   const tenantId = user.tenantId as string;
 
   try {
+    const servicesCount = await prisma.service.count({ where: { tenantId } });
+    const professionalsCount = await prisma.professional.count({
+      where: { tenantId, isActive: true },
+    });
+
+    // Set viewMode based on team size
+    const viewMode = professionalsCount > 1 ? "team" : "solo";
+
     await prisma.tenant.update({
       where: { id: tenantId },
       data: {
         onboardingStep: 5,
         onboardingCompleted: true,
+        settings: {
+          upsert: {
+            create: { viewMode },
+            update: { viewMode },
+          },
+        },
       },
     });
 
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
       select: { name: true, slug: true },
-    });
-
-    const servicesCount = await prisma.service.count({ where: { tenantId } });
-    const professionalsCount = await prisma.professional.count({
-      where: { tenantId, isActive: true },
     });
 
     return NextResponse.json({

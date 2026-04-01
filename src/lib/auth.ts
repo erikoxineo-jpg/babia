@@ -79,15 +79,20 @@ export const authOptions: NextAuthOptions = {
         token.viewMode = u.viewMode;
       }
 
-      // Refresh onboarding status from DB until completed
+      // Refresh onboarding + viewMode from DB until onboarding completed
       if (token.tenantId && token.onboardingCompleted === false) {
         const tenant = await prisma.tenant.findUnique({
           where: { id: token.tenantId as string },
-          select: { onboardingStep: true, onboardingCompleted: true },
+          select: {
+            onboardingStep: true,
+            onboardingCompleted: true,
+            settings: { select: { viewMode: true } },
+          },
         });
         if (tenant) {
           token.onboardingStep = tenant.onboardingStep;
           token.onboardingCompleted = tenant.onboardingCompleted;
+          token.viewMode = tenant.settings?.viewMode ?? "solo";
         }
       }
 
