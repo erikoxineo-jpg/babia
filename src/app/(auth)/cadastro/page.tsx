@@ -160,7 +160,7 @@ export default function CadastroPage() {
           disabled={loading}
           className="w-full bg-primary-500 text-white py-2 px-4 rounded-md text-sm font-semibold hover:bg-primary-600 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? "Criando conta..." : "Criar conta grátis"}
+          {loading ? "Criando conta..." : "Criar conta"}
         </button>
       </form>
 

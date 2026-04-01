@@ -41,7 +41,7 @@ export function SoloHome() {
 
   async function copyLink() {
     if (!data) return;
-    const url = `${window.location.origin}/b/${data.slug}`;
+    const url = `${window.location.origin}/agendar/${data.slug}`;
     await navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -63,7 +63,7 @@ export function SoloHome() {
     );
   }
 
-  const bookingUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/b/${data.slug}`;
+  const bookingUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/agendar/${data.slug}`;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
