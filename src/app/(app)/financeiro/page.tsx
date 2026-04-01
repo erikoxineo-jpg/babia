@@ -17,7 +17,7 @@ export default function FinanceiroPage() {
           <DollarSign className="w-8 h-8 text-primary-500" />
         </div>
 
-        <h2 className="text-lg font-semibold text-gray-800 mb-2">
+        <h2 className="text-lg font-heading font-semibold text-gray-800 mb-2">
           Em breve
         </h2>
         <p className="text-sm text-gray-500 max-w-md mx-auto mb-6">
@@ -35,7 +35,7 @@ export default function FinanceiroPage() {
           <p className="text-xs text-gray-500">
             Acompanhe seu faturamento e métricas pelo{" "}
             <Link
-              href="/"
+              href="/dashboard"
               className="text-primary-500 font-medium hover:text-primary-600 transition-colors"
             >
               Dashboard

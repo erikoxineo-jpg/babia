@@ -95,7 +95,7 @@ export default function BarbeariaPage() {
       <Stepper currentStep={1} />
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-1">Dados do estabelecimento</h2>
+        <h2 className="text-lg font-heading font-semibold text-gray-800 mb-1">Dados do estabelecimento</h2>
         <p className="text-sm text-gray-500 mb-6">
           Informações básicas sobre o seu negócio.
         </p>

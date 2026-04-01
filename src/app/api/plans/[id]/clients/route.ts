@@ -1,20 +1,16 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireAuth, isErrorResponse } from "@/lib/rbac";
 
 // GET — listar clientes vinculados ao plano
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
-  }
+  const auth = await requireAuth();
+  if (isErrorResponse(auth)) return auth;
 
-  const user = session.user as Record<string, unknown>;
-  const tenantId = user.tenantId as string;
+  const { tenantId } = auth.user;
   const { id } = await params;
 
   const plan = await prisma.plan.findFirst({ where: { id, tenantId } });
@@ -42,18 +38,15 @@ export async function GET(
   });
 }
 
-// POST — vincular cliente ao plano
+// POST — vincular cliente ao plano (owner, admin)
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
-  }
+  const auth = await requireAuth(["owner", "admin"]);
+  if (isErrorResponse(auth)) return auth;
 
-  const user = session.user as Record<string, unknown>;
-  const tenantId = user.tenantId as string;
+  const { tenantId } = auth.user;
   const { id } = await params;
 
   try {

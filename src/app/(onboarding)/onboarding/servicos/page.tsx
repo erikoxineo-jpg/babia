@@ -140,7 +140,7 @@ export default function ServicosPage() {
       <Stepper currentStep={3} />
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-1">Serviços oferecidos</h2>
+        <h2 className="text-lg font-heading font-semibold text-gray-800 mb-1">Serviços oferecidos</h2>
         <p className="text-sm text-gray-500 mb-6">
           Selecione os serviços da sua barbearia. Você pode personalizar preços e adicionar novos.
         </p>

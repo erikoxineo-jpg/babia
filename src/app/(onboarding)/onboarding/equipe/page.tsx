@@ -168,7 +168,7 @@ export default function EquipePage() {
 
         {phase === "choice" && (
           <>
-            <h2 className="text-lg font-semibold text-gray-800 mb-1">Como você trabalha?</h2>
+            <h2 className="text-lg font-heading font-semibold text-gray-800 mb-1">Como você trabalha?</h2>
             <p className="text-sm text-gray-500 mb-6">
               Isso define como o sistema vai funcionar para você.
             </p>
@@ -222,7 +222,7 @@ export default function EquipePage() {
 
         {phase === "team" && (
           <>
-            <h2 className="text-lg font-semibold text-gray-800 mb-1">Sua equipe</h2>
+            <h2 className="text-lg font-heading font-semibold text-gray-800 mb-1">Sua equipe</h2>
             <p className="text-sm text-gray-500 mb-6">
               Você já está adicionado. Adicione outros profissionais se houver.
               Este passo é opcional.

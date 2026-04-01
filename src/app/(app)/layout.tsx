@@ -45,7 +45,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   const viewMode = user?.viewMode as string;
-  const isSoloHome = viewMode === "solo" && pathname === "/";
+  const isSoloHome = viewMode === "solo" && pathname === "/dashboard";
 
   if (isSoloHome) {
     return <div className="min-h-screen bg-gray-50">{children}</div>;

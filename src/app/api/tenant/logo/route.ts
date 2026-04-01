@@ -3,11 +3,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeFile, mkdir, unlink } from "fs/promises";
-import { join } from "path";
+import { join, resolve, sep } from "path";
 import { existsSync } from "fs";
 import { randomBytes } from "crypto";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "webp"];
 const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
 const UPLOADS_DIR = join(process.cwd(), "uploads", "logos");
 
@@ -75,11 +76,27 @@ export async function POST(request: Request) {
       await mkdir(UPLOADS_DIR, { recursive: true });
     }
 
-    // Salvar arquivo
-    const ext = file.name.split(".").pop() || "jpg";
+    // Validar extensão contra whitelist
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (!ALLOWED_EXTENSIONS.includes(ext)) {
+      return NextResponse.json(
+        { error: "Extensão inválida. Use jpg, jpeg, png ou webp." },
+        { status: 422 }
+      );
+    }
+
+    // Salvar arquivo com nome seguro
     const suffix = randomBytes(6).toString("hex");
     const filename = `${tenantId}-${suffix}.${ext}`;
-    const filepath = join(UPLOADS_DIR, filename);
+    const filepath = resolve(UPLOADS_DIR, filename);
+
+    // Path traversal check: garantir que o arquivo está dentro do diretório esperado
+    if (!filepath.startsWith(resolve(UPLOADS_DIR) + sep)) {
+      return NextResponse.json(
+        { error: "Caminho de arquivo inválido." },
+        { status: 400 }
+      );
+    }
 
     const buffer = Buffer.from(await file.arrayBuffer());
     await writeFile(filepath, buffer);

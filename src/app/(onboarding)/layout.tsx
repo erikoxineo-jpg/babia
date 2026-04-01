@@ -23,7 +23,7 @@ function OnboardingShell({ children }: { children: React.ReactNode }) {
 
   const user = session?.user as Record<string, unknown> | undefined;
   if (user?.onboardingCompleted) {
-    router.push("/");
+    router.push("/dashboard");
     return null;
   }
 

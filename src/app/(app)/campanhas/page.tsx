@@ -176,7 +176,7 @@ export default function CampanhasPage() {
           <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl z-50 overflow-y-auto">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-800">Nova campanha</h2>
+                <h2 className="text-lg font-heading font-semibold text-gray-800">Nova campanha</h2>
                 <button onClick={() => setShowNew(false)} className="text-gray-400 hover:text-gray-600">
                   <X size={20} />
                 </button>
@@ -269,7 +269,7 @@ export default function CampanhasPage() {
             <div className="w-14 h-14 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Send className="w-6 h-6 text-success-600" />
             </div>
-            <h2 className="text-lg font-bold text-gray-800 mb-1">Campanha enviada!</h2>
+            <h2 className="text-lg font-heading font-bold text-gray-800 mb-1">Campanha enviada!</h2>
             <p className="text-sm text-gray-500 mb-4">
               Mensagens disparadas automaticamente via WhatsApp.
             </p>

@@ -138,7 +138,7 @@ function EditDrawer({
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl flex flex-col animate-slide-in-right">
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">Editar Cliente</h2>
+          <h2 className="text-lg font-heading font-semibold text-gray-800">Editar Cliente</h2>
           <button onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700">Fechar</button>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-3">

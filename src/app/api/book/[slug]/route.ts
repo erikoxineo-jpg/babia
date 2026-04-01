@@ -2,12 +2,17 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, getDayOfWeek, timeToMinutes, minutesToTime } from "@/lib/availability";
 import { createConfirmationNotification } from "@/lib/notifications";
+import { bookingLimiter, checkRateLimit } from "@/lib/rate-limit";
 
 // POST — criar agendamento público
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  // Rate limit: 20 agendamentos por hora por IP
+  const rateLimitResponse = checkRateLimit(request, bookingLimiter);
+  if (rateLimitResponse) return rateLimitResponse;
+
   const { slug } = await params;
 
   try {

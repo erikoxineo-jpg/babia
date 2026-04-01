@@ -91,7 +91,7 @@ export default function HorariosPage() {
       <Stepper currentStep={2} />
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-1">Horário de funcionamento</h2>
+        <h2 className="text-lg font-heading font-semibold text-gray-800 mb-1">Horário de funcionamento</h2>
         <p className="text-sm text-gray-500 mb-6">
           Defina seus dias e horários de atendimento. Você pode ajustar depois.
         </p>

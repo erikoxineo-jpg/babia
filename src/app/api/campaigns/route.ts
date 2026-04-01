@@ -1,18 +1,14 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireAuth, isErrorResponse } from "@/lib/rbac";
 import type { Prisma } from "@prisma/client";
 
 // GET — lista campanhas
 export async function GET(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
-  }
+  const auth = await requireAuth();
+  if (isErrorResponse(auth)) return auth;
 
-  const user = session.user as Record<string, unknown>;
-  const tenantId = user.tenantId as string;
+  const { tenantId } = auth.user;
 
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
@@ -54,15 +50,12 @@ export async function GET(request: Request) {
   });
 }
 
-// POST — criar campanha
+// POST — criar campanha (owner, admin)
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
-  }
+  const auth = await requireAuth(["owner", "admin"]);
+  if (isErrorResponse(auth)) return auth;
 
-  const user = session.user as Record<string, unknown>;
-  const tenantId = user.tenantId as string;
+  const { tenantId } = auth.user;
 
   try {
     const body = await request.json();

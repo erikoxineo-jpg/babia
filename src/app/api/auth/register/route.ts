@@ -2,8 +2,13 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/onboarding";
+import { registerLimiter, checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  // Rate limit: 5 registros por hora por IP
+  const rateLimitResponse = checkRateLimit(request, registerLimiter);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const { name, email, phone, password, barbershopName } = body;

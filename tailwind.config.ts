@@ -84,6 +84,7 @@ const config: Config = {
 
       fontFamily: {
         sans: [
+          'var(--font-inter)',
           'Inter',
           'system-ui',
           '-apple-system',
@@ -93,6 +94,12 @@ const config: Config = {
           '"Helvetica Neue"',
           'Arial',
           'sans-serif',
+        ],
+        heading: [
+          'var(--font-playfair)',
+          '"Playfair Display"',
+          'Georgia',
+          'serif',
         ],
         mono: [
           'JetBrains Mono',

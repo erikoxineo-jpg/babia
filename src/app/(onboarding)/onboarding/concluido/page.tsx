@@ -39,7 +39,7 @@ export default function ConcluidoPage() {
   }, []);
 
   function goToDashboard() {
-    window.location.href = "/";
+    window.location.href = "/dashboard";
   }
 
   if (loading) {
@@ -72,7 +72,7 @@ export default function ConcluidoPage() {
           <Check className="w-8 h-8 text-success-600" />
         </div>
 
-        <h2 className="text-xl font-bold text-gray-800 mb-2">
+        <h2 className="text-xl font-heading font-bold text-gray-800 mb-2">
           Tudo pronto!
         </h2>
         <p className="text-sm text-gray-500 mb-6">

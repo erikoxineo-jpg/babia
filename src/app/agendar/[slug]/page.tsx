@@ -731,7 +731,7 @@ export default function PublicBookingPage({
       {/* Footer */}
       <div className="text-center mt-10 pt-4 border-t border-gray-100">
         <p className="text-[10px] text-gray-300">
-          Powered by <span className="font-semibold text-gray-400">BabIA</span>
+          Powered by <span className="font-heading font-semibold text-gray-400">BabIA</span>
         </p>
       </div>
     </div>

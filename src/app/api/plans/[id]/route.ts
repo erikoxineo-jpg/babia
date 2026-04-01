@@ -1,20 +1,16 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireAuth, isErrorResponse } from "@/lib/rbac";
 
-// PUT — atualizar plano
+// PUT — atualizar plano (owner, admin)
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
-  }
+  const auth = await requireAuth(["owner", "admin"]);
+  if (isErrorResponse(auth)) return auth;
 
-  const user = session.user as Record<string, unknown>;
-  const tenantId = user.tenantId as string;
+  const { tenantId } = auth.user;
   const { id } = await params;
 
   const plan = await prisma.plan.findFirst({ where: { id, tenantId } });

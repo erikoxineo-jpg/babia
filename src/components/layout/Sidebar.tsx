@@ -19,7 +19,7 @@ import {
 import { NAV_PERMISSIONS } from "@/lib/rbac";
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/agenda", label: "Agenda", icon: Calendar },
   { href: "/clientes", label: "Clientes", icon: Users },
   { href: "/servicos", label: "Serviços", icon: Scissors },
@@ -58,13 +58,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       {viewMode === "solo" && (
         <Link
           key="solo-home"
-          href="/"
+          href="/dashboard"
           onClick={onClose}
           className={`
             flex items-center gap-3 px-3 py-2 rounded-md text-sm
             transition-colors duration-150 ease-in-out
             ${
-              pathname === "/"
+              pathname === "/dashboard"
                 ? "bg-primary-800 text-white font-semibold"
                 : "text-gray-300 hover:bg-primary-800 hover:text-white"
             }

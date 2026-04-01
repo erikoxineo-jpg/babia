@@ -5,11 +5,11 @@ import { createReminderNotification } from "@/lib/notifications";
 // GET — endpoint para cron job enviar lembretes
 // Pode ser chamado via Vercel Cron ou serviço externo
 export async function GET(request: Request) {
-  // Simple auth via secret header
+  // Auth via secret header — nega acesso se CRON_SECRET não definido
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
 
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -51,7 +51,7 @@ export function isErrorResponse(result: AuthResult | NextResponse): result is Ne
  * Role permissions for sidebar navigation
  */
 export const NAV_PERMISSIONS: Record<string, Role[]> = {
-  "/": ["owner", "admin", "professional", "receptionist"],
+  "/dashboard": ["owner", "admin", "professional", "receptionist"],
   "/agenda": ["owner", "admin", "professional", "receptionist"],
   "/clientes": ["owner", "admin", "receptionist"],
   "/servicos": ["owner", "admin"],
