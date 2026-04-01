@@ -84,8 +84,8 @@ const config: Config = {
 
       fontFamily: {
         sans: [
-          'var(--font-inter)',
-          'Inter',
+          'var(--font-montserrat)',
+          'Montserrat',
           'system-ui',
           '-apple-system',
           'BlinkMacSystemFont',
@@ -96,10 +96,10 @@ const config: Config = {
           'sans-serif',
         ],
         heading: [
-          'var(--font-playfair)',
-          '"Playfair Display"',
-          'Georgia',
-          'serif',
+          'var(--font-montserrat)',
+          'Montserrat',
+          'system-ui',
+          'sans-serif',
         ],
         mono: [
           'JetBrains Mono',
