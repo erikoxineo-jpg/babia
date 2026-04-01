@@ -19,6 +19,9 @@ interface ServiceCardProps {
   onChange?: (service: ServiceItem) => void;
 }
 
+const inputClass =
+  "px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-secondary-300 focus:border-secondary-300 focus:bg-white transition-colors";
+
 export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCardProps) {
   const [editing, setEditing] = useState(false);
 
@@ -26,39 +29,42 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
     return (
       <div
         className={`
-          rounded-lg border transition-colors
+          rounded-2xl border-2 transition-all
           ${service.selected
-            ? "bg-primary-50 border-primary-300"
-            : "bg-white border-gray-200 hover:border-gray-300"
+            ? "bg-white border-secondary-200 shadow-sm"
+            : "bg-white border-gray-100 hover:border-gray-200"
           }
         `}
       >
         <div
           onClick={onToggle}
-          className="flex items-center justify-between p-3 cursor-pointer"
+          className="flex items-center justify-between p-4 cursor-pointer"
         >
           <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              checked={service.selected ?? false}
-              onChange={onToggle}
-              className="w-4 h-4 rounded border-gray-300 text-primary-500 focus:ring-primary-500"
-              onClick={(e) => e.stopPropagation()}
-            />
+            <div
+              className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${
+                service.selected
+                  ? "bg-secondary-500 border-secondary-500"
+                  : "border-gray-300 bg-white"
+              }`}
+              onClick={(e) => { e.stopPropagation(); onToggle?.(); }}
+            >
+              {service.selected && <Check className="w-3 h-3 text-white" />}
+            </div>
             <div>
-              <p className="text-sm font-medium text-gray-800">{service.name}</p>
+              <p className="text-sm font-semibold text-gray-800">{service.name}</p>
               <div className="flex items-center gap-3 mt-0.5">
-                <span className="flex items-center gap-1 text-xs text-gray-500">
+                <span className="flex items-center gap-1 text-xs text-gray-400">
                   <Clock className="w-3 h-3" /> {service.durationMinutes}min
                 </span>
-                <span className="flex items-center gap-1 text-xs text-gray-500">
+                <span className="flex items-center gap-1 text-xs text-gray-400">
                   <DollarSign className="w-3 h-3" /> R$ {service.price.toFixed(2)}
                 </span>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
+            <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full font-medium">
               {service.category}
             </span>
             {service.selected && (
@@ -68,7 +74,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
                   e.stopPropagation();
                   setEditing(!editing);
                 }}
-                className="p-1 text-gray-400 hover:text-primary-500 transition-colors"
+                className="p-1.5 text-gray-400 hover:text-secondary-500 transition-colors rounded-lg hover:bg-gray-50"
                 title="Editar"
               >
                 {editing ? <Check className="w-4 h-4" /> : <Pencil className="w-3.5 h-3.5" />}
@@ -79,7 +85,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
 
         {editing && service.selected && (
           <div
-            className="flex flex-col sm:flex-row gap-2 px-3 pb-3 pt-1 border-t border-primary-200"
+            className="flex flex-col sm:flex-row gap-2 px-4 pb-4 pt-2 border-t border-gray-100"
             onClick={(e) => e.stopPropagation()}
           >
             <input
@@ -87,7 +93,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
               value={service.name}
               onChange={(e) => onChange?.({ ...service, name: e.target.value })}
               placeholder="Nome"
-              className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className={`flex-1 ${inputClass}`}
             />
             <div className="flex gap-2 items-center">
               <div className="flex items-center gap-1">
@@ -98,7 +104,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
                   onChange={(e) =>
                     onChange?.({ ...service, durationMinutes: parseInt(e.target.value) || 0 })
                   }
-                  className="w-16 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className={`w-16 ${inputClass}`}
                   min={5}
                   step={5}
                 />
@@ -112,7 +118,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
                   onChange={(e) =>
                     onChange?.({ ...service, price: parseFloat(e.target.value) || 0 })
                   }
-                  className="w-20 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className={`w-20 ${inputClass}`}
                   min={0}
                   step={5}
                 />
@@ -125,13 +131,13 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
   }
 
   return (
-    <div className="flex flex-col sm:flex-row gap-2 p-3 rounded-lg border border-gray-200 bg-white">
+    <div className="flex flex-col sm:flex-row gap-2 p-4 rounded-2xl border-2 border-gray-100 bg-white">
       <input
         type="text"
         value={service.name}
         onChange={(e) => onChange?.({ ...service, name: e.target.value })}
-        placeholder="Nome do serviço"
-        className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+        placeholder="Nome do servico"
+        className={`flex-1 ${inputClass}`}
       />
       <div className="flex gap-2 items-center">
         <div className="flex items-center gap-1">
@@ -142,7 +148,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
             onChange={(e) =>
               onChange?.({ ...service, durationMinutes: parseInt(e.target.value) || 0 })
             }
-            className="w-16 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className={`w-16 ${inputClass}`}
             min={5}
             step={5}
           />
@@ -156,7 +162,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
             onChange={(e) =>
               onChange?.({ ...service, price: parseFloat(e.target.value) || 0 })
             }
-            className="w-20 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className={`w-20 ${inputClass}`}
             min={0}
             step={5}
           />
@@ -166,12 +172,12 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
           value={service.category}
           onChange={(e) => onChange?.({ ...service, category: e.target.value })}
           placeholder="Categoria"
-          className="w-24 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className={`w-24 ${inputClass}`}
         />
         <button
           type="button"
           onClick={onRemove}
-          className="p-1.5 text-gray-400 hover:text-error-500 transition-colors"
+          className="p-1.5 text-gray-400 hover:text-secondary-500 transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>

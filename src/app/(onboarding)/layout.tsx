@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
+import { Loader2 } from "lucide-react";
 
 function OnboardingShell({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
@@ -11,7 +12,7 @@ function OnboardingShell({ children }: { children: React.ReactNode }) {
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="animate-pulse text-gray-400 text-sm">Carregando...</div>
+        <Loader2 className="w-5 h-5 text-primary-500 animate-spin" />
       </div>
     );
   }
@@ -29,15 +30,42 @@ function OnboardingShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="bg-white border-b border-gray-200 px-4 py-3">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-800">
-            Bab<span className="text-primary-500">IA</span>
-          </h1>
-          <span className="text-xs text-gray-400">Configuração inicial</span>
+      <div className="flex min-h-screen">
+        {/* Left branding panel — desktop only */}
+        <div className="hidden lg:flex lg:w-[420px] bg-secondary-500 flex-col justify-between p-10 sticky top-0 h-screen">
+          <div>
+            <h1 className="text-2xl font-bold text-white">
+              Bab<span className="text-primary-400">IA</span>
+            </h1>
+            <p className="text-secondary-200 text-sm mt-1">Sua secretaria inteligente</p>
+          </div>
+          <div>
+            <p className="text-white/90 text-lg font-semibold leading-relaxed">
+              Configure seu negocio em poucos minutos e comece a receber agendamentos.
+            </p>
+            <p className="text-secondary-300 text-sm mt-3">
+              Preencha as informacoes ao lado. Voce pode ajustar tudo depois.
+            </p>
+          </div>
+          <p className="text-secondary-400 text-xs">
+            BabIA &copy; {new Date().getFullYear()}
+          </p>
         </div>
-      </header>
-      <main className="max-w-2xl mx-auto px-4 py-6">{children}</main>
+
+        {/* Right content panel */}
+        <div className="flex-1 flex flex-col">
+          {/* Mobile header */}
+          <header className="lg:hidden bg-white border-b border-gray-100 px-5 py-3.5">
+            <h1 className="text-lg font-bold text-gray-800">
+              Bab<span className="text-primary-500">IA</span>
+            </h1>
+          </header>
+
+          <main className="flex-1 w-full max-w-2xl mx-auto px-5 py-6 lg:py-10 lg:px-8">
+            {children}
+          </main>
+        </div>
+      </div>
     </div>
   );
 }

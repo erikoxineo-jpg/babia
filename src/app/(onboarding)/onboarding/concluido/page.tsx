@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Stepper } from "@/components/onboarding/Stepper";
-import { Check, ExternalLink, Lightbulb } from "lucide-react";
+import { Check, ExternalLink, Lightbulb, Loader2 } from "lucide-react";
 
 interface Summary {
   tenantName: string;
@@ -33,7 +33,7 @@ export default function ConcluidoPage() {
         setLoading(false);
       })
       .catch(() => {
-        setError("Erro de conexão.");
+        setError("Erro de conexao.");
         setLoading(false);
       });
   }, []);
@@ -45,7 +45,7 @@ export default function ConcluidoPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-12">
-        <div className="animate-pulse text-gray-400 text-sm">Finalizando...</div>
+        <Loader2 className="w-5 h-5 text-primary-500 animate-spin" />
       </div>
     );
   }
@@ -54,10 +54,8 @@ export default function ConcluidoPage() {
     return (
       <div>
         <Stepper currentStep={5} />
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
-          <div className="bg-error-50 border border-error-200 text-error-700 text-sm px-4 py-2 rounded-md">
-            {error}
-          </div>
+        <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl">
+          {error}
         </div>
       </div>
     );
@@ -67,59 +65,59 @@ export default function ConcluidoPage() {
     <div>
       <Stepper currentStep={5} />
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
-        <div className="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Check className="w-8 h-8 text-success-600" />
+      <div className="text-center">
+        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-5">
+          <Check className="w-8 h-8 text-primary-600" />
         </div>
 
-        <h2 className="text-xl font-heading font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
           Tudo pronto!
         </h2>
-        <p className="text-sm text-gray-500 mb-6">
-          {summary?.tenantName} está configurada e pronta para receber agendamentos.
+        <p className="text-sm text-gray-400 mb-8">
+          {summary?.tenantName} esta configurada e pronta para receber agendamentos.
         </p>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-2xl font-bold text-primary-600">
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="bg-gray-50 rounded-2xl p-5">
+            <p className="text-3xl font-bold text-secondary-500">
               {summary?.servicesCount}
             </p>
-            <p className="text-xs text-gray-500">serviços cadastrados</p>
+            <p className="text-xs text-gray-400 mt-1">servicos</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-2xl font-bold text-primary-600">
+          <div className="bg-gray-50 rounded-2xl p-5">
+            <p className="text-3xl font-bold text-secondary-500">
               {summary?.professionalsCount}
             </p>
-            <p className="text-xs text-gray-500">profissionais</p>
+            <p className="text-xs text-gray-400 mt-1">profissionais</p>
           </div>
         </div>
 
-        <div className="bg-secondary-50 border border-secondary-200 rounded-lg p-4 mb-6 text-left">
-          <div className="flex items-start gap-2">
-            <ExternalLink className="w-4 h-4 text-secondary-600 mt-0.5 shrink-0" />
+        <div className="bg-secondary-500 rounded-2xl p-5 mb-5 text-left">
+          <div className="flex items-start gap-3">
+            <ExternalLink className="w-4 h-4 text-secondary-200 mt-0.5 shrink-0" />
             <div>
-              <p className="text-sm font-medium text-secondary-800">
+              <p className="text-sm font-semibold text-white">
                 Seu link de agendamento
               </p>
-              <p className="text-sm text-secondary-600 mt-0.5 break-all">
+              <p className="text-sm text-secondary-200 mt-1 break-all">
                 {window.location.origin}/agendar/{summary?.slug}
               </p>
-              <p className="text-xs text-secondary-500 mt-1">
+              <p className="text-xs text-secondary-300 mt-1.5">
                 Compartilhe com seus clientes para receber agendamentos online.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
-          <div className="flex items-start gap-2">
-            <Lightbulb className="w-4 h-4 text-gray-500 mt-0.5 shrink-0" />
+        <div className="bg-gray-50 rounded-2xl p-5 mb-8 text-left">
+          <div className="flex items-start gap-3">
+            <Lightbulb className="w-4 h-4 text-primary-500 mt-0.5 shrink-0" />
             <div className="space-y-1.5">
-              <p className="text-sm font-medium text-gray-700">Próximos passos</p>
-              <ul className="text-xs text-gray-500 space-y-1">
+              <p className="text-sm font-semibold text-gray-700">Proximos passos</p>
+              <ul className="text-xs text-gray-400 space-y-1">
                 <li>Cadastre seus primeiros clientes</li>
-                <li>Configure notificações por WhatsApp</li>
-                <li>Ajuste valores e horários no menu Configurações</li>
+                <li>Configure notificacoes por WhatsApp</li>
+                <li>Ajuste valores e horarios no menu Configuracoes</li>
               </ul>
             </div>
           </div>
@@ -127,7 +125,7 @@ export default function ConcluidoPage() {
 
         <button
           onClick={goToDashboard}
-          className="w-full bg-primary-500 text-white py-2.5 px-4 rounded-md text-sm font-semibold hover:bg-primary-600 transition-colors"
+          className="w-full bg-secondary-500 text-white py-3.5 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors"
         >
           Ir para o Dashboard
         </button>

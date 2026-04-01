@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { Stepper } from "@/components/onboarding/Stepper";
 import { DayScheduleRow } from "@/components/onboarding/DayScheduleRow";
 import { DEFAULT_SCHEDULE, type DaySchedule } from "@/lib/onboarding";
@@ -73,7 +74,7 @@ export default function HorariosPage() {
 
       router.push("/onboarding/servicos");
     } catch {
-      setError("Erro de conexão.");
+      setError("Erro de conexao.");
       setSaving(false);
     }
   }
@@ -81,7 +82,7 @@ export default function HorariosPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-12">
-        <div className="animate-pulse text-gray-400 text-sm">Carregando...</div>
+        <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
       </div>
     );
   }
@@ -90,45 +91,46 @@ export default function HorariosPage() {
     <div>
       <Stepper currentStep={2} />
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-heading font-semibold text-gray-800 mb-1">Horário de funcionamento</h2>
-        <p className="text-sm text-gray-500 mb-6">
-          Defina seus dias e horários de atendimento. Você pode ajustar depois.
+      <div className="space-y-1 mb-8">
+        <h2 className="text-xl font-bold text-gray-800">Horario de funcionamento</h2>
+        <p className="text-sm text-gray-400">
+          Defina seus dias e horarios de atendimento. Voce pode ajustar depois.
         </p>
-
-        <form onSubmit={handleSubmit} className="space-y-3">
-          {error && (
-            <div className="bg-error-50 border border-error-200 text-error-700 text-sm px-4 py-2 rounded-md">
-              {error}
-            </div>
-          )}
-
-          {schedule.map((day, index) => (
-            <DayScheduleRow
-              key={day.dayOfWeek}
-              day={day}
-              onChange={(d) => updateDay(index, d)}
-            />
-          ))}
-
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={() => router.push("/onboarding/barbearia")}
-              className="px-4 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Voltar
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex-1 bg-primary-500 text-white py-2.5 px-4 rounded-md text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? "Salvando..." : "Continuar"}
-            </button>
-          </div>
-        </form>
       </div>
+
+      <form onSubmit={handleSubmit} className="space-y-3">
+        {error && (
+          <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl">
+            {error}
+          </div>
+        )}
+
+        {schedule.map((day, index) => (
+          <DayScheduleRow
+            key={day.dayOfWeek}
+            day={day}
+            onChange={(d) => updateDay(index, d)}
+          />
+        ))}
+
+        <div className="flex gap-3 pt-5">
+          <button
+            type="button"
+            onClick={() => router.push("/onboarding/barbearia")}
+            className="px-5 py-3 border-2 border-gray-100 rounded-2xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            Voltar
+          </button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="flex-1 bg-secondary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {saving && <Loader2 size={14} className="animate-spin" />}
+            {saving ? "Salvando..." : "Continuar"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

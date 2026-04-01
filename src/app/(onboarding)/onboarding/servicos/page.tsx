@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { Stepper } from "@/components/onboarding/Stepper";
 import { ServiceCard } from "@/components/onboarding/ServiceCard";
 import { SERVICE_TEMPLATES, type ServiceTemplate } from "@/lib/onboarding";
@@ -100,7 +100,7 @@ export default function ServicosPage() {
     const allServices = [...selected, ...validCustom];
 
     if (allServices.length === 0) {
-      setError("Adicione pelo menos 1 serviço.");
+      setError("Adicione pelo menos 1 servico.");
       return;
     }
 
@@ -122,7 +122,7 @@ export default function ServicosPage() {
 
       router.push("/onboarding/equipe");
     } catch {
-      setError("Erro de conexão.");
+      setError("Erro de conexao.");
       setSaving(false);
     }
   }
@@ -130,7 +130,7 @@ export default function ServicosPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-12">
-        <div className="animate-pulse text-gray-400 text-sm">Carregando...</div>
+        <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
       </div>
     );
   }
@@ -139,21 +139,23 @@ export default function ServicosPage() {
     <div>
       <Stepper currentStep={3} />
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-heading font-semibold text-gray-800 mb-1">Serviços oferecidos</h2>
-        <p className="text-sm text-gray-500 mb-6">
-          Selecione os serviços da sua barbearia. Você pode personalizar preços e adicionar novos.
+      <div className="space-y-1 mb-8">
+        <h2 className="text-xl font-bold text-gray-800">Servicos oferecidos</h2>
+        <p className="text-sm text-gray-400">
+          Selecione os servicos e personalize precos. Voce pode adicionar mais depois.
         </p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="bg-error-50 border border-error-200 text-error-700 text-sm px-4 py-2 rounded-md">
-              {error}
-            </div>
-          )}
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {error && (
+          <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl">
+            {error}
+          </div>
+        )}
 
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-700">Serviços populares</p>
+        <div className="space-y-2">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Servicos populares</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {templates.map((t, index) => (
               <ServiceCard
                 key={index}
@@ -163,48 +165,49 @@ export default function ServicosPage() {
               />
             ))}
           </div>
+        </div>
 
-          {custom.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-700">Serviços personalizados</p>
-              {custom.map((c, index) => (
-                <ServiceCard
-                  key={index}
-                  service={c}
-                  onChange={(s) => updateCustom(index, s as ServiceItem)}
-                  onRemove={() => removeCustom(index)}
-                />
-              ))}
-            </div>
-          )}
+        {custom.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Personalizados</p>
+            {custom.map((c, index) => (
+              <ServiceCard
+                key={index}
+                service={c}
+                onChange={(s) => updateCustom(index, s as ServiceItem)}
+                onRemove={() => removeCustom(index)}
+              />
+            ))}
+          </div>
+        )}
 
+        <button
+          type="button"
+          onClick={addCustom}
+          className="flex items-center gap-1.5 text-sm text-secondary-500 hover:text-secondary-600 font-medium transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          Adicionar servico personalizado
+        </button>
+
+        <div className="flex gap-3 pt-3">
           <button
             type="button"
-            onClick={addCustom}
-            className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 font-medium"
+            onClick={() => router.push("/onboarding/horarios")}
+            className="px-5 py-3 border-2 border-gray-100 rounded-2xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
           >
-            <Plus className="w-4 h-4" />
-            Adicionar serviço personalizado
+            Voltar
           </button>
-
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => router.push("/onboarding/horarios")}
-              className="px-4 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Voltar
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex-1 bg-primary-500 text-white py-2.5 px-4 rounded-md text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? "Salvando..." : "Continuar"}
-            </button>
-          </div>
-        </form>
-      </div>
+          <button
+            type="submit"
+            disabled={saving}
+            className="flex-1 bg-secondary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {saving && <Loader2 size={14} className="animate-spin" />}
+            {saving ? "Salvando..." : "Continuar"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

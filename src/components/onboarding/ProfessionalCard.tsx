@@ -18,29 +18,29 @@ export function ProfessionalCard({
   onRemove,
 }: ProfessionalCardProps) {
   return (
-    <div className="flex items-start justify-between p-3 rounded-lg border border-gray-200 bg-white">
+    <div className="flex items-start justify-between p-4 rounded-2xl border-2 border-gray-100 bg-white">
       <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center shrink-0">
-          <User className="w-4 h-4" />
+        <div className="w-10 h-10 rounded-xl bg-secondary-500 text-white flex items-center justify-center shrink-0">
+          <User className="w-5 h-5" />
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-gray-800">{name}</p>
+            <p className="text-sm font-semibold text-gray-800">{name}</p>
             {isOwner && (
-              <span className="text-xs bg-secondary-100 text-secondary-700 px-1.5 py-0.5 rounded">
-                Você
+              <span className="text-[10px] bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full font-medium">
+                Voce
               </span>
             )}
           </div>
           {phone && (
-            <p className="text-xs text-gray-500 mt-0.5">{phone}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{phone}</p>
           )}
           {serviceNames.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-1.5">
+            <div className="flex flex-wrap gap-1 mt-2">
               {serviceNames.map((s) => (
                 <span
                   key={s}
-                  className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"
+                  className="text-[10px] bg-gray-50 text-gray-500 px-2 py-0.5 rounded-full font-medium"
                 >
                   {s}
                 </span>
@@ -53,7 +53,7 @@ export function ProfessionalCard({
         <button
           type="button"
           onClick={onRemove}
-          className="p-1 text-gray-400 hover:text-error-500 transition-colors"
+          className="p-1.5 text-gray-400 hover:text-secondary-500 transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>
