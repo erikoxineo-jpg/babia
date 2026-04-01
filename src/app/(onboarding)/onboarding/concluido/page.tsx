@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Stepper } from "@/components/onboarding/Stepper";
-import { Check, ExternalLink, Lightbulb, Loader2 } from "lucide-react";
+import { ExternalLink, Lightbulb, Loader2 } from "lucide-react";
 
 interface Summary {
   tenantName: string;
@@ -66,8 +66,12 @@ export default function ConcluidoPage() {
       <Stepper currentStep={5} />
 
       <div className="text-center">
-        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-5">
-          <Check className="w-8 h-8 text-primary-600" />
+        <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-5 shadow-lg shadow-primary-500/20">
+          <img
+            src="/Babia Perfil.png"
+            alt="BabIA"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <h2 className="text-2xl font-bold text-gray-800 mb-2">

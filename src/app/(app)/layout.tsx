@@ -57,13 +57,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
-  const viewMode = user?.viewMode as string;
-  const isSoloHome = viewMode === "solo" && pathname === "/dashboard";
-
-  if (isSoloHome) {
-    return <div className="min-h-screen bg-white">{children}</div>;
-  }
-
   return (
     <div className="min-h-screen bg-white">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} logoUrl={tenantLogoUrl} />
