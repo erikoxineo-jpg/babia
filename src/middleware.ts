@@ -38,12 +38,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Root path: LP for unauthenticated, redirect to dashboard for authenticated
+  // Root path: always show LP
   if (pathname === "/") {
-    const token = await getToken({ req: request });
-    if (token) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
     return NextResponse.next();
   }
 
