@@ -54,7 +54,7 @@ export default function ConcluidoPage() {
     return (
       <div>
         <Stepper currentStep={5} />
-        <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl">
+        <div className="bg-gray-50 border border-gray-200 text-gray-600 text-sm px-4 py-3 rounded-2xl">
           {error}
         </div>
       </div>
@@ -79,30 +79,30 @@ export default function ConcluidoPage() {
 
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-gray-50 rounded-2xl p-5">
-            <p className="text-3xl font-bold text-secondary-500">
+            <p className="text-3xl font-bold text-primary-600">
               {summary?.servicesCount}
             </p>
             <p className="text-xs text-gray-400 mt-1">servicos</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-5">
-            <p className="text-3xl font-bold text-secondary-500">
+            <p className="text-3xl font-bold text-primary-600">
               {summary?.professionalsCount}
             </p>
             <p className="text-xs text-gray-400 mt-1">profissionais</p>
           </div>
         </div>
 
-        <div className="bg-secondary-500 rounded-2xl p-5 mb-5 text-left">
+        <div className="bg-gray-900 rounded-2xl p-5 mb-5 text-left">
           <div className="flex items-start gap-3">
-            <ExternalLink className="w-4 h-4 text-secondary-200 mt-0.5 shrink-0" />
+            <ExternalLink className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
             <div>
               <p className="text-sm font-semibold text-white">
                 Seu link de agendamento
               </p>
-              <p className="text-sm text-secondary-200 mt-1 break-all">
+              <p className="text-sm text-gray-400 mt-1 break-all">
                 {window.location.origin}/agendar/{summary?.slug}
               </p>
-              <p className="text-xs text-secondary-300 mt-1.5">
+              <p className="text-xs text-gray-500 mt-1.5">
                 Compartilhe com seus clientes para receber agendamentos online.
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function ConcluidoPage() {
 
         <button
           onClick={goToDashboard}
-          className="w-full bg-secondary-500 text-white py-3.5 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors"
+          className="w-full bg-primary-500 text-white py-3.5 px-4 rounded-2xl text-sm font-semibold hover:bg-primary-600 transition-colors"
         >
           Ir para o Dashboard
         </button>

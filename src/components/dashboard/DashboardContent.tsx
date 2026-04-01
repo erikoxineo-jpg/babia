@@ -123,22 +123,22 @@ export function DashboardContent() {
       value: String(data.week_no_shows),
       sub: `${data.at_risk_clients} em risco`,
       icon: UserX,
-      color: "text-secondary-500",
-      bg: "bg-secondary-50",
+      color: "text-gray-600",
+      bg: "bg-gray-100",
     },
   ];
 
   const severityStyles = {
     info: { border: "border-l-primary-400", bg: "bg-primary-50/60", icon: <Clock size={16} className="text-primary-500" /> },
     warning: { border: "border-l-warning-400", bg: "bg-warning-50/60", icon: <AlertTriangle size={16} className="text-warning-600" /> },
-    danger: { border: "border-l-secondary-400", bg: "bg-secondary-50/60", icon: <AlertTriangle size={16} className="text-secondary-500" /> },
+    danger: { border: "border-l-gray-400", bg: "bg-gray-100/60", icon: <AlertTriangle size={16} className="text-gray-500" /> },
   };
 
   const statusBreakdown = [
     { label: "Pendentes", value: data.appointments.pending, color: "bg-warning-100 text-warning-700" },
     { label: "Confirmados", value: data.appointments.confirmed, color: "bg-success-100 text-success-700" },
     { label: "Concluídos", value: data.appointments.completed, color: "bg-primary-100 text-primary-700" },
-    { label: "Faltas", value: data.appointments.no_show, color: "bg-secondary-100 text-secondary-600" },
+    { label: "Faltas", value: data.appointments.no_show, color: "bg-gray-200 text-gray-600" },
     { label: "Cancelados", value: data.appointments.cancelled, color: "bg-gray-100 text-gray-500" },
   ];
 
@@ -258,8 +258,8 @@ export function DashboardContent() {
                 className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-secondary-50 rounded-xl flex items-center justify-center">
-                    <Users size={14} className="text-secondary-500" />
+                  <div className="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                    <Users size={14} className="text-gray-500" />
                   </div>
                   <span className="text-sm text-gray-700">
                     Reativar {data.at_risk_clients} cliente{data.at_risk_clients > 1 ? "s" : ""} em risco

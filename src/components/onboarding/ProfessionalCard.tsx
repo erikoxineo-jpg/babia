@@ -20,7 +20,7 @@ export function ProfessionalCard({
   return (
     <div className="flex items-start justify-between p-4 rounded-2xl border-2 border-gray-100 bg-white">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-secondary-500 text-white flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-primary-500 text-white flex items-center justify-center shrink-0">
           <User className="w-5 h-5" />
         </div>
         <div>
@@ -53,7 +53,7 @@ export function ProfessionalCard({
         <button
           type="button"
           onClick={onRemove}
-          className="p-1.5 text-gray-400 hover:text-secondary-500 transition-colors"
+          className="p-1.5 text-gray-400 hover:text-primary-500 transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>

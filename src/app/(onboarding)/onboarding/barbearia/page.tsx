@@ -9,7 +9,7 @@ import { LogoUpload } from "@/components/shared/LogoUpload";
 import { slugify } from "@/lib/onboarding";
 
 const inputClass =
-  "w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-secondary-300 focus:border-secondary-300 focus:bg-white transition-colors";
+  "w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300 focus:bg-white transition-colors";
 
 export default function BarbeariaPage() {
   const router = useRouter();
@@ -107,7 +107,7 @@ export default function BarbeariaPage() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {error && (
-          <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl">
+          <div className="bg-gray-50 border border-gray-200 text-gray-600 text-sm px-4 py-3 rounded-2xl">
             {error}
           </div>
         )}
@@ -217,7 +217,7 @@ export default function BarbeariaPage() {
           <button
             type="submit"
             disabled={saving}
-            className="w-full bg-secondary-500 text-white py-3.5 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-primary-500 text-white py-3.5 px-4 rounded-2xl text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {saving && <Loader2 size={14} className="animate-spin" />}
             {saving ? "Salvando..." : "Continuar"}

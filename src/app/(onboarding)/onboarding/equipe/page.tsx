@@ -160,7 +160,7 @@ export default function EquipePage() {
       <Stepper currentStep={4} />
 
       {error && (
-        <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl mb-6">
+        <div className="bg-gray-50 border border-gray-200 text-gray-600 text-sm px-4 py-3 rounded-2xl mb-6">
           {error}
         </div>
       )}
@@ -181,7 +181,7 @@ export default function EquipePage() {
               disabled={saving}
               className="flex flex-col items-center gap-4 p-8 rounded-3xl border-2 border-gray-100 hover:border-primary-300 hover:shadow-soft transition-all text-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <div className="w-16 h-16 rounded-2xl bg-secondary-500 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-gray-800 flex items-center justify-center">
                 <User className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -258,7 +258,7 @@ export default function EquipePage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 bg-secondary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 bg-primary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 {saving ? "Salvando..." : "Continuar"}

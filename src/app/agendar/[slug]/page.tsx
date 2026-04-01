@@ -128,11 +128,11 @@ function getInitials(name: string): string {
 
 const AVATAR_COLORS = [
   "from-primary-400 to-primary-600",
-  "from-secondary-400 to-secondary-600",
+  "from-gray-600 to-gray-800",
   "from-success-400 to-success-600",
   "from-warning-400 to-warning-600",
   "from-primary-300 to-primary-500",
-  "from-secondary-300 to-secondary-500",
+  "from-gray-600 to-gray-800",
 ];
 
 // ==========================================
@@ -705,8 +705,8 @@ export default function PublicBookingPage({
           </div>
 
           {error && (
-            <div className="p-3 bg-secondary-50 border border-secondary-200 rounded-xl mb-4">
-              <p className="text-xs text-secondary-600">{error}</p>
+            <div className="p-3 bg-gray-100 border border-gray-200 rounded-xl mb-4">
+              <p className="text-xs text-gray-600">{error}</p>
             </div>
           )}
 

@@ -17,11 +17,11 @@ export function BabiaAvatar({ size = "md" }: BabiaAvatarProps) {
 
   return (
     <div
-      className={`${cfg.container} rounded-full bg-gradient-to-br from-secondary-400 to-primary-500 flex items-center justify-center relative shadow-lg shadow-primary-500/20`}
+      className={`${cfg.container} rounded-full bg-gradient-to-br from-gray-700 to-primary-500 flex items-center justify-center relative shadow-lg shadow-primary-500/20`}
     >
       <span className={`${cfg.text} font-bold text-white`}>B</span>
       <div className="absolute -top-0.5 -right-0.5">
-        <Sparkles size={cfg.icon * 0.5} className="text-secondary-300" />
+        <Sparkles size={cfg.icon * 0.5} className="text-primary-300" />
       </div>
     </div>
   );

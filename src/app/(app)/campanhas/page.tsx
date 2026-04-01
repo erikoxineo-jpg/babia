@@ -283,7 +283,7 @@ export default function CampanhasPage() {
               </div>
               {(sendResult.failedCount ?? 0) > 0 && (
                 <div>
-                  <p className="text-2xl font-bold text-secondary-500">{sendResult.failedCount}</p>
+                  <p className="text-2xl font-bold text-gray-500">{sendResult.failedCount}</p>
                   <p className="text-xs text-gray-400">falhas</p>
                 </div>
               )}

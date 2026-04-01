@@ -376,9 +376,9 @@ export default function ClienteDetailPage({
         )}
 
         {client.noShowCount > 0 && (
-          <div className="bg-secondary-50 rounded-3xl border border-secondary-100 p-5 flex items-center gap-3">
-            <AlertTriangle size={16} className="text-secondary-500" />
-            <p className="text-xs text-secondary-600 font-medium">
+          <div className="bg-gray-100 rounded-3xl border border-gray-200 p-5 flex items-center gap-3">
+            <AlertTriangle size={16} className="text-gray-500" />
+            <p className="text-xs text-gray-600 font-medium">
               {client.noShowCount} falta{client.noShowCount > 1 ? "s" : ""}
             </p>
           </div>

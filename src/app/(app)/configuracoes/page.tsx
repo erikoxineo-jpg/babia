@@ -283,7 +283,7 @@ export default function ConfiguracoesPage() {
               {logoUrl && !logoUploading && (
                 <button
                   onClick={handleLogoRemove}
-                  className="flex items-center gap-1.5 px-3 py-2 border border-secondary-200 text-secondary-500 text-xs font-medium rounded-xl hover:bg-secondary-50 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 text-gray-500 text-xs font-medium rounded-xl hover:bg-gray-50 transition-colors"
                 >
                   <Trash2 size={12} />
                   Remover
@@ -291,7 +291,7 @@ export default function ConfiguracoesPage() {
               )}
             </div>
             <p className="text-xs text-gray-400">JPG, PNG ou WebP. Máx 2 MB.</p>
-            {logoError && <p className="text-xs text-secondary-500">{logoError}</p>}
+            {logoError && <p className="text-xs text-gray-500">{logoError}</p>}
           </div>
         </div>
 

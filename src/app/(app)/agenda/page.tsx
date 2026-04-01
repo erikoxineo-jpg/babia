@@ -136,7 +136,7 @@ export default function AgendaPage() {
     : professionals;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
@@ -165,7 +165,7 @@ export default function AgendaPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <div className="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-x-auto">
           <div className="flex min-w-0">
             {visibleProfessionals.map((pro) => {
               const proAppointments = (data?.appointments ?? []).filter(
@@ -188,17 +188,17 @@ export default function AgendaPage() {
       )}
 
       {/* FABs */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-30">
+      <div className="fixed bottom-[88px] lg:bottom-6 right-6 flex flex-col gap-3 z-30">
         <button
           onClick={handleNewBlockClick}
-          className="w-12 h-12 bg-gray-600 text-white rounded-2xl shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
+          className="w-12 h-12 bg-gray-600 text-white rounded-3xl shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
           title="Bloquear horário"
         >
           <Ban size={20} />
         </button>
         <button
           onClick={handleNewClick}
-          className="w-14 h-14 bg-primary-500 text-white rounded-2xl shadow-lg hover:bg-primary-600 transition-colors flex items-center justify-center"
+          className="w-14 h-14 bg-primary-500 text-white rounded-3xl shadow-lg hover:bg-primary-600 transition-colors flex items-center justify-center"
           title="Novo agendamento"
         >
           <Plus size={24} />

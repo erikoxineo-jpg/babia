@@ -82,7 +82,7 @@ export default function ClientesPage() {
   }, [fetchClients]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export default function ClientesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar por nome ou telefone..."
-          className="w-full pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-2xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-3xl text-sm shadow-soft focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         />
       </div>
 
@@ -132,7 +132,7 @@ export default function ClientesPage() {
         </div>
       ) : clients.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+          <div className="w-14 h-14 rounded-3xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
             <Users className="w-6 h-6 text-gray-300" />
           </div>
           <p className="text-sm font-medium text-gray-500">
@@ -149,7 +149,7 @@ export default function ClientesPage() {
               <Link
                 key={client.id}
                 href={`/clientes/${client.id}`}
-                className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:bg-gray-50 transition-colors"
+                className="block bg-white rounded-3xl border border-gray-100 shadow-soft p-5 hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0">

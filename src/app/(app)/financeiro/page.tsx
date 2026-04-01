@@ -85,7 +85,7 @@ const PAYMENT_COLORS: Record<string, string> = {
   cash: "bg-success-500",
   credit_card: "bg-primary-500",
   debit_card: "bg-primary-400",
-  plan_session: "bg-secondary-500",
+  plan_session: "bg-primary-500",
   not_registered: "bg-gray-300",
 };
 
@@ -94,7 +94,7 @@ const PAYMENT_DOT_COLORS: Record<string, string> = {
   cash: "bg-success-500",
   credit_card: "bg-primary-500",
   debit_card: "bg-primary-400",
-  plan_session: "bg-secondary-500",
+  plan_session: "bg-primary-500",
   not_registered: "bg-gray-300",
 };
 
@@ -198,10 +198,10 @@ export default function FinanceiroPage() {
       {summary && (
         <>
           {/* Hero revenue card */}
-          <div className="bg-secondary-500 rounded-3xl p-6 text-white">
+          <div className="bg-gray-900 rounded-3xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-secondary-200 text-sm font-medium">Receita total</p>
+                <p className="text-gray-400 text-sm font-medium">Receita total</p>
                 <p className="text-3xl font-bold mt-1 tracking-tight">
                   {formatCurrency(summary.revenue)}
                 </p>
@@ -223,12 +223,12 @@ export default function FinanceiroPage() {
                         {growthPct >= 0 ? "+" : ""}
                         {growthPct.toFixed(1)}%
                       </span>
-                      <span className="text-xs text-secondary-200">
+                      <span className="text-xs text-gray-400">
                         vs {PERIOD_COMPARISON[period]}
                       </span>
                     </>
                   ) : (
-                    <span className="text-xs text-secondary-200">
+                    <span className="text-xs text-gray-400">
                       Sem dados do período anterior
                     </span>
                   )}
@@ -273,13 +273,13 @@ export default function FinanceiroPage() {
               <div className="flex items-center gap-2 mb-3">
                 <div
                   className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                    growthPct !== null && growthPct >= 0 ? "bg-primary-50" : "bg-secondary-50"
+                    growthPct !== null && growthPct >= 0 ? "bg-primary-50" : "bg-gray-100"
                   }`}
                 >
                   {growthPct !== null && growthPct >= 0 ? (
                     <TrendingUp size={16} className="text-success-600" />
                   ) : (
-                    <TrendingDown size={16} className="text-secondary-500" />
+                    <TrendingDown size={16} className="text-gray-600" />
                   )}
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function FinanceiroPage() {
                 className={`text-2xl font-bold ${
                   growthPct !== null && growthPct >= 0
                     ? "text-success-600"
-                    : "text-secondary-500"
+                    : "text-gray-600"
                 }`}
               >
                 {growthPct !== null
@@ -372,7 +372,7 @@ export default function FinanceiroPage() {
                         <span
                           className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${
                             i === 0
-                              ? "bg-secondary-50 text-secondary-700"
+                              ? "bg-primary-50 text-primary-700"
                               : "bg-gray-100 text-gray-500"
                           }`}
                         >

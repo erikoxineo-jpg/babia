@@ -9,7 +9,7 @@ interface DayScheduleRowProps {
 }
 
 const selectClass =
-  "px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-secondary-300 focus:border-secondary-300 focus:bg-white transition-colors";
+  "px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300 focus:bg-white transition-colors";
 
 export function DayScheduleRow({ day, onChange }: DayScheduleRowProps) {
   const label = DAY_LABELS[day.dayOfWeek];
@@ -26,7 +26,7 @@ export function DayScheduleRow({ day, onChange }: DayScheduleRowProps) {
           onClick={() => onChange({ ...day, isActive: !day.isActive })}
           className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors cursor-pointer ${
             day.isActive
-              ? "bg-secondary-500 border-secondary-500"
+              ? "bg-primary-500 border-primary-500"
               : "border-gray-300 bg-white"
           }`}
         >

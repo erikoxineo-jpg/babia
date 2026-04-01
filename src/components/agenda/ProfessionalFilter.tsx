@@ -50,7 +50,7 @@ export function ProfessionalFilter({
         <select
           value={selected ?? ""}
           onChange={(e) => onChange(e.target.value || null)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full px-3 py-2 border border-gray-100 rounded-2xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">Todos os profissionais</option>
           {professionals.map((p) => (

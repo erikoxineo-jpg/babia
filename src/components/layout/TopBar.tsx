@@ -19,11 +19,11 @@ export function TopBar({ tenantName, userName, onMenuClick, logoUrl }: TopBarPro
     .toUpperCase();
 
   return (
-    <header className="sticky top-0 z-40 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6">
+    <header className="sticky top-0 z-40 h-14 lg:h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 lg:px-6">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 text-gray-500 hover:text-gray-700 rounded-md"
+          className="hidden p-2 text-gray-500 hover:text-gray-700 rounded-md"
         >
           <Menu size={20} />
         </button>

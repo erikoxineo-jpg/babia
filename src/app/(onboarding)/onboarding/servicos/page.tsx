@@ -148,7 +148,7 @@ export default function ServicosPage() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {error && (
-          <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl">
+          <div className="bg-gray-50 border border-gray-200 text-gray-600 text-sm px-4 py-3 rounded-2xl">
             {error}
           </div>
         )}
@@ -184,7 +184,7 @@ export default function ServicosPage() {
         <button
           type="button"
           onClick={addCustom}
-          className="flex items-center gap-1.5 text-sm text-secondary-500 hover:text-secondary-600 font-medium transition-colors"
+          className="flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-600 font-medium transition-colors"
         >
           <Plus className="w-4 h-4" />
           Adicionar servico personalizado
@@ -201,7 +201,7 @@ export default function ServicosPage() {
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 bg-secondary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 bg-primary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {saving && <Loader2 size={14} className="animate-spin" />}
             {saving ? "Salvando..." : "Continuar"}

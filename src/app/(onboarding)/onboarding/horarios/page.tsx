@@ -100,7 +100,7 @@ export default function HorariosPage() {
 
       <form onSubmit={handleSubmit} className="space-y-3">
         {error && (
-          <div className="bg-secondary-50 border border-secondary-200 text-secondary-600 text-sm px-4 py-3 rounded-2xl">
+          <div className="bg-gray-50 border border-gray-200 text-gray-600 text-sm px-4 py-3 rounded-2xl">
             {error}
           </div>
         )}
@@ -124,7 +124,7 @@ export default function HorariosPage() {
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 bg-secondary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-secondary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 bg-primary-500 text-white py-3 px-4 rounded-2xl text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {saving && <Loader2 size={14} className="animate-spin" />}
             {saving ? "Salvando..." : "Continuar"}

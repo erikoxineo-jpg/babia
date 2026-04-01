@@ -118,7 +118,7 @@ export function LogoUpload({ logoUrl, onUploadComplete, onRemove }: LogoUploadPr
               <button
                 type="button"
                 onClick={handleRemove}
-                className="flex items-center gap-1.5 px-3 py-1.5 border border-secondary-200 text-secondary-500 text-xs font-medium rounded-lg hover:bg-secondary-50 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 text-gray-500 text-xs font-medium rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <Trash2 size={12} />
                 Remover
@@ -131,7 +131,7 @@ export function LogoUpload({ logoUrl, onUploadComplete, onRemove }: LogoUploadPr
           </p>
 
           {error && (
-            <p className="text-xs text-secondary-500">{error}</p>
+            <p className="text-xs text-gray-500">{error}</p>
           )}
         </div>
       </div>

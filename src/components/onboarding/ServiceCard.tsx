@@ -20,7 +20,7 @@ interface ServiceCardProps {
 }
 
 const inputClass =
-  "px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-secondary-300 focus:border-secondary-300 focus:bg-white transition-colors";
+  "px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300 focus:bg-white transition-colors";
 
 export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCardProps) {
   const [editing, setEditing] = useState(false);
@@ -31,7 +31,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
         className={`
           rounded-2xl border-2 transition-all
           ${service.selected
-            ? "bg-white border-secondary-200 shadow-sm"
+            ? "bg-white border-primary-200 shadow-sm"
             : "bg-white border-gray-100 hover:border-gray-200"
           }
         `}
@@ -44,7 +44,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
             <div
               className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${
                 service.selected
-                  ? "bg-secondary-500 border-secondary-500"
+                  ? "bg-primary-500 border-primary-500"
                   : "border-gray-300 bg-white"
               }`}
               onClick={(e) => { e.stopPropagation(); onToggle?.(); }}
@@ -74,7 +74,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
                   e.stopPropagation();
                   setEditing(!editing);
                 }}
-                className="p-1.5 text-gray-400 hover:text-secondary-500 transition-colors rounded-lg hover:bg-gray-50"
+                className="p-1.5 text-gray-400 hover:text-primary-500 transition-colors rounded-lg hover:bg-gray-50"
                 title="Editar"
               >
                 {editing ? <Check className="w-4 h-4" /> : <Pencil className="w-3.5 h-3.5" />}
@@ -177,7 +177,7 @@ export function ServiceCard({ service, onToggle, onRemove, onChange }: ServiceCa
         <button
           type="button"
           onClick={onRemove}
-          className="p-1.5 text-gray-400 hover:text-secondary-500 transition-colors"
+          className="p-1.5 text-gray-400 hover:text-primary-500 transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>

@@ -28,7 +28,7 @@ export function AppointmentCard({
   return (
     <button
       onClick={onClick}
-      className={`absolute left-1 right-1 rounded-md border-l-4 px-2 py-1 text-left cursor-pointer overflow-hidden transition-opacity hover:opacity-90 ${STATUS_COLORS[appointment.status]}`}
+      className={`absolute left-1 right-1 rounded-xl border-l-4 px-2 py-1 text-left cursor-pointer overflow-hidden transition-opacity hover:opacity-90 ${STATUS_COLORS[appointment.status]}`}
       style={{ top: `${top}px`, height: `${height}px` }}
     >
       <div className="flex items-center gap-1.5 min-w-0">

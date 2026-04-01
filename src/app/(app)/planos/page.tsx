@@ -94,7 +94,7 @@ export default function PlanosPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Planos</h1>
@@ -102,7 +102,7 @@ export default function PlanosPage() {
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-1.5 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
+          className="flex items-center gap-1.5 px-4 py-3 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 transition-colors"
         >
           <Plus size={16} />
           Novo plano
@@ -130,7 +130,7 @@ export default function PlanosPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Ex: Plano Mensal Premium"
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                   />
                 </div>
 
@@ -140,7 +140,7 @@ export default function PlanosPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none"
                   />
                 </div>
 
@@ -152,7 +152,7 @@ export default function PlanosPage() {
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
                       step="0.01"
-                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                     />
                   </div>
                   <div>
@@ -161,7 +161,7 @@ export default function PlanosPage() {
                       type="number"
                       value={durationDays}
                       onChange={(e) => setDurationDays(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                     />
                   </div>
                   <div>
@@ -170,13 +170,13 @@ export default function PlanosPage() {
                       type="number"
                       value={totalSessions}
                       onChange={(e) => setTotalSessions(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
                     />
                   </div>
                 </div>
 
                 {price && totalSessions && (
-                  <div className="bg-success-50 rounded-xl p-3">
+                  <div className="bg-success-50 rounded-2xl p-3">
                     <p className="text-xs text-success-700">
                       Valor por sessão: {formatCurrency(parseFloat(price) / parseInt(totalSessions || "1"))}
                     </p>
@@ -186,7 +186,7 @@ export default function PlanosPage() {
                 <button
                   onClick={handleCreate}
                   disabled={creating || !name.trim() || !price}
-                  className="w-full py-3 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3.5 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                 >
                   {creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
                   Criar plano
@@ -204,18 +204,18 @@ export default function PlanosPage() {
         </div>
       ) : plans.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+          <div className="w-14 h-14 rounded-3xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
             <CreditCard className="w-6 h-6 text-gray-300" />
           </div>
           <p className="text-sm font-medium text-gray-500">Nenhum plano cadastrado.</p>
           <p className="text-xs text-gray-400 mt-1">Crie planos para fidelizar seus clientes!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`bg-white rounded-2xl border shadow-sm p-5 ${
+              className={`bg-white rounded-3xl border shadow-soft p-6 ${
                 plan.isActive ? "border-gray-100" : "border-gray-100 opacity-60"
               }`}
             >

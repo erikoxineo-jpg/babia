@@ -36,7 +36,7 @@ export function DateNavigator({ date, onChange }: DateNavigatorProps) {
     <div className="flex items-center gap-2">
       <button
         onClick={() => onChange(addDays(date, -1))}
-        className="p-2 rounded-md text-gray-500 hover:bg-gray-100 transition-colors"
+        className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
       >
         <ChevronLeft size={20} />
       </button>
@@ -47,7 +47,7 @@ export function DateNavigator({ date, onChange }: DateNavigatorProps) {
 
       <button
         onClick={() => onChange(addDays(date, 1))}
-        className="p-2 rounded-md text-gray-500 hover:bg-gray-100 transition-colors"
+        className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
       >
         <ChevronRight size={20} />
       </button>
@@ -55,7 +55,7 @@ export function DateNavigator({ date, onChange }: DateNavigatorProps) {
       {!isToday && (
         <button
           onClick={() => onChange(getToday())}
-          className="ml-2 px-3 py-1.5 text-xs font-medium text-primary-600 bg-primary-50 rounded-md hover:bg-primary-100 transition-colors"
+          className="ml-2 px-3 py-1.5 text-xs font-medium text-primary-600 bg-primary-50 rounded-xl hover:bg-primary-100 transition-colors"
         >
           Hoje
         </button>

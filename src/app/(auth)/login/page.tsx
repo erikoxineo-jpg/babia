@@ -50,7 +50,7 @@ export default function LoginPage() {
         className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6 space-y-4"
       >
         {error && (
-          <div className="bg-secondary-50 border border-secondary-100 text-secondary-600 text-sm px-4 py-2.5 rounded-2xl">
+          <div className="bg-gray-100 border border-gray-200 text-gray-600 text-sm px-4 py-2.5 rounded-2xl">
             {error}
           </div>
         )}

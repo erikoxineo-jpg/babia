@@ -47,7 +47,7 @@ export default function ServicosPage() {
   }, [fetchServices]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
@@ -63,7 +63,7 @@ export default function ServicosPage() {
         </div>
         <Link
           href="/onboarding/servicos"
-          className="flex items-center gap-1.5 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
+          className="flex items-center gap-1.5 px-4 py-3 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 transition-colors"
         >
           <Scissors size={16} />
           Gerenciar serviços
@@ -77,7 +77,7 @@ export default function ServicosPage() {
         </div>
       ) : services.length === 0 ? (
         <div className="text-center py-16">
-          <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+          <div className="w-14 h-14 rounded-3xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
             <Scissors className="w-6 h-6 text-gray-300" />
           </div>
           <p className="text-sm font-medium text-gray-500">
@@ -88,17 +88,17 @@ export default function ServicosPage() {
           </p>
           <Link
             href="/onboarding/servicos"
-            className="inline-block mt-4 px-5 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
+            className="inline-block mt-4 px-5 py-3 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 transition-colors"
           >
             Configurar serviços
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {services.map((service) => (
             <div
               key={service.id}
-              className={`bg-white rounded-2xl border shadow-sm p-5 ${
+              className={`bg-white rounded-3xl border shadow-soft p-6 ${
                 service.isActive ? "border-gray-100" : "border-gray-100 opacity-60"
               }`}
             >

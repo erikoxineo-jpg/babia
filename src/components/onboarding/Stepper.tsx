@@ -26,7 +26,7 @@ export function Stepper({ currentStep }: StepperProps) {
                   ${isCompleted
                     ? "bg-primary-500 text-white"
                     : isCurrent
-                      ? "bg-secondary-500 text-white ring-4 ring-secondary-100"
+                      ? "bg-primary-500 text-white ring-4 ring-primary-100"
                       : "bg-gray-100 text-gray-400"
                   }
                 `}
@@ -40,7 +40,7 @@ export function Stepper({ currentStep }: StepperProps) {
               <span
                 className={`
                   text-[11px] mt-1.5 hidden sm:block
-                  ${isCurrent ? "font-semibold text-secondary-600" : isCompleted ? "text-primary-600 font-medium" : "text-gray-400"}
+                  ${isCurrent ? "font-semibold text-primary-600" : isCompleted ? "text-primary-600 font-medium" : "text-gray-400"}
                 `}
               >
                 {step.label}
