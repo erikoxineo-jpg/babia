@@ -40,7 +40,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <meta name="theme-color" content="#6C3CE1" />
+        <meta name="theme-color" content="#D4A853" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>{children}</body>

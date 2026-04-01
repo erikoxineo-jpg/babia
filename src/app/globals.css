@@ -11,7 +11,7 @@
 body {
   font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
   color: #374151;
-  background-color: #f9fafb;
+  background-color: #FFFFFF;
 }
 
 @keyframes slide-in-right {
@@ -25,6 +25,29 @@ body {
 
 .animate-slide-in-right {
   animation: slide-in-right 0.2s ease-out;
+}
+
+/* Safe area for bottom tab bar on iPhones */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.25s ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {

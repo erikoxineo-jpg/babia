@@ -66,8 +66,8 @@ export function SoloHome() {
   const bookingUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/agendar/${data.slug}`;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm space-y-6 text-center">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="w-full max-w-sm space-y-8 text-center">
         {/* Avatar */}
         <div className="flex justify-center">
           <BabiaAvatar size="lg" />
@@ -84,7 +84,7 @@ export function SoloHome() {
         </div>
 
         {/* Booking link card */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+        <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-soft">
           <p className="text-xs text-gray-400 mb-1">Sua página está no ar!</p>
           <p className="text-sm font-medium text-primary-600 truncate mb-4">
             {bookingUrl}
@@ -92,7 +92,7 @@ export function SoloHome() {
           <div className="flex gap-2">
             <button
               onClick={copyLink}
-              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-xl hover:bg-primary-600 transition-colors"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 bg-primary-500 text-white text-sm font-medium rounded-2xl hover:bg-primary-600 transition-colors"
             >
               {copied ? (
                 <>
@@ -110,7 +110,7 @@ export function SoloHome() {
               href={bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center px-3 py-2.5 border border-gray-100 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center px-3 py-3 border border-gray-100 rounded-2xl text-gray-600 hover:bg-gray-50 transition-colors"
             >
               <ExternalLink size={14} />
             </a>
@@ -126,7 +126,7 @@ export function SoloHome() {
         <div className="space-y-2">
           <Link
             href="/servicos"
-            className="flex items-center justify-between w-full px-5 py-3.5 bg-white rounded-2xl border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+            className="flex items-center justify-between w-full px-5 py-3.5 bg-white rounded-3xl border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-soft"
           >
             <span className="flex items-center gap-2.5">
               <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
@@ -139,7 +139,7 @@ export function SoloHome() {
 
           <Link
             href="/configuracoes"
-            className="flex items-center justify-between w-full px-5 py-3.5 bg-white rounded-2xl border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+            className="flex items-center justify-between w-full px-5 py-3.5 bg-white rounded-3xl border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 transition-colors shadow-soft"
           >
             <span className="flex items-center gap-2.5">
               <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
@@ -154,7 +154,7 @@ export function SoloHome() {
         {/* Full panel CTA */}
         <Link
           href="/agenda"
-          className="block w-full px-5 py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-2xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-sm"
+          className="block w-full px-5 py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-3xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-sm"
         >
           Acessar painel completo
         </Link>

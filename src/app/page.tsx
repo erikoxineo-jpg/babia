@@ -41,14 +41,14 @@ export default function LandingPage() {
 
         {/* Conteúdo */}
         <div className="w-full lg:w-1/2 text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 bg-secondary-500/10 text-secondary-600 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+          <div className="inline-flex items-center gap-2 bg-primary-500/10 text-primary-600 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
             <Sparkles size={14} />
             Secretária inteligente
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
             Conheça a{" "}
-            <span className="text-secondary-500">BabIA</span>
+            <span className="text-primary-500">BabIA</span>
           </h1>
 
           <p className="text-gray-500 text-lg mb-8 max-w-md mx-auto lg:mx-0">
@@ -57,7 +57,7 @@ export default function LandingPage() {
 
           <Link
             href="/cadastro"
-            className="inline-block bg-secondary-500 hover:bg-secondary-600 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
+            className="inline-block bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
           >
             Começar agora
           </Link>

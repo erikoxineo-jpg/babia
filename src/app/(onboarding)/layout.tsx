@@ -10,7 +10,7 @@ function OnboardingShell({ children }: { children: React.ReactNode }) {
 
   if (status === "loading") {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex items-center justify-center min-h-screen bg-white">
         <div className="animate-pulse text-gray-400 text-sm">Carregando...</div>
       </div>
     );
@@ -28,11 +28,11 @@ function OnboardingShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <header className="bg-white border-b border-gray-200 px-4 py-3">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <h1 className="text-lg font-bold text-gray-800">
-            Bab<span className="text-secondary-500">IA</span>
+            Bab<span className="text-primary-500">IA</span>
           </h1>
           <span className="text-xs text-gray-400">Configuração inicial</span>
         </div>

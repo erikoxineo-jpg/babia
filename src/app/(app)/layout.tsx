@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { SessionProvider } from "next-auth/react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
+import { BottomTabBar } from "@/components/layout/BottomTabBar";
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
@@ -60,11 +61,11 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const isSoloHome = viewMode === "solo" && pathname === "/dashboard";
 
   if (isSoloHome) {
-    return <div className="min-h-screen bg-gray-50">{children}</div>;
+    return <div className="min-h-screen bg-white">{children}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} logoUrl={tenantLogoUrl} />
       <div className="lg:pl-[256px]">
         <TopBar
@@ -73,8 +74,9 @@ function AppShell({ children }: { children: React.ReactNode }) {
           onMenuClick={() => setSidebarOpen(true)}
           logoUrl={tenantLogoUrl}
         />
-        <main className="p-4 lg:p-6">{children}</main>
+        <main className="p-5 lg:p-6 pb-[72px] lg:pb-6">{children}</main>
       </div>
+      <BottomTabBar />
     </div>
   );
 }

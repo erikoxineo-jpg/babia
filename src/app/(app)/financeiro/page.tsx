@@ -169,7 +169,7 @@ export default function FinanceiroPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-800">Financeiro</h1>
@@ -198,10 +198,10 @@ export default function FinanceiroPage() {
       {summary && (
         <>
           {/* Hero revenue card */}
-          <div className="bg-primary-500 rounded-2xl p-6 text-white">
+          <div className="bg-secondary-500 rounded-3xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-primary-200 text-sm font-medium">Receita total</p>
+                <p className="text-secondary-200 text-sm font-medium">Receita total</p>
                 <p className="text-3xl font-bold mt-1 tracking-tight">
                   {formatCurrency(summary.revenue)}
                 </p>
@@ -223,12 +223,12 @@ export default function FinanceiroPage() {
                         {growthPct >= 0 ? "+" : ""}
                         {growthPct.toFixed(1)}%
                       </span>
-                      <span className="text-xs text-primary-200">
+                      <span className="text-xs text-secondary-200">
                         vs {PERIOD_COMPARISON[period]}
                       </span>
                     </>
                   ) : (
-                    <span className="text-xs text-primary-200">
+                    <span className="text-xs text-secondary-200">
                       Sem dados do período anterior
                     </span>
                   )}
@@ -241,9 +241,9 @@ export default function FinanceiroPage() {
           </div>
 
           {/* KPI Cards row */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-4">
             {/* Atendimentos */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
                   <BarChart3 size={16} className="text-primary-500" />
@@ -256,7 +256,7 @@ export default function FinanceiroPage() {
             </div>
 
             {/* Ticket médio */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 bg-success-50 rounded-xl flex items-center justify-center">
                   <Receipt size={16} className="text-success-600" />
@@ -269,7 +269,7 @@ export default function FinanceiroPage() {
             </div>
 
             {/* Crescimento */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
               <div className="flex items-center gap-2 mb-3">
                 <div
                   className={`w-8 h-8 rounded-xl flex items-center justify-center ${
@@ -301,7 +301,7 @@ export default function FinanceiroPage() {
           {/* Payment methods + Top services */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Payment methods */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
               <h2 className="text-base font-semibold text-gray-800 mb-5">
                 Formas de pagamento
               </h2>
@@ -357,7 +357,7 @@ export default function FinanceiroPage() {
             </div>
 
             {/* Top services */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
               <h2 className="text-base font-semibold text-gray-800 mb-5">
                 Top serviços
               </h2>
@@ -404,7 +404,7 @@ export default function FinanceiroPage() {
       )}
 
       {/* Transactions list */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-base font-semibold text-gray-800">
             Últimas transações
@@ -500,7 +500,7 @@ export default function FinanceiroPage() {
           </>
         ) : (
           <div className="text-center py-10">
-            <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 rounded-3xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
               <Receipt size={24} className="text-gray-300" />
             </div>
             <p className="text-sm font-medium text-gray-500">

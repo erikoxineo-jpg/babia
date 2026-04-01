@@ -38,7 +38,7 @@ export default function LoginPage() {
     <div className="w-full max-w-sm">
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold text-gray-800">
-          Bab<span className="text-secondary-500">IA</span>
+          Bab<span className="text-primary-500">IA</span>
         </h1>
         <p className="text-sm text-gray-400 mt-1">
           Sua secretária de cuidados pessoais
@@ -47,10 +47,10 @@ export default function LoginPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4"
+        className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6 space-y-4"
       >
         {error && (
-          <div className="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-2.5 rounded-xl">
+          <div className="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-2.5 rounded-2xl">
             {error}
           </div>
         )}
@@ -65,7 +65,7 @@ export default function LoginPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
             placeholder="seu@email.com"
           />
         </div>
@@ -80,7 +80,7 @@ export default function LoginPage() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
             placeholder="••••••"
           />
         </div>
@@ -88,7 +88,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary-500 text-white py-3 px-4 rounded-xl text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-primary-500 text-white py-3.5 px-4 rounded-2xl text-sm font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading && <Loader2 size={14} className="animate-spin" />}
           {loading ? "Entrando..." : "Entrar"}

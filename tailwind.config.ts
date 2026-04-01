@@ -9,18 +9,6 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          50:  '#E8EEF5',
-          100: '#C5D3E8',
-          200: '#9FB5D9',
-          300: '#7897C9',
-          400: '#5A7FBD',
-          500: '#1E3A5F',
-          600: '#1A3354',
-          700: '#152A45',
-          800: '#0F1F33',
-          900: '#0A1522',
-        },
-        secondary: {
           50:  '#FBF5E8',
           100: '#F5E6C4',
           200: '#EDD49C',
@@ -31,6 +19,18 @@ const config: Config = {
           700: '#A37E3A',
           800: '#7A5F2C',
           900: '#52401E',
+        },
+        secondary: {
+          50:  '#E8EEF5',
+          100: '#C5D3E8',
+          200: '#9FB5D9',
+          300: '#7897C9',
+          400: '#5A7FBD',
+          500: '#1E3A5F',
+          600: '#1A3354',
+          700: '#152A45',
+          800: '#0F1F33',
+          900: '#0A1522',
         },
         success: {
           50:  '#ECFDF5',
@@ -125,9 +125,12 @@ const config: Config = {
 
       boxShadow: {
         sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        soft: '0 2px 12px 0 rgba(0, 0, 0, 0.06)',
         md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
         lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
         xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+        up: '0 -4px 12px 0 rgba(0, 0, 0, 0.06)',
+        card: '0 1px 8px 0 rgba(0, 0, 0, 0.04)',
       },
 
       borderRadius: {
@@ -137,6 +140,7 @@ const config: Config = {
         lg:   '8px',
         xl:   '12px',
         '2xl': '16px',
+        '3xl': '24px',
         full: '9999px',
       },
 
