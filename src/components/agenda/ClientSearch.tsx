@@ -118,20 +118,36 @@ export function ClientSearch({ value, onChange }: ClientSearchProps) {
 
   return (
     <div ref={wrapperRef} className="relative">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => handleSearch(e.target.value)}
-          placeholder="Buscar cliente por nome ou telefone..."
-          className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-          onFocus={() => {
-            if (results.length > 0) setShowDropdown(true);
-          }}
-        />
-        {loading && (
-          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 animate-spin" />
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => handleSearch(e.target.value)}
+            placeholder="Buscar cliente..."
+            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            onFocus={() => {
+              if (results.length > 0) setShowDropdown(true);
+            }}
+          />
+          {loading && (
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 animate-spin" />
+          )}
+        </div>
+        {!showNewForm && (
+          <button
+            type="button"
+            onClick={() => {
+              setShowDropdown(false);
+              setShowNewForm(true);
+              setNewName(query);
+            }}
+            className="px-3 py-2 bg-primary-500 text-white text-xs font-medium rounded-md hover:bg-primary-600 transition-colors flex items-center gap-1.5 shrink-0"
+          >
+            <Plus size={14} />
+            Novo
+          </button>
         )}
       </div>
 
@@ -147,22 +163,11 @@ export function ClientSearch({ value, onChange }: ClientSearchProps) {
               <p className="text-xs text-gray-500">{client.phone}</p>
             </button>
           ))}
-          {results.length === 0 && !loading && (
+          {results.length === 0 && !loading && query.trim().length >= 2 && (
             <div className="px-3 py-2 text-xs text-gray-400">
               Nenhum cliente encontrado.
             </div>
           )}
-          <button
-            onClick={() => {
-              setShowDropdown(false);
-              setShowNewForm(true);
-              setNewName(query);
-            }}
-            className="w-full px-3 py-2 text-left text-sm text-primary-600 hover:bg-primary-50 border-t border-gray-100 flex items-center gap-2"
-          >
-            <Plus size={14} />
-            Novo cliente
-          </button>
         </div>
       )}
 

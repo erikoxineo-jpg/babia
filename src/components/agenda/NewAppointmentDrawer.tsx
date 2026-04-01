@@ -62,14 +62,14 @@ export function NewAppointmentDrawer({
   useEffect(() => {
     if (open) {
       setClient(null);
-      setProfessionalId(prefill.professionalId ?? "");
+      setProfessionalId(prefill.professionalId ?? (professionals.length === 1 ? professionals[0].id : ""));
       setServiceId("");
       setSelectedTime(prefill.time ?? "");
       setNotes("");
       setSlots([]);
       setError("");
     }
-  }, [open, prefill.professionalId, prefill.time]);
+  }, [open, prefill.professionalId, prefill.time, professionals]);
 
   // Buscar slots quando profissional + serviço estão selecionados
   useEffect(() => {
