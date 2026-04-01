@@ -12,7 +12,7 @@ echo "✅ PostgreSQL is ready"
 
 # Run database migrations
 echo "🔄 Running Prisma migrations..."
-./node_modules/prisma/build/index.js migrate deploy
+prisma migrate deploy
 
 echo "🚀 Starting BarberFlow..."
 exec node server.js
