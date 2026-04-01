@@ -29,6 +29,14 @@ interface WhatsAppLink {
   link: string | null;
 }
 
+interface SendResult {
+  mode: "automatic" | "manual";
+  sentCount?: number;
+  failedCount?: number;
+  recipientsCount?: number;
+  whatsappLinks?: WhatsAppLink[];
+}
+
 const TEMPLATES = [
   {
     name: "Sentimos sua falta",
@@ -75,6 +83,7 @@ export default function CampanhasPage() {
   const [showNew, setShowNew] = useState(false);
   const [sending, setSending] = useState<string | null>(null);
   const [links, setLinks] = useState<WhatsAppLink[] | null>(null);
+  const [sendResult, setSendResult] = useState<SendResult | null>(null);
 
   // New campaign form
   const [newName, setNewName] = useState("");
@@ -126,7 +135,12 @@ export default function CampanhasPage() {
       const res = await fetch(`/api/campaigns/${id}/send`, { method: "POST" });
       const json = await res.json();
       if (json.success) {
-        setLinks(json.data.whatsappLinks ?? []);
+        const data = json.data;
+        if (data.mode === "automatic") {
+          setSendResult(data);
+        } else {
+          setLinks(data.whatsappLinks ?? []);
+        }
         fetchCampaigns();
       }
     } catch {
@@ -243,6 +257,40 @@ export default function CampanhasPage() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Auto send result modal */}
+      {sendResult && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/50" onClick={() => setSendResult(null)} />
+          <div className="bg-white rounded-lg shadow-xl z-50 w-full max-w-sm mx-4 p-6 text-center">
+            <div className="w-14 h-14 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Send className="w-6 h-6 text-success-600" />
+            </div>
+            <h2 className="text-lg font-bold text-gray-800 mb-1">Campanha enviada!</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Mensagens disparadas automaticamente via WhatsApp.
+            </p>
+            <div className="flex justify-center gap-6 mb-4">
+              <div>
+                <p className="text-2xl font-bold text-success-600">{sendResult.sentCount}</p>
+                <p className="text-xs text-gray-400">enviadas</p>
+              </div>
+              {(sendResult.failedCount ?? 0) > 0 && (
+                <div>
+                  <p className="text-2xl font-bold text-red-500">{sendResult.failedCount}</p>
+                  <p className="text-xs text-gray-400">falhas</p>
+                </div>
+              )}
+            </div>
+            <button
+              onClick={() => setSendResult(null)}
+              className="w-full py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
+            >
+              Fechar
+            </button>
           </div>
         </div>
       )}
