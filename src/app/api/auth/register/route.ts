@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/onboarding";
 import { registerLimiter, checkRateLimit } from "@/lib/rate-limit";
+import { fireWebhook } from "@/lib/n8n";
 
 export async function POST(request: Request) {
   // Rate limit: 5 registros por hora por IP
@@ -76,6 +77,14 @@ export async function POST(request: Request) {
 
       return { user, tenant, professional };
     });
+
+    // Fire-and-forget: boas-vindas ao novo proprietário
+    fireWebhook("user.registered", {
+      ownerName: result.user.name,
+      ownerPhone: result.tenant.phone,
+      tenantName: result.tenant.name,
+      slug: result.tenant.slug,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

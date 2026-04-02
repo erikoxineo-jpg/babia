@@ -1,0 +1,110 @@
+{
+  "name": "BabIA - Boas-vindas Registro",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "babia-events",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-event",
+              "leftValue": "={{ $json.event }}",
+              "rightValue": "user.registered",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "filter-event",
+      "name": "Filtro: user.registered",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ JSON.stringify({ number: $json.ownerPhone.replace(/\\D/g, '').length <= 11 ? '55' + $json.ownerPhone.replace(/\\D/g, '') : $json.ownerPhone.replace(/\\D/g, ''), text: `Olá ${$json.ownerName}! Bem-vindo(a) à BabIA! 🎉\\n\\nSua barbearia *${$json.tenantName}* foi criada com sucesso!\\n\\n📋 *Checklist para começar:*\\n1️⃣ Complete o onboarding no painel\\n2️⃣ Cadastre seus serviços e preços\\n3️⃣ Configure seus horários de atendimento\\n4️⃣ Compartilhe seu link de agendamento\\n\\n🔗 Seu link será:\\nhttps://babia.oxineo.com.br/agendar/${$json.slug}\\n\\nAcesse o painel para configurar tudo:\\nhttps://babia.oxineo.com.br/login\\n\\n_Qualquer dúvida, estou aqui!_ 🤖` }) }}",
+        "options": {}
+      },
+      "id": "set-message",
+      "name": "Montar Mensagem",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.EVOLUTION_API_URL }}/message/sendText/{{ $env.EVOLUTION_INSTANCE }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.EVOLUTION_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "send-whatsapp",
+      "name": "Enviar WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [910, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [{ "node": "Filtro: user.registered", "type": "main", "index": 0 }]
+      ]
+    },
+    "Filtro: user.registered": {
+      "main": [
+        [{ "node": "Montar Mensagem", "type": "main", "index": 0 }]
+      ]
+    },
+    "Montar Mensagem": {
+      "main": [
+        [{ "node": "Enviar WhatsApp", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "BabIA" },
+    { "name": "WhatsApp" }
+  ]
+}

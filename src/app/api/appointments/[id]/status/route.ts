@@ -50,7 +50,8 @@ export async function PUT(
       const timestampField =
         status === "confirmed" ? { confirmedAt: new Date() } :
         status === "cancelled" ? { cancelledAt: new Date() } :
-        status === "completed" ? { completedAt: new Date() } : {};
+        status === "completed" ? { completedAt: new Date() } :
+        status === "no_show" ? { completedAt: new Date() } : {};
 
       const updated = await tx.appointment.update({
         where: { id },

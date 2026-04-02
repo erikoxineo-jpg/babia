@@ -43,7 +43,7 @@ export async function GET() {
         price: true,
         client: { select: { name: true } },
         service: { select: { name: true } },
-        professional: { select: { name: true } },
+        professional: { select: { id: true, name: true } },
       },
       orderBy: [{ startTime: "asc" }],
     }),
@@ -154,7 +154,7 @@ export async function GET() {
 
     // Get this professional's appointments
     const profAppointments = todayAppointments.filter((apt) => {
-      return apt.status !== "cancelled";
+      return apt.professional.id === prof.id && apt.status !== "cancelled";
     });
 
     // Count slots in 30-min increments

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Scissors, Loader2, Clock, Tag } from "lucide-react";
+import { Scissors, Loader2, Clock, Tag, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 
 interface ServiceItem {
@@ -29,14 +29,18 @@ function formatCurrency(value: number) {
 export default function ServicosPage() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const fetchServices = useCallback(async () => {
+    setError(false);
     try {
       const res = await fetch("/api/onboarding/servicos");
       const json = await res.json();
       if (json.success) setServices(json.data ?? []);
+      else setError(true);
     } catch {
       setServices([]);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -74,6 +78,14 @@ export default function ServicosPage() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+        </div>
+      ) : error ? (
+        <div className="text-center py-16">
+          <AlertTriangle className="w-6 h-6 text-gray-300 mx-auto mb-3" />
+          <p className="text-sm text-gray-500">Erro ao carregar serviços.</p>
+          <button onClick={fetchServices} className="mt-3 px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-2xl transition-colors">
+            Tentar novamente
+          </button>
         </div>
       ) : services.length === 0 ? (
         <div className="text-center py-16">

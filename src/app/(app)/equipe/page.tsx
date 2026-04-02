@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { UserCheck, Loader2, Phone, Briefcase } from "lucide-react";
+import { UserCheck, Loader2, Phone, Briefcase, AlertTriangle } from "lucide-react";
 
 interface ProfessionalItem {
   id: string;
@@ -15,14 +15,18 @@ interface ProfessionalItem {
 export default function EquipePage() {
   const [professionals, setProfessionals] = useState<ProfessionalItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const fetchProfessionals = useCallback(async () => {
+    setError(false);
     try {
       const res = await fetch("/api/onboarding/equipe");
       const json = await res.json();
       if (json.success) setProfessionals(json.data ?? []);
+      else setError(true);
     } catch {
       setProfessionals([]);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -51,6 +55,14 @@ export default function EquipePage() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+        </div>
+      ) : error ? (
+        <div className="text-center py-16">
+          <AlertTriangle className="w-6 h-6 text-gray-300 mx-auto mb-3" />
+          <p className="text-sm text-gray-500">Erro ao carregar equipe.</p>
+          <button onClick={fetchProfessionals} className="mt-3 px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-2xl transition-colors">
+            Tentar novamente
+          </button>
         </div>
       ) : professionals.length === 0 ? (
         <div className="text-center py-16">

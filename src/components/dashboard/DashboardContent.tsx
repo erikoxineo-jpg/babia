@@ -56,25 +56,31 @@ export function DashboardContent() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  async function load() {
+    setLoading(true);
+    setError(false);
+    try {
+      const [summaryRes, alertsRes] = await Promise.all([
+        fetch("/api/dashboard/summary"),
+        fetch("/api/dashboard/alerts"),
+      ]);
+      const summaryJson = await summaryRes.json();
+      const alertsJson = await alertsRes.json();
+      if (summaryJson.success) setData(summaryJson.data);
+      else setError(true);
+      if (alertsJson.success) setAlerts(alertsJson.data.alerts ?? []);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function load() {
-      try {
-        const [summaryRes, alertsRes] = await Promise.all([
-          fetch("/api/dashboard/summary"),
-          fetch("/api/dashboard/alerts"),
-        ]);
-        const summaryJson = await summaryRes.json();
-        const alertsJson = await alertsRes.json();
-        if (summaryJson.success) setData(summaryJson.data);
-        if (alertsJson.success) setAlerts(alertsJson.data.alerts ?? []);
-      } catch {
-        // silent
-      } finally {
-        setLoading(false);
-      }
-    }
     load();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -85,10 +91,17 @@ export function DashboardContent() {
     );
   }
 
-  if (!data) {
+  if (!data || error) {
     return (
-      <div className="text-center py-20 text-sm text-gray-400">
-        Erro ao carregar dashboard.
+      <div className="text-center py-20">
+        <AlertTriangle className="w-6 h-6 text-gray-300 mx-auto mb-3" />
+        <p className="text-sm text-gray-500">Erro ao carregar dashboard.</p>
+        <button
+          onClick={load}
+          className="mt-3 px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-2xl transition-colors"
+        >
+          Tentar novamente
+        </button>
       </div>
     );
   }

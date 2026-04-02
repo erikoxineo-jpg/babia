@@ -32,6 +32,7 @@ export async function sendWhatsappMessage(
           number,
           text: message,
         }),
+        signal: AbortSignal.timeout(10000),
       }
     );
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Plus, Ban, Loader2 } from "lucide-react";
+import { Plus, Ban, Loader2, AlertTriangle } from "lucide-react";
 import { DateNavigator } from "@/components/agenda/DateNavigator";
 import { ProfessionalFilter } from "@/components/agenda/ProfessionalFilter";
 import { DayColumn } from "@/components/agenda/DayColumn";
@@ -34,6 +34,7 @@ export default function AgendaPage() {
   const [data, setData] = useState<AgendaData | null>(null);
   const [services, setServices] = useState<ServiceOption[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [filterProfessional, setFilterProfessional] = useState<string | null>(null);
 
   // Drawer state
@@ -58,12 +59,14 @@ export default function AgendaPage() {
 
   const fetchAgenda = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch(`/api/appointments?date=${selectedDate}`);
       const json = await res.json();
       setData(json);
     } catch {
       setData(null);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -157,6 +160,14 @@ export default function AgendaPage() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+        </div>
+      ) : error ? (
+        <div className="text-center py-16">
+          <AlertTriangle className="w-6 h-6 text-gray-300 mx-auto mb-3" />
+          <p className="text-sm text-gray-500">Erro ao carregar agenda.</p>
+          <button onClick={fetchAgenda} className="mt-3 px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-2xl transition-colors">
+            Tentar novamente
+          </button>
         </div>
       ) : visibleProfessionals.length === 0 ? (
         <div className="text-center py-16">

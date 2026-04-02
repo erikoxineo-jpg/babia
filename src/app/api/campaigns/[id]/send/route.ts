@@ -80,6 +80,8 @@ export async function POST(
   const now = new Date();
   let sentCount = 0;
   let failedCount = 0;
+  let consecutiveFailures = 0;
+  let aborted = false;
   const whatsappLinks: { clientName: string; link: string | null }[] = [];
 
   // Mark as sending
@@ -88,8 +90,25 @@ export async function POST(
     data: { status: "sending" },
   });
 
+  // Timeout global: 5 minutos
+  const deadline = Date.now() + 5 * 60 * 1000;
+
   // Process each client
   for (const client of clients) {
+    // Timeout global check
+    if (Date.now() > deadline) {
+      console.error(`Campaign ${id}: aborted — global timeout (5min)`);
+      aborted = true;
+      break;
+    }
+
+    // Circuit breaker: 5 falhas consecutivas → abortar
+    if (consecutiveFailures >= 5) {
+      console.error(`Campaign ${id}: aborted — 5 consecutive failures`);
+      aborted = true;
+      break;
+    }
+
     const daysSinceVisit = client.lastVisit
       ? Math.floor(
           (now.getTime() - client.lastVisit.getTime()) / (1000 * 60 * 60 * 24)
@@ -108,8 +127,10 @@ export async function POST(
       if (result.success) {
         messageStatus = "sent";
         sentCount++;
+        consecutiveFailures = 0;
       } else {
         failedCount++;
+        consecutiveFailures++;
         console.error(
           `Campaign ${id}: failed to send to ${client.name}: ${result.error}`
         );
@@ -118,8 +139,7 @@ export async function POST(
       await delay(1500 + Math.random() * 1500);
     } else {
       // Fallback: generate WhatsApp links (manual mode)
-      messageStatus = "sent";
-      sentCount++;
+      messageStatus = "pending";
       whatsappLinks.push({
         clientName: client.name,
         link: buildWhatsappLink(client.phone, message),
@@ -136,13 +156,19 @@ export async function POST(
     });
   }
 
-  // Update campaign status
+  // Determine final campaign status
+  let finalStatus: "sent" | "draft" = "sent";
+  if (sentCount === 0 && failedCount > 0) {
+    // Nenhuma mensagem enviada com sucesso → volta para draft (pode retentar)
+    finalStatus = "draft";
+  }
+
   await prisma.campaign.update({
     where: { id },
     data: {
-      status: "sent",
+      status: finalStatus,
       sentCount,
-      sentAt: now,
+      sentAt: finalStatus === "sent" ? now : undefined,
     },
   });
 
@@ -152,10 +178,11 @@ export async function POST(
       data: {
         id: campaign.id,
         mode: "automatic",
-        status: "sent",
+        status: finalStatus,
         recipientsCount: clients.length,
         sentCount,
         failedCount,
+        aborted,
       },
     });
   }
@@ -166,7 +193,7 @@ export async function POST(
     data: {
       id: campaign.id,
       mode: "manual",
-      status: "sent",
+      status: finalStatus,
       recipientsCount: clients.length,
       whatsappLinks: whatsappLinks.slice(0, 50),
     },

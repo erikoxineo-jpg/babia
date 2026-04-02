@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAuth, isErrorResponse } from "@/lib/rbac";
+import { fireWebhook } from "@/lib/n8n";
 
 export async function POST() {
   const auth = await requireAuth(["owner"]);
@@ -33,8 +34,20 @@ export async function POST() {
 
     const tenant = await prisma.tenant.findUnique({
       where: { id: tenantId },
-      select: { name: true, slug: true },
+      select: { name: true, slug: true, whatsapp: true, phone: true },
     });
+
+    // Fire-and-forget: notificar N8N sobre conclusão do onboarding
+    if (tenant) {
+      fireWebhook("onboarding.completed", {
+        tenantName: tenant.name,
+        slug: tenant.slug,
+        phone: tenant.whatsapp || tenant.phone,
+        servicesCount,
+        professionalsCount,
+        bookingUrl: `https://babia.oxineo.com.br/agendar/${tenant.slug}`,
+      }).catch(() => {});
+    }
 
     return NextResponse.json({
       success: true,

@@ -93,6 +93,15 @@ export default function LoginPage() {
           {loading && <Loader2 size={14} className="animate-spin" />}
           {loading ? "Entrando..." : "Entrar"}
         </button>
+
+        <div className="text-center">
+          <Link
+            href="/esqueci-senha"
+            className="text-xs text-gray-400 hover:text-primary-500 transition-colors"
+          >
+            Esqueci minha senha
+          </Link>
+        </div>
       </form>
 
       <p className="text-center text-sm text-gray-400 mt-5">

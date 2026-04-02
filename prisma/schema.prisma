@@ -107,6 +107,8 @@ enum PaymentMethod {
 enum NotificationType {
   confirmation
   reminder
+  reminder_24h
+  reminder_4h
   reactivation
   waitlist
 }
@@ -180,6 +182,7 @@ model User {
   sessions            Session[]
   professional        Professional?
   appointmentHistory  AppointmentHistory[]
+  passwordResetTokens PasswordResetToken[]
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -572,4 +575,19 @@ model Notification {
   @@index([clientId])
   @@index([tenantId, type])
   @@map("notifications")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  token     String    @unique @db.VarChar(6)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz
+  usedAt    DateTime? @map("used_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
 }

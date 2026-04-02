@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, getDayOfWeek, timeToMinutes, minutesToTime } from "@/lib/availability";
 import { createConfirmationNotification } from "@/lib/notifications";
+import { fireWebhook } from "@/lib/n8n";
+import { sendWhatsappMessage } from "@/lib/whatsapp";
 
 // GET — lista agendamentos + profissionais para uma data
 export async function GET(request: Request) {
@@ -121,7 +123,7 @@ export async function POST(request: Request) {
           appointments: {
             where: {
               date: new Date(date + "T00:00:00"),
-              status: { not: "cancelled" },
+              status: { notIn: ["cancelled", "no_show"] },
             },
             select: { startTime: true, endTime: true, status: true },
           },
@@ -187,7 +189,7 @@ export async function POST(request: Request) {
         },
         include: {
           client: { select: { id: true, name: true, phone: true } },
-          professional: { select: { id: true, name: true } },
+          professional: { select: { id: true, name: true, phone: true } },
           service: { select: { id: true, name: true, durationMinutes: true } },
         },
       });
@@ -218,6 +220,31 @@ export async function POST(request: Request) {
       date: dateFormatted,
       time: startTime,
     }).catch(() => {});
+
+    // Fire-and-forget: notificar N8N sobre novo agendamento
+    prisma.tenant.findUnique({ where: { id: tenantId }, select: { name: true } })
+      .then((t) => {
+        if (t) {
+          fireWebhook("appointment.created", {
+            tenantName: t.name,
+            clientName: appointment.client.name,
+            clientPhone: appointment.client.phone,
+            professionalName: appointment.professional.name,
+            serviceName: appointment.service.name,
+            date: dateFormatted,
+            time: startTime,
+            price: Number(appointment.price),
+            source: "internal",
+          });
+        }
+      })
+      .catch(() => {});
+
+    // Notificar profissional via WhatsApp
+    if (appointment.professional.phone) {
+      const proMsg = `📋 *Novo agendamento!*\n\nCliente: ${appointment.client.name}\nServiço: ${appointment.service.name}\nData: ${dateFormatted}\nHorário: ${startTime}\n\n_Agendamento feito pelo painel._`;
+      sendWhatsappMessage(appointment.professional.phone, proMsg).catch(() => {});
+    }
 
     return NextResponse.json(
       {

@@ -43,6 +43,7 @@ export default function ClientesPage() {
   const [clients, setClients] = useState<ClientItem[]>([]);
   const [meta, setMeta] = useState<Meta | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
@@ -59,6 +60,7 @@ export default function ClientesPage() {
 
   const fetchClients = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const params = new URLSearchParams();
       if (debouncedSearch) params.set("search", debouncedSearch);
@@ -72,6 +74,7 @@ export default function ClientesPage() {
       setMeta(json.meta ?? null);
     } catch {
       setClients([]);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -129,6 +132,16 @@ export default function ClientesPage() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+        </div>
+      ) : error ? (
+        <div className="text-center py-16">
+          <div className="w-14 h-14 rounded-3xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+            <Users className="w-6 h-6 text-gray-300" />
+          </div>
+          <p className="text-sm text-gray-500">Erro ao carregar clientes.</p>
+          <button onClick={fetchClients} className="mt-3 px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-2xl transition-colors">
+            Tentar novamente
+          </button>
         </div>
       ) : clients.length === 0 ? (
         <div className="text-center py-16">

@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, getDayOfWeek, timeToMinutes, minutesToTime } from "@/lib/availability";
 import { createConfirmationNotification } from "@/lib/notifications";
 import { bookingLimiter, checkRateLimit } from "@/lib/rate-limit";
+import { fireWebhook } from "@/lib/n8n";
+import { sendWhatsappMessage } from "@/lib/whatsapp";
 
 // POST — criar agendamento público
 export async function POST(
@@ -168,7 +170,7 @@ export async function POST(
           source: "public",
         },
         include: {
-          professional: { select: { name: true } },
+          professional: { select: { name: true, phone: true } },
           service: { select: { name: true } },
         },
       });
@@ -200,6 +202,25 @@ export async function POST(
       date: dateFormatted,
       time: startTime,
     }).catch(() => {});
+
+    // Fire-and-forget: notificar N8N sobre novo agendamento público
+    fireWebhook("appointment.created", {
+      tenantName: tenant.name,
+      clientName: clientName.trim(),
+      clientPhone: phone,
+      professionalName: result.professional.name,
+      serviceName: result.service.name,
+      date: dateFormatted,
+      time: startTime,
+      price: Number(result.price),
+      source: "public",
+    }).catch(() => {});
+
+    // Notificar profissional via WhatsApp
+    if (result.professional.phone) {
+      const proMsg = `📋 *Novo agendamento online!*\n\nCliente: ${clientName.trim()}\nTelefone: ${phone}\nServiço: ${result.service.name}\nData: ${dateFormatted}\nHorário: ${startTime}\n\n_Agendamento feito pelo link público._`;
+      sendWhatsappMessage(result.professional.phone, proMsg).catch(() => {});
+    }
 
     return NextResponse.json(
       {

@@ -151,6 +151,8 @@ export async function POST(
           professionalId: targetProfessionalId,
           status: "pending",
           confirmedAt: null,
+          cancelledAt: null,
+          completedAt: null,
         },
         include: {
           client: { select: { id: true, name: true, phone: true } },

@@ -110,15 +110,18 @@ export default function FinanceiroPage() {
   const [txPage, setTxPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [txLoading, setTxLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const loadSummary = useCallback(async (p: Period) => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch(`/api/financial/summary?period=${p}`);
       const json = await res.json();
       if (json.success) setSummary(json.data);
+      else setError(true);
     } catch {
-      // silent
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -164,6 +167,18 @@ export default function FinanceiroPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error && !summary) {
+    return (
+      <div className="text-center py-20">
+        <DollarSign className="w-6 h-6 text-gray-300 mx-auto mb-3" />
+        <p className="text-sm text-gray-500">Erro ao carregar dados financeiros.</p>
+        <button onClick={() => loadSummary(period)} className="mt-3 px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-2xl transition-colors">
+          Tentar novamente
+        </button>
       </div>
     );
   }
