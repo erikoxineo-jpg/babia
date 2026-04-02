@@ -41,6 +41,10 @@ export default function LandingPage() {
 
         {/* Conteúdo */}
         <div className="w-full lg:w-1/2 text-center lg:text-left">
+          <div className="flex justify-center lg:justify-start mb-6">
+            <img src="/babiaperfil3.png" alt="BabIA" className="w-16 h-16 rounded-full object-cover shadow-lg shadow-primary-500/20 ring-2 ring-primary-200" />
+          </div>
+
           <div className="inline-flex items-center gap-2 bg-primary-500/10 text-primary-600 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
             <Sparkles size={14} />
             Secretária inteligente

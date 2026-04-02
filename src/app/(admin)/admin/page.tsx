@@ -78,9 +78,7 @@ function AdminLogin() {
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center mx-auto mb-4">
-            <Shield className="w-8 h-8 text-white" />
-          </div>
+          <img src="/babiaperfil3.png" alt="BabIA" className="w-20 h-20 rounded-full object-cover mx-auto mb-4 ring-2 ring-gray-700 shadow-lg" />
           <h1 className="text-xl font-bold text-white">Admin BabIA</h1>
           <p className="text-sm text-gray-500 mt-1">Acesso restrito</p>
         </div>
@@ -258,9 +256,7 @@ function AdminPanel() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-800 text-white flex items-center justify-center">
-              <Shield size={20} />
-            </div>
+            <img src="/babiaperfil3.png" alt="BabIA" className="w-10 h-10 rounded-full object-cover ring-2 ring-primary-200" />
             <div>
               <h1 className="text-xl font-bold text-gray-800">Painel Admin</h1>
               <p className="text-xs text-gray-400">Controle de acesso dos clientes BabIA</p>

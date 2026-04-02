@@ -66,9 +66,9 @@ export default function ConcluidoPage() {
       <Stepper currentStep={5} />
 
       <div className="text-center">
-        <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-5 shadow-lg shadow-primary-500/20">
+        <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-5 shadow-lg shadow-primary-500/20 ring-2 ring-primary-200">
           <img
-            src="/Babia Perfil.png"
+            src="/babiaperfil3.png"
             alt="BabIA"
             className="w-full h-full object-cover"
           />

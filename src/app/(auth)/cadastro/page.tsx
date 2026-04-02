@@ -66,6 +66,7 @@ export default function CadastroPage() {
   return (
     <div className="w-full max-w-sm">
       <div className="text-center mb-8">
+        <img src="/babiaperfil3.png" alt="BabIA" className="w-20 h-20 rounded-full object-cover mx-auto mb-3 shadow-lg shadow-primary-500/20 ring-2 ring-primary-200" />
         <h1 className="text-2xl font-bold text-gray-800">
           Bab<span className="text-primary-500">IA</span>
         </h1>
