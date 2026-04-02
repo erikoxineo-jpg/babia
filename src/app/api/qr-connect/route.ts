@@ -9,19 +9,26 @@ let cachedQr: { base64: string; timestamp: number } | null = null;
 const QR_CACHE_TTL = 45000; // 45 seconds
 
 async function evoFetch(path: string, method = "GET", body?: unknown) {
-  const res = await fetch(`${EVOLUTION_API_URL}${path}`, {
-    method,
-    headers: { "Content-Type": "application/json", apikey: EVOLUTION_API_KEY },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-    cache: "no-store",
-  });
-  return res.json();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const res = await fetch(`${EVOLUTION_API_URL}${path}`, {
+      method,
+      headers: { "Content-Type": "application/json", apikey: EVOLUTION_API_KEY },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    return await res.json();
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 // GET — check status only (no QR generation)
 export async function GET(request: Request) {
   if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
-    return NextResponse.json({ error: "Evolution API não configurada" }, { status: 500 });
+    return NextResponse.json({ status: "disconnected", error: "Evolution API nao configurada" });
   }
 
   const { searchParams } = new URL(request.url);
@@ -30,10 +37,10 @@ export async function GET(request: Request) {
   try {
     // Check connection state (lightweight, no side effects)
     const state = await evoFetch(`/instance/connectionState/${EVOLUTION_INSTANCE}`);
-    const isConnected = state?.instance?.state === "open";
+    const instanceState = state?.instance?.state;
 
-    if (isConnected) {
-      cachedQr = null; // Clear cache when connected
+    if (instanceState === "open") {
+      cachedQr = null;
       return NextResponse.json({ status: "connected" });
     }
 
@@ -47,7 +54,7 @@ export async function GET(request: Request) {
       if (connect.count !== undefined && !connect.base64) {
         return NextResponse.json({ status: "expired" });
       }
-      return NextResponse.json({ status: "connecting" });
+      return NextResponse.json({ status: "disconnected" });
     }
 
     // Return cached QR if still valid
@@ -55,24 +62,24 @@ export async function GET(request: Request) {
       return NextResponse.json({ status: "qr", base64: cachedQr.base64 });
     }
 
-    // No cached QR, tell frontend to request one
+    // No cached QR — tell frontend it's disconnected
     return NextResponse.json({ status: "disconnected" });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    console.error("[qr-connect] GET error:", err);
+    return NextResponse.json({ status: "disconnected", error: String(err) });
   }
 }
 
 // POST — actions: qr, reset, test
 export async function POST(request: Request) {
   if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
-    return NextResponse.json({ error: "Evolution API não configurada" }, { status: 500 });
+    return NextResponse.json({ status: "error", error: "Evolution API nao configurada" });
   }
 
   try {
     const { action, phone } = await request.json();
 
     if (action === "qr") {
-      // Generate QR code (only called explicitly by user)
       const connect = await evoFetch(`/instance/connect/${EVOLUTION_INSTANCE}`);
       if (connect.base64) {
         cachedQr = { base64: connect.base64, timestamp: Date.now() };
@@ -81,12 +88,11 @@ export async function POST(request: Request) {
       if (connect.count !== undefined && !connect.base64) {
         return NextResponse.json({ status: "expired" });
       }
-      return NextResponse.json({ status: "connecting" });
+      return NextResponse.json({ status: "disconnected" });
     }
 
     if (action === "reset") {
       cachedQr = null;
-      // Delete and recreate instance
       await evoFetch(`/instance/delete/${EVOLUTION_INSTANCE}`, "DELETE").catch(() => {});
       await new Promise((r) => setTimeout(r, 2000));
       const created = await evoFetch("/instance/create", "POST", {
@@ -103,8 +109,7 @@ export async function POST(request: Request) {
         cachedQr = { base64: created.qrcode.base64, timestamp: Date.now() };
         return NextResponse.json({ status: "qr", base64: created.qrcode.base64 });
       }
-
-      return NextResponse.json({ status: "connecting" });
+      return NextResponse.json({ status: "disconnected" });
     }
 
     if (action === "test" && phone) {
@@ -112,12 +117,12 @@ export async function POST(request: Request) {
         number: phone,
         text: "BabIA conectada! Seu WhatsApp esta integrado e funcionando. As notificacoes de agendamento serao enviadas automaticamente.",
       });
-
       return NextResponse.json({ status: "sent", result });
     }
 
-    return NextResponse.json({ error: "Ação inválida" }, { status: 400 });
+    return NextResponse.json({ error: "Acao invalida" }, { status: 400 });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    console.error("[qr-connect] POST error:", err);
+    return NextResponse.json({ status: "error", error: String(err) });
   }
 }

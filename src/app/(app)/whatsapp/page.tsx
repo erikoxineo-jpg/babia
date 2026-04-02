@@ -12,7 +12,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-type Status = "loading" | "connected" | "qr" | "expired" | "disconnected" | "connecting" | "error";
+type Status = "loading" | "connected" | "qr" | "disconnected" | "error";
 
 export default function WhatsAppPage() {
   const [status, setStatus] = useState<Status>("loading");
@@ -24,10 +24,15 @@ export default function WhatsAppPage() {
   const [loadingQr, setLoadingQr] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Poll only checks state — never generates QR
   const checkStatus = useCallback(async () => {
     try {
-      const res = await fetch("/api/qr-connect", { cache: "no-store" });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch("/api/qr-connect", {
+        cache: "no-store",
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
       const data = await res.json();
 
       if (data.status === "connected") {
@@ -40,46 +45,54 @@ export default function WhatsAppPage() {
       } else if (data.status === "qr" && data.base64) {
         setStatus("qr");
         setQrBase64(data.base64);
-      } else if (data.status === "expired") {
-        setStatus("expired");
-        setQrBase64(null);
-      } else if (data.status === "disconnected") {
-        // Only update if not already showing QR
-        if (status !== "qr") {
-          setStatus("disconnected");
-        }
+      } else {
+        // disconnected, expired, connecting, error — all show disconnect UI
+        setStatus((prev) => (prev === "qr" ? "qr" : "disconnected"));
       }
     } catch {
-      if (status !== "qr") setStatus("error");
+      setStatus((prev) => (prev === "qr" ? "qr" : "disconnected"));
     }
-  }, [status]);
+  }, []);
 
   useEffect(() => {
     checkStatus();
-    intervalRef.current = setInterval(checkStatus, 4000);
+    intervalRef.current = setInterval(checkStatus, 5000);
+    // Safety: if stuck on loading for 5s, show disconnected
+    const safetyTimeout = setTimeout(() => {
+      setStatus((prev) => (prev === "loading" ? "disconnected" : prev));
+    }, 5000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      clearTimeout(safetyTimeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Generate QR code — only on user action
   async function handleGenerateQr() {
     setLoadingQr(true);
     setTestResult(null);
     try {
-      const res = await fetch("/api/qr-connect?action=qr", { cache: "no-store" });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const res = await fetch("/api/qr-connect?action=qr", {
+        cache: "no-store",
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
       const data = await res.json();
       if (data.base64) {
         setStatus("qr");
         setQrBase64(data.base64);
-      } else if (data.status === "expired") {
-        setStatus("expired");
+        // Restart polling to detect connection
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(checkStatus, 4000);
       } else if (data.status === "connected") {
         setStatus("connected");
+      } else {
+        setStatus("disconnected");
       }
     } catch {
-      setStatus("error");
+      setStatus("disconnected");
     } finally {
       setLoadingQr(false);
     }
@@ -99,13 +112,12 @@ export default function WhatsAppPage() {
         setStatus("qr");
         setQrBase64(data.base64);
       } else {
-        setStatus("connecting");
+        setStatus("disconnected");
       }
-      // Restart polling
       if (intervalRef.current) clearInterval(intervalRef.current);
       intervalRef.current = setInterval(checkStatus, 4000);
     } catch {
-      setStatus("error");
+      setStatus("disconnected");
     } finally {
       setResetting(false);
     }
@@ -251,7 +263,7 @@ export default function WhatsAppPage() {
           </div>
         )}
 
-        {(status === "disconnected" || status === "expired" || status === "connecting") && (
+        {status === "disconnected" && (
           <div className="flex flex-col items-center py-8">
             <div className="w-16 h-16 bg-warning-50 dark:bg-warning-900/30 rounded-full flex items-center justify-center mb-4">
               <WifiOff className="w-8 h-8 text-warning-500" />
@@ -263,16 +275,25 @@ export default function WhatsAppPage() {
               Conecte seu WhatsApp para ativar as notificações automáticas.
             </p>
             <button
-              onClick={status === "expired" ? handleReset : handleGenerateQr}
-              disabled={resetting || loadingQr}
+              onClick={handleGenerateQr}
+              disabled={loadingQr}
               className="px-6 py-3 bg-primary-500 text-white rounded-2xl text-sm font-semibold hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center gap-2"
             >
-              {resetting || loadingQr ? (
+              {loadingQr ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (
                 <Smartphone size={16} />
               )}
-              {status === "expired" ? "Resetar e Gerar QR Code" : "Conectar WhatsApp"}
+              Conectar WhatsApp
+            </button>
+
+            <button
+              onClick={handleReset}
+              disabled={resetting}
+              className="mt-3 px-4 py-2 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center gap-1.5"
+            >
+              {resetting ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />}
+              Resetar e reconectar
             </button>
           </div>
         )}
