@@ -1,38 +1,89 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const EVOLUTION_API_URL = process.env.EVOLUTION_API_URL || "";
-  const EVOLUTION_API_KEY = process.env.EVOLUTION_API_KEY || "";
-  const EVOLUTION_INSTANCE = process.env.EVOLUTION_INSTANCE || "barberflow";
+const EVOLUTION_API_URL = process.env.EVOLUTION_API_URL || "";
+const EVOLUTION_API_KEY = process.env.EVOLUTION_API_KEY || "";
+const EVOLUTION_INSTANCE = process.env.EVOLUTION_INSTANCE || "barberflow";
 
+async function evoFetch(path: string, method = "GET", body?: unknown) {
+  const res = await fetch(`${EVOLUTION_API_URL}${path}`, {
+    method,
+    headers: { "Content-Type": "application/json", apikey: EVOLUTION_API_KEY },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+    cache: "no-store",
+  });
+  return res.json();
+}
+
+// GET — status + QR code
+export async function GET() {
   if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
-    return new NextResponse("Evolution API não configurada", { status: 500 });
+    return NextResponse.json({ error: "Evolution API não configurada" }, { status: 500 });
   }
 
   try {
-    const res = await fetch(
-      `${EVOLUTION_API_URL}/instance/connect/${EVOLUTION_INSTANCE}`,
-      { headers: { apikey: EVOLUTION_API_KEY }, cache: "no-store" }
-    );
-    const data = await res.json();
+    // Check connection state
+    const state = await evoFetch(`/instance/connectionState/${EVOLUTION_INSTANCE}`);
+    const isConnected = state?.instance?.state === "open";
 
-    if (data.instance?.state === "open") {
-      return new NextResponse(
-        "<html><body style='display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif'><h1>WhatsApp já está conectado!</h1></body></html>",
-        { headers: { "Content-Type": "text/html" } }
-      );
+    if (isConnected) {
+      return NextResponse.json({ status: "connected" });
     }
 
-    const b64 = data.base64 || "";
-    if (!b64) {
-      return new NextResponse("QR code não disponível", { status: 500 });
+    // Try to get QR code
+    const connect = await evoFetch(`/instance/connect/${EVOLUTION_INSTANCE}`);
+
+    if (connect.base64) {
+      return NextResponse.json({ status: "qr", base64: connect.base64 });
     }
 
-    return new NextResponse(
-      `<html><head><meta name='viewport' content='width=device-width,initial-scale=1'><title>QR WhatsApp</title></head><body style='display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#f5f5f5;margin:0'><h2>Escaneie com o WhatsApp</h2><p style='color:#666;font-size:14px'>Aparelhos conectados &gt; Conectar um aparelho</p><img src='${b64}' style='width:300px;height:300px;border-radius:12px'/><p style='color:#999;font-size:12px;margin-top:16px'>Expira em ~60s. Recarregue a página para gerar outro.</p></body></html>`,
-      { headers: { "Content-Type": "text/html", "Cache-Control": "no-store" } }
-    );
+    // QR exhausted — need to recreate instance
+    if (connect.count !== undefined && !connect.base64) {
+      return NextResponse.json({ status: "expired" });
+    }
+
+    return NextResponse.json({ status: "connecting" });
   } catch (err) {
-    return new NextResponse("Erro: " + String(err), { status: 500 });
+    return NextResponse.json({ error: String(err) }, { status: 500 });
+  }
+}
+
+// POST — actions: reset, test
+export async function POST(request: Request) {
+  if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
+    return NextResponse.json({ error: "Evolution API não configurada" }, { status: 500 });
+  }
+
+  try {
+    const { action, phone } = await request.json();
+
+    if (action === "reset") {
+      // Delete and recreate instance
+      await evoFetch(`/instance/delete/${EVOLUTION_INSTANCE}`, "DELETE").catch(() => {});
+      await new Promise((r) => setTimeout(r, 2000));
+      const created = await evoFetch("/instance/create", "POST", {
+        instanceName: EVOLUTION_INSTANCE,
+        qrcode: true,
+        integration: "WHATSAPP-BAILEYS",
+      });
+
+      if (created.qrcode?.base64) {
+        return NextResponse.json({ status: "qr", base64: created.qrcode.base64 });
+      }
+
+      return NextResponse.json({ status: "connecting" });
+    }
+
+    if (action === "test" && phone) {
+      const result = await evoFetch(`/message/sendText/${EVOLUTION_INSTANCE}`, "POST", {
+        number: phone,
+        text: "✅ *BabIA conectada!*\n\nSeu WhatsApp está integrado e funcionando.\nAs notificações de agendamento serão enviadas automaticamente.",
+      });
+
+      return NextResponse.json({ status: "sent", result });
+    }
+
+    return NextResponse.json({ error: "Ação inválida" }, { status: 400 });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

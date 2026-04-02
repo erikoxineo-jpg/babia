@@ -14,6 +14,7 @@ import {
   CreditCard,
   DollarSign,
   Megaphone,
+  Smartphone,
   Settings,
   X,
 } from "lucide-react";
@@ -31,6 +32,7 @@ const MORE_ITEMS = [
   { href: "/planos", label: "Planos", icon: CreditCard },
   { href: "/financeiro", label: "Financeiro", icon: DollarSign },
   { href: "/campanhas", label: "Campanhas", icon: Megaphone },
+  { href: "/whatsapp", label: "WhatsApp", icon: Smartphone },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ];
 

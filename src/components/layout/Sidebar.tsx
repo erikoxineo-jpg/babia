@@ -13,6 +13,7 @@ import {
   Megaphone,
   CreditCard,
   Settings,
+  Smartphone,
   X,
   Home,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/planos", label: "Planos", icon: CreditCard },
   { href: "/financeiro", label: "Financeiro", icon: DollarSign },
   { href: "/campanhas", label: "Campanhas", icon: Megaphone },
+  { href: "/whatsapp", label: "WhatsApp", icon: Smartphone },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ];
 
