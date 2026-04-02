@@ -20,6 +20,7 @@ export async function sendWhatsappMessage(
   const number = formatPhoneForAPI(phone);
 
   try {
+    console.log(`[WhatsApp] Sending to ${number}...`);
     const res = await fetch(
       `${EVOLUTION_API_URL}/message/sendText/${EVOLUTION_INSTANCE}`,
       {
@@ -32,23 +33,28 @@ export async function sendWhatsappMessage(
           number,
           text: message,
         }),
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(30000),
       }
     );
 
+    const data = await res.json().catch(() => ({}));
+
     if (res.ok) {
+      console.log(`[WhatsApp] Sent to ${number} OK`);
       return { success: true };
     }
 
-    const data = await res.json().catch(() => ({}));
+    console.error(`[WhatsApp] Failed to send to ${number}: HTTP ${res.status}`, data);
     return {
       success: false,
       error: data.message || `HTTP ${res.status}`,
     };
   } catch (err) {
+    const errMsg = err instanceof Error ? err.message : "Erro de conexão";
+    console.error(`[WhatsApp] Error sending to ${number}:`, errMsg);
     return {
       success: false,
-      error: err instanceof Error ? err.message : "Erro de conexão",
+      error: errMsg,
     };
   }
 }

@@ -12,7 +12,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-type Status = "loading" | "connected" | "qr" | "expired" | "connecting" | "error";
+type Status = "loading" | "connected" | "qr" | "expired" | "disconnected" | "connecting" | "error";
 
 export default function WhatsAppPage() {
   const [status, setStatus] = useState<Status>("loading");
@@ -21,8 +21,10 @@ export default function WhatsAppPage() {
   const [sending, setSending] = useState(false);
   const [testResult, setTestResult] = useState<"success" | "error" | null>(null);
   const [resetting, setResetting] = useState(false);
+  const [loadingQr, setLoadingQr] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Poll only checks state — never generates QR
   const checkStatus = useCallback(async () => {
     try {
       const res = await fetch("/api/qr-connect", { cache: "no-store" });
@@ -31,7 +33,6 @@ export default function WhatsAppPage() {
       if (data.status === "connected") {
         setStatus("connected");
         setQrBase64(null);
-        // Stop polling when connected
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
           intervalRef.current = null;
@@ -42,24 +43,47 @@ export default function WhatsAppPage() {
       } else if (data.status === "expired") {
         setStatus("expired");
         setQrBase64(null);
-      } else if (data.status === "connecting") {
-        setStatus("connecting");
-      } else {
-        setStatus("error");
+      } else if (data.status === "disconnected") {
+        // Only update if not already showing QR
+        if (status !== "qr") {
+          setStatus("disconnected");
+        }
       }
     } catch {
-      setStatus("error");
+      if (status !== "qr") setStatus("error");
     }
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     checkStatus();
-    // Poll every 5 seconds when not connected
-    intervalRef.current = setInterval(checkStatus, 5000);
+    intervalRef.current = setInterval(checkStatus, 4000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [checkStatus]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Generate QR code — only on user action
+  async function handleGenerateQr() {
+    setLoadingQr(true);
+    setTestResult(null);
+    try {
+      const res = await fetch("/api/qr-connect?action=qr", { cache: "no-store" });
+      const data = await res.json();
+      if (data.base64) {
+        setStatus("qr");
+        setQrBase64(data.base64);
+      } else if (data.status === "expired") {
+        setStatus("expired");
+      } else if (data.status === "connected") {
+        setStatus("connected");
+      }
+    } catch {
+      setStatus("error");
+    } finally {
+      setLoadingQr(false);
+    }
+  }
 
   async function handleReset() {
     setResetting(true);
@@ -79,7 +103,7 @@ export default function WhatsAppPage() {
       }
       // Restart polling
       if (intervalRef.current) clearInterval(intervalRef.current);
-      intervalRef.current = setInterval(checkStatus, 5000);
+      intervalRef.current = setInterval(checkStatus, 4000);
     } catch {
       setStatus("error");
     } finally {
@@ -145,7 +169,7 @@ export default function WhatsAppPage() {
               WhatsApp Conectado!
             </h2>
             <p className="text-sm text-gray-400 text-center max-w-sm">
-              As notificações de agendamento, confirmação e lembrete serão enviadas automaticamente.
+              As notificações de agendamento serão enviadas automaticamente.
             </p>
 
             {/* Test message */}
@@ -182,7 +206,6 @@ export default function WhatsAppPage() {
               )}
             </div>
 
-            {/* Reconnect button */}
             <button
               onClick={handleReset}
               disabled={resetting}
@@ -207,7 +230,6 @@ export default function WhatsAppPage() {
               <strong>Conectar um aparelho</strong>
             </p>
 
-            {/* QR Code */}
             <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={qrBase64} alt="QR Code WhatsApp" className="w-64 h-64" />
@@ -215,35 +237,42 @@ export default function WhatsAppPage() {
 
             <div className="flex items-center gap-2 mt-4">
               <Loader2 size={14} className="text-primary-500 animate-spin" />
-              <p className="text-xs text-gray-400">Aguardando leitura... atualiza automaticamente</p>
+              <p className="text-xs text-gray-400">Aguardando leitura...</p>
             </div>
+
+            <button
+              onClick={handleGenerateQr}
+              disabled={loadingQr}
+              className="mt-3 px-4 py-2 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center gap-1.5"
+            >
+              <RefreshCw size={12} />
+              Gerar novo QR Code
+            </button>
           </div>
         )}
 
-        {(status === "expired" || status === "connecting") && (
+        {(status === "disconnected" || status === "expired" || status === "connecting") && (
           <div className="flex flex-col items-center py-8">
             <div className="w-16 h-16 bg-warning-50 dark:bg-warning-900/30 rounded-full flex items-center justify-center mb-4">
               <WifiOff className="w-8 h-8 text-warning-500" />
             </div>
             <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">
-              {status === "expired" ? "QR Code expirado" : "Aguardando conexão"}
+              WhatsApp Desconectado
             </h2>
             <p className="text-sm text-gray-400 text-center max-w-sm mb-4">
-              {status === "expired"
-                ? "O QR code expirou. Clique abaixo para gerar um novo."
-                : "A conexão está sendo estabelecida. Se não conectar, gere um novo QR code."}
+              Conecte seu WhatsApp para ativar as notificações automáticas.
             </p>
             <button
-              onClick={handleReset}
-              disabled={resetting}
+              onClick={status === "expired" ? handleReset : handleGenerateQr}
+              disabled={resetting || loadingQr}
               className="px-6 py-3 bg-primary-500 text-white rounded-2xl text-sm font-semibold hover:bg-primary-600 disabled:opacity-50 transition-colors flex items-center gap-2"
             >
-              {resetting ? (
+              {resetting || loadingQr ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (
-                <RefreshCw size={16} />
+                <Smartphone size={16} />
               )}
-              Gerar novo QR Code
+              {status === "expired" ? "Resetar e Gerar QR Code" : "Conectar WhatsApp"}
             </button>
           </div>
         )}
