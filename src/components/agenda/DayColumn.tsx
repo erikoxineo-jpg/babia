@@ -42,8 +42,8 @@ export function DayColumn({
   if (!schedule || !schedule.isActive) {
     return (
       <div className="flex-1 min-w-[200px]">
-        <div className="text-center py-2 bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-          <span className="text-sm font-medium text-gray-700">{professional.name}</span>
+        <div className="text-center py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{professional.name}</span>
         </div>
         <div className="flex items-center justify-center h-40 text-xs text-gray-400">
           Folga
@@ -95,8 +95,8 @@ export function DayColumn({
 
   return (
     <div className="flex-1 min-w-[200px]">
-      <div className="text-center py-2 bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-        <span className="text-sm font-medium text-gray-700">{professional.name}</span>
+      <div className="text-center py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{professional.name}</span>
       </div>
 
       <div

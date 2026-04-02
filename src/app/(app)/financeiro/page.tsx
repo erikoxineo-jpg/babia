@@ -187,22 +187,22 @@ export default function FinanceiroPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Financeiro</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 dark:text-gray-100">Financeiro</h1>
         <p className="text-sm text-gray-400 mt-0.5">
           Acompanhe a receita do seu negócio
         </p>
       </div>
 
       {/* Period selector — pills */}
-      <div className="inline-flex bg-gray-100 rounded-full p-1 gap-1">
+      <div className="inline-flex bg-gray-100 dark:bg-gray-800 rounded-full p-1 gap-1">
         {PERIODS.map((p) => (
           <button
             key={p.key}
             onClick={() => setPeriod(p.key)}
             className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
               period === p.key
-                ? "bg-white text-primary-700 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-white dark:bg-gray-700 text-primary-700 dark:text-primary-400 shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
           >
             {p.label}
@@ -258,33 +258,33 @@ export default function FinanceiroPage() {
           {/* KPI Cards row */}
           <div className="grid grid-cols-3 gap-4">
             {/* Atendimentos */}
-            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 p-6 transition-colors">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
                   <BarChart3 size={16} className="text-primary-500" />
                 </div>
               </div>
-              <p className="text-2xl font-bold text-gray-800">
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {summary.completedCount}
               </p>
               <p className="text-xs text-gray-400 mt-1">Atendimentos</p>
             </div>
 
             {/* Ticket médio */}
-            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 p-6 transition-colors">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 bg-success-50 rounded-xl flex items-center justify-center">
                   <Receipt size={16} className="text-success-600" />
                 </div>
               </div>
-              <p className="text-2xl font-bold text-gray-800">
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {formatCurrency(summary.averageTicket)}
               </p>
               <p className="text-xs text-gray-400 mt-1">Ticket médio</p>
             </div>
 
             {/* Crescimento */}
-            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 p-6 transition-colors">
               <div className="flex items-center gap-2 mb-3">
                 <div
                   className={`w-8 h-8 rounded-xl flex items-center justify-center ${
@@ -316,8 +316,8 @@ export default function FinanceiroPage() {
           {/* Payment methods + Top services */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Payment methods */}
-            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
-              <h2 className="text-base font-semibold text-gray-800 mb-5">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+              <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">
                 Formas de pagamento
               </h2>
               {summary.paymentMethods.length > 0 ? (
@@ -348,7 +348,7 @@ export default function FinanceiroPage() {
                               </p>
                             </div>
                           </div>
-                          <span className="text-sm font-bold text-gray-800">
+                          <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
                             {formatCurrency(pm.total)}
                           </span>
                         </div>
@@ -372,8 +372,8 @@ export default function FinanceiroPage() {
             </div>
 
             {/* Top services */}
-            <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
-              <h2 className="text-base font-semibold text-gray-800 mb-5">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+              <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">
                 Top serviços
               </h2>
               {summary.topServices.length > 0 ? (
@@ -381,7 +381,7 @@ export default function FinanceiroPage() {
                   {summary.topServices.map((svc, i) => (
                     <div
                       key={svc.name}
-                      className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <span
@@ -394,7 +394,7 @@ export default function FinanceiroPage() {
                           {i + 1}
                         </span>
                         <div>
-                          <p className="text-sm font-medium text-gray-800">
+                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
                             {svc.name}
                           </p>
                           <p className="text-xs text-gray-400">
@@ -402,7 +402,7 @@ export default function FinanceiroPage() {
                           </p>
                         </div>
                       </div>
-                      <span className="text-sm font-bold text-gray-800">
+                      <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
                         {formatCurrency(svc.revenue)}
                       </span>
                     </div>
@@ -419,9 +419,9 @@ export default function FinanceiroPage() {
       )}
 
       {/* Transactions list */}
-      <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 p-6 transition-colors">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-base font-semibold text-gray-800">
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
             Últimas transações
           </h2>
           {txMeta && txMeta.total > 0 && (
@@ -441,7 +441,7 @@ export default function FinanceiroPage() {
               {transactions.map((tx) => (
                 <div
                   key={tx.id}
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -458,7 +458,7 @@ export default function FinanceiroPage() {
                       )}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-800">
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
                         {tx.client.name}
                       </p>
                       <p className="text-xs text-gray-400">

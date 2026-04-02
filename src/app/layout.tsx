@@ -32,13 +32,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="theme-color" content="#D4A853" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('babia-theme');if(t==='dark')document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
       </head>
-      <body className={`${montserrat.variable} font-sans`}>{children}</body>
+      <body className={`${montserrat.variable} font-sans bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 transition-colors`}>{children}</body>
     </html>
   );
 }

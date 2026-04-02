@@ -41,7 +41,7 @@ export default function EquipePage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold text-gray-800">Equipe</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Equipe</h1>
           {professionals.length > 0 && (
             <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
               {professionals.length}
@@ -81,8 +81,8 @@ export default function EquipePage() {
           {professionals.map((pro) => (
             <div
               key={pro.id}
-              className={`bg-white rounded-3xl border shadow-soft p-6 ${
-                pro.isActive ? "border-gray-100" : "border-gray-100 opacity-60"
+              className={`bg-white dark:bg-gray-800 rounded-3xl border shadow-soft dark:shadow-none p-6 transition-colors ${
+                pro.isActive ? "border-gray-100 dark:border-gray-700" : "border-gray-100 dark:border-gray-700 opacity-60"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ export default function EquipePage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-800 truncate">
+                    <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
                       {pro.name}
                     </span>
                     <span

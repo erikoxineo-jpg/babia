@@ -8,6 +8,12 @@ body {
   background-color: #FFFFFF;
 }
 
+.dark body,
+html.dark body {
+  color: #E5E7EB;
+  background-color: #111827;
+}
+
 @keyframes slide-in-right {
   from {
     transform: translateX(100%);

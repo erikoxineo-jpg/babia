@@ -25,7 +25,7 @@ export function ProfessionalFilter({
           className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
             selected === null
               ? "bg-primary-500 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
           }`}
         >
           Todos
@@ -37,7 +37,7 @@ export function ProfessionalFilter({
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               selected === p.id
                 ? "bg-primary-500 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
             }`}
           >
             {p.name}
@@ -50,7 +50,7 @@ export function ProfessionalFilter({
         <select
           value={selected ?? ""}
           onChange={(e) => onChange(e.target.value || null)}
-          className="w-full px-3 py-2 border border-gray-100 rounded-2xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full px-3 py-2 border border-gray-100 dark:border-gray-700 rounded-2xl text-sm bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <option value="">Todos os profissionais</option>
           {professionals.map((p) => (

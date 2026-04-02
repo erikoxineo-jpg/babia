@@ -36,18 +36,18 @@ export function DateNavigator({ date, onChange }: DateNavigatorProps) {
     <div className="flex items-center gap-2">
       <button
         onClick={() => onChange(addDays(date, -1))}
-        className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
+        className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
         <ChevronLeft size={20} />
       </button>
 
-      <span className="text-sm font-medium text-gray-800 min-w-[200px] text-center">
+      <span className="text-sm font-medium text-gray-800 dark:text-gray-200 min-w-[200px] text-center">
         {formatDate(date)}
       </span>
 
       <button
         onClick={() => onChange(addDays(date, 1))}
-        className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
+        className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
         <ChevronRight size={20} />
       </button>

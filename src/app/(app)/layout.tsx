@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomTabBar } from "@/components/layout/BottomTabBar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
@@ -58,7 +59,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} logoUrl={tenantLogoUrl} />
       <div className="lg:pl-[256px]">
         <TopBar
@@ -77,7 +78,9 @@ function AppShell({ children }: { children: React.ReactNode }) {
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
-      <AppShell>{children}</AppShell>
+      <ThemeProvider>
+        <AppShell>{children}</AppShell>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

@@ -143,7 +143,7 @@ export default function AgendaPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Agenda</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Agenda</h1>
           <p className="text-sm text-gray-400 mt-0.5">Gerencie seus agendamentos do dia</p>
         </div>
         <DateNavigator date={selectedDate} onChange={setSelectedDate} />
@@ -176,7 +176,7 @@ export default function AgendaPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-x-auto">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-x-auto transition-colors">
           <div className="flex min-w-0">
             {visibleProfessionals.map((pro) => {
               const proAppointments = (data?.appointments ?? []).filter(

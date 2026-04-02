@@ -58,12 +58,12 @@ export function BottomTabBar() {
       {showMore && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="fixed inset-0 bg-black/40" onClick={() => setShowMore(false)} />
-          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 pb-safe animate-slide-up">
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-3xl z-50 pb-safe animate-slide-up transition-colors">
             <div className="flex items-center justify-between px-5 pt-4 pb-3">
-              <h3 className="text-sm font-semibold text-gray-800">Mais opções</h3>
+              <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Mais opções</h3>
               <button
                 onClick={() => setShowMore(false)}
-                className="w-8 h-8 rounded-2xl flex items-center justify-center text-gray-400 hover:bg-gray-100"
+                className="w-8 h-8 rounded-2xl flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <X size={18} />
               </button>
@@ -79,8 +79,8 @@ export function BottomTabBar() {
                     onClick={() => setShowMore(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-colors ${
                       isActive
-                        ? "bg-primary-50 text-primary-500 font-semibold"
-                        : "text-gray-600 hover:bg-gray-50"
+                        ? "bg-primary-50 dark:bg-primary-900/30 text-primary-500 font-semibold"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                     }`}
                   >
                     <Icon size={20} />
@@ -94,7 +94,7 @@ export function BottomTabBar() {
       )}
 
       {/* Tab bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-100 shadow-up h-[72px] lg:hidden pb-safe">
+      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 shadow-up h-[72px] lg:hidden pb-safe transition-colors">
         <div className="flex items-center justify-around h-full px-2">
           {visibleTabs.map((tab) => {
             const Icon = tab.icon;
@@ -104,7 +104,7 @@ export function BottomTabBar() {
                 key={tab.href}
                 href={tab.href}
                 className={`flex flex-col items-center justify-center gap-0.5 min-w-[56px] py-1 ${
-                  isActive ? "text-primary-500" : "text-gray-400"
+                  isActive ? "text-primary-500" : "text-gray-400 dark:text-gray-500"
                 }`}
               >
                 <Icon size={22} />
@@ -116,7 +116,7 @@ export function BottomTabBar() {
             <button
               onClick={() => setShowMore(true)}
               className={`flex flex-col items-center justify-center gap-0.5 min-w-[56px] py-1 ${
-                isMoreActive ? "text-primary-500" : "text-gray-400"
+                isMoreActive ? "text-primary-500" : "text-gray-400 dark:text-gray-500"
               }`}
             >
               <MoreHorizontal size={22} />

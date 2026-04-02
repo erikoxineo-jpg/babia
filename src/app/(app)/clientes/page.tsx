@@ -89,7 +89,7 @@ export default function ClientesPage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold text-gray-800">Clientes</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Clientes</h1>
           {meta && (
             <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
               {meta.total}
@@ -107,20 +107,20 @@ export default function ClientesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar por nome ou telefone..."
-          className="w-full pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-3xl text-sm shadow-soft focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full pl-11 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl text-sm shadow-soft dark:shadow-none dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
         />
       </div>
 
       {/* Filters */}
-      <div className="inline-flex bg-gray-100 rounded-full p-1 gap-1">
+      <div className="inline-flex bg-gray-100 dark:bg-gray-800 rounded-full p-1 gap-1">
         {FILTERS.map((f) => (
           <button
             key={f.value}
             onClick={() => { setStatusFilter(f.value); setPage(1); }}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               statusFilter === f.value
-                ? "bg-white text-primary-700 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-white dark:bg-gray-700 text-primary-700 dark:text-primary-400 shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
           >
             {f.label}
@@ -162,7 +162,7 @@ export default function ClientesPage() {
               <Link
                 key={client.id}
                 href={`/clientes/${client.id}`}
-                className="block bg-white rounded-3xl border border-gray-100 shadow-soft p-5 hover:bg-gray-50 transition-colors"
+                className="block bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-soft dark:shadow-none p-5 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0">
@@ -176,7 +176,7 @@ export default function ClientesPage() {
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-gray-800 truncate">
+                        <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
                           {client.name}
                         </span>
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium shrink-0 ${badge.className}`}>
@@ -197,7 +197,7 @@ export default function ClientesPage() {
                     </div>
                   </div>
                   <div className="text-right shrink-0 ml-4">
-                    <p className="text-sm font-bold text-gray-800">
+                    <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
                       {client.totalVisits} <span className="text-xs font-normal text-gray-400">visitas</span>
                     </p>
                     <p className="text-xs text-gray-400">

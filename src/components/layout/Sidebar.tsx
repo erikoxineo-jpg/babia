@@ -53,7 +53,7 @@ export function Sidebar({ open, onClose, logoUrl }: SidebarProps) {
     <nav className="flex flex-col gap-1 px-3 py-4">
       <div className="px-3 mb-6 flex items-center gap-3">
         <img src="/babiaperfil3.png" alt="BabIA" className="w-9 h-9 rounded-full object-cover ring-2 ring-primary-200" />
-        <h1 className="text-xl font-bold text-gray-800">
+        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
           Bab<span className="text-primary-500">IA</span>
         </h1>
       </div>
@@ -67,8 +67,8 @@ export function Sidebar({ open, onClose, logoUrl }: SidebarProps) {
             transition-colors duration-150 ease-in-out
             ${
               pathname === "/dashboard"
-                ? "bg-primary-50 text-primary-700 font-semibold"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                ? "bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 font-semibold"
+                : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200"
             }
           `}
         >
@@ -89,8 +89,8 @@ export function Sidebar({ open, onClose, logoUrl }: SidebarProps) {
               transition-colors duration-150 ease-in-out
               ${
                 isActive
-                  ? "bg-primary-50 text-primary-700 font-semibold"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                  ? "bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 font-semibold"
+                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200"
               }
             `}
           >
@@ -105,7 +105,7 @@ export function Sidebar({ open, onClose, logoUrl }: SidebarProps) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-sidebar lg:fixed lg:inset-y-0 bg-white border-r border-gray-100">
+      <aside className="hidden lg:flex lg:flex-col lg:w-sidebar lg:fixed lg:inset-y-0 bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 transition-colors">
         {nav}
       </aside>
 
@@ -116,10 +116,10 @@ export function Sidebar({ open, onClose, logoUrl }: SidebarProps) {
             className="fixed inset-0 bg-black/50"
             onClick={onClose}
           />
-          <aside className="fixed inset-y-0 left-0 w-sidebar bg-white border-r border-gray-100 z-50">
+          <aside className="fixed inset-y-0 left-0 w-sidebar bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 z-50 transition-colors">
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
             >
               <X size={20} />
             </button>

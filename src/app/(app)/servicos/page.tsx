@@ -56,7 +56,7 @@ export default function ServicosPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-gray-800">Serviços</h1>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Serviços</h1>
             {services.length > 0 && (
               <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
                 {services.length}
@@ -110,14 +110,14 @@ export default function ServicosPage() {
           {services.map((service) => (
             <div
               key={service.id}
-              className={`bg-white rounded-3xl border shadow-soft p-6 ${
-                service.isActive ? "border-gray-100" : "border-gray-100 opacity-60"
+              className={`bg-white dark:bg-gray-800 rounded-3xl border shadow-soft dark:shadow-none p-6 transition-colors ${
+                service.isActive ? "border-gray-100 dark:border-gray-700" : "border-gray-100 dark:border-gray-700 opacity-60"
               }`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-800 truncate">
+                    <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
                       {service.name}
                     </span>
                     <span
@@ -146,7 +146,7 @@ export default function ServicosPage() {
                   <Clock size={12} className="text-gray-300" />
                   {service.durationMinutes} min
                 </span>
-                <span className="text-base font-bold text-gray-800">
+                <span className="text-base font-bold text-gray-800 dark:text-gray-100">
                   {formatCurrency(service.price)}
                 </span>
               </div>

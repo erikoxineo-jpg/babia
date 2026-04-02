@@ -100,7 +100,7 @@ export default function PlanosPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Planos</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 dark:text-gray-100">Planos</h1>
           <p className="text-sm text-gray-400 mt-0.5">Pacotes para fidelizar clientes</p>
         </div>
         <button
@@ -116,10 +116,10 @@ export default function PlanosPage() {
       {showNew && (
         <div className="fixed inset-0 z-50">
           <div className="fixed inset-0 bg-black/40" onClick={() => setShowNew(false)} />
-          <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl z-50 overflow-y-auto">
+          <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white dark:bg-gray-800 shadow-xl z-50 overflow-y-auto transition-colors">
             <div className="p-5">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-heading font-semibold text-gray-800">Novo plano</h2>
+                <h2 className="text-lg font-heading font-semibold text-gray-800 dark:text-gray-100">Novo plano</h2>
                 <button onClick={() => setShowNew(false)} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
                   <X size={20} />
                 </button>
@@ -133,7 +133,7 @@ export default function PlanosPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Ex: Plano Mensal Premium"
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                    className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-2xl text-sm dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white dark:focus:bg-gray-600"
                   />
                 </div>
 
@@ -143,7 +143,7 @@ export default function PlanosPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white resize-none"
+                    className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-2xl text-sm dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white dark:focus:bg-gray-600 resize-none"
                   />
                 </div>
 
@@ -155,7 +155,7 @@ export default function PlanosPage() {
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
                       step="0.01"
-                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                      className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-2xl text-sm dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white dark:focus:bg-gray-600"
                     />
                   </div>
                   <div>
@@ -164,7 +164,7 @@ export default function PlanosPage() {
                       type="number"
                       value={durationDays}
                       onChange={(e) => setDurationDays(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                      className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-2xl text-sm dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white dark:focus:bg-gray-600"
                     />
                   </div>
                   <div>
@@ -173,7 +173,7 @@ export default function PlanosPage() {
                       type="number"
                       value={totalSessions}
                       onChange={(e) => setTotalSessions(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white"
+                      className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-2xl text-sm dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white dark:focus:bg-gray-600"
                     />
                   </div>
                 </div>
@@ -228,13 +228,13 @@ export default function PlanosPage() {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`bg-white rounded-3xl border shadow-soft p-6 ${
-                plan.isActive ? "border-gray-100" : "border-gray-100 opacity-60"
+              className={`bg-white dark:bg-gray-800 rounded-3xl border shadow-soft dark:shadow-none p-6 transition-colors ${
+                plan.isActive ? "border-gray-100 dark:border-gray-700" : "border-gray-100 dark:border-gray-700 opacity-60"
               }`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-800">{plan.name}</h3>
+                  <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{plan.name}</h3>
                   {plan.description && (
                     <p className="text-xs text-gray-400 mt-0.5">{plan.description}</p>
                   )}
@@ -253,7 +253,7 @@ export default function PlanosPage() {
               </div>
 
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-2xl font-bold text-gray-800">
+                <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                   {formatCurrency(plan.price)}
                 </span>
                 <span className="text-xs text-gray-400">/ {plan.durationDays} dias</span>
