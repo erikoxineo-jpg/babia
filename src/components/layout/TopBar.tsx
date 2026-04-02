@@ -30,7 +30,11 @@ export function TopBar({ tenantName, userName, onMenuClick, logoUrl }: TopBarPro
         >
           <Menu size={20} />
         </button>
-        <img src="/babiaperfil3.png" alt="BabIA" className="w-8 h-8 rounded-full object-cover" />
+        {logoUrl ? (
+          <img src={logoUrl} alt={tenantName} className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-200 dark:ring-gray-600" />
+        ) : (
+          <img src="/babiaperfil3.png" alt="BabIA" className="w-8 h-8 rounded-full object-cover" />
+        )}
         <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{tenantName}</h2>
       </div>
 

@@ -52,7 +52,11 @@ export function Sidebar({ open, onClose, logoUrl }: SidebarProps) {
   const nav = (
     <nav className="flex flex-col gap-1 px-3 py-4">
       <div className="px-3 mb-6 flex items-center gap-3">
-        <img src="/babiaperfil3.png" alt="BabIA" className="w-9 h-9 rounded-full object-cover ring-2 ring-primary-200" />
+        {logoUrl ? (
+          <img src={logoUrl} alt="Logo" className="w-9 h-9 rounded-full object-cover ring-2 ring-primary-200" />
+        ) : (
+          <img src="/babiaperfil3.png" alt="BabIA" className="w-9 h-9 rounded-full object-cover ring-2 ring-primary-200" />
+        )}
         <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
           Bab<span className="text-primary-500">IA</span>
         </h1>
