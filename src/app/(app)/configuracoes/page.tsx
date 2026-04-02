@@ -52,8 +52,8 @@ const WEEKDAYS = [
   { value: 6, short: "Sáb" },
 ];
 
-const inputClass = "w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
-const smallInputClass = "w-20 px-3 py-2.5 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white";
+const inputClass = "w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-2xl text-sm dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white dark:focus:bg-gray-600";
+const smallInputClass = "w-20 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-2xl text-sm dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white dark:focus:bg-gray-600";
 
 export default function ConfiguracoesPage() {
   const router = useRouter();
@@ -245,17 +245,17 @@ export default function ConfiguracoesPage() {
   return (
     <div className="max-w-2xl space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Configurações</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Configurações</h1>
         <p className="text-sm text-gray-400 mt-0.5">Gerencie os dados do seu estabelecimento</p>
       </div>
 
       {/* Logo */}
-      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
+      <section className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-soft dark:shadow-none p-6 transition-colors">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Camera size={16} className="text-primary-500" />
           </div>
-          <h2 className="text-base font-semibold text-gray-800">Logo da barbearia</h2>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Logo da barbearia</h2>
         </div>
 
         <div className="flex items-center gap-4">
@@ -305,12 +305,12 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Tenant Data */}
-      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
+      <section className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-soft dark:shadow-none p-6 transition-colors">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Building2 size={16} className="text-primary-500" />
           </div>
-          <h2 className="text-base font-semibold text-gray-800">Dados da barbearia</h2>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Dados da barbearia</h2>
         </div>
 
         <div className="space-y-4">
@@ -375,26 +375,26 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Working Hours */}
-      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
+      <section className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-soft dark:shadow-none p-6 transition-colors">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Clock size={16} className="text-primary-500" />
           </div>
-          <h2 className="text-base font-semibold text-gray-800">Horários e funcionamento</h2>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Horários e funcionamento</h2>
         </div>
 
         <div className="space-y-4">
           <div>
             <label className="text-xs text-gray-500 mb-2 block">Dias de funcionamento</label>
-            <div className="inline-flex bg-gray-100 rounded-full p-1 gap-1">
+            <div className="inline-flex bg-gray-100 dark:bg-gray-700 rounded-full p-1 gap-1">
               {WEEKDAYS.map((day) => (
                 <button
                   key={day.value}
                   onClick={() => toggleDay(day.value)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                     workingDays.includes(day.value)
-                      ? "bg-white text-primary-700 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
+                      ? "bg-white dark:bg-gray-600 text-primary-700 dark:text-primary-400 shadow-sm"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                   }`}
                 >
                   {day.short}
@@ -423,18 +423,18 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Notifications */}
-      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
+      <section className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-soft dark:shadow-none p-6 transition-colors">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <Bell size={16} className="text-primary-500" />
           </div>
-          <h2 className="text-base font-semibold text-gray-800">Notificações</h2>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Notificações</h2>
         </div>
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-700">Confirmação automática</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Confirmação automática</p>
               <p className="text-xs text-gray-400">Enviar confirmação após agendamento</p>
             </div>
             <button
@@ -462,12 +462,12 @@ export default function ConfiguracoesPage() {
       </section>
 
       {/* Cancellation Policy */}
-      <section className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6">
+      <section className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-soft dark:shadow-none p-6 transition-colors">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-primary-50 rounded-xl flex items-center justify-center">
             <ShieldAlert size={16} className="text-primary-500" />
           </div>
-          <h2 className="text-base font-semibold text-gray-800">Política de cancelamento</h2>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Política de cancelamento</h2>
         </div>
 
         <div>
@@ -492,7 +492,7 @@ export default function ConfiguracoesPage() {
       </div>
 
       {/* Stats */}
-      <div className="border-t border-gray-100 pt-4 pb-2">
+      <div className="border-t border-gray-100 dark:border-gray-700 pt-4 pb-2">
         <p className="text-xs text-gray-400 mb-2">Estatísticas do sistema</p>
         <div className="flex gap-6">
           <span className="text-xs text-gray-500">
