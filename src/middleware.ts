@@ -6,11 +6,14 @@ import { loginLimiter, getClientIp } from "@/lib/rate-limit";
 const PUBLIC_PATHS = [
   "/login",
   "/cadastro",
+  "/esqueci-senha",
+  "/redefinir-senha",
   "/api/auth",
   "/api/health",
   "/api/book",
   "/api/slug",
   "/api/cron",
+  "/api/whatsapp",
   "/agendar",
 ];
 
