@@ -113,8 +113,10 @@ export async function POST(request: Request) {
     }
 
     if (action === "test" && phone) {
+      const digits = phone.replace(/\D/g, "");
+      const fullNumber = digits.length <= 11 ? `55${digits}` : digits;
       const result = await evoFetch(`/message/sendText/${EVOLUTION_INSTANCE}`, "POST", {
-        number: phone,
+        number: fullNumber,
         text: "BabIA conectada! Seu WhatsApp esta integrado e funcionando. As notificacoes de agendamento serao enviadas automaticamente.",
       });
       return NextResponse.json({ status: "sent", result });
