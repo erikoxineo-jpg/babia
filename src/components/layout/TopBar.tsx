@@ -30,11 +30,7 @@ export function TopBar({ tenantName, userName, onMenuClick, logoUrl }: TopBarPro
         >
           <Menu size={20} />
         </button>
-        {logoUrl ? (
-          <img src={logoUrl} alt={tenantName} className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-200 dark:ring-gray-600" />
-        ) : (
-          <img src="/babiaperfil3.png" alt="BabIA" className="w-8 h-8 rounded-full object-cover" />
-        )}
+        <img src="/babiaperfil3.png" alt="BabIA" className="w-8 h-8 rounded-full object-cover" />
         <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{tenantName}</h2>
       </div>
 
@@ -49,9 +45,13 @@ export function TopBar({ tenantName, userName, onMenuClick, logoUrl }: TopBarPro
         </button>
 
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-            {initials}
-          </div>
+          {logoUrl ? (
+            <img src={logoUrl} alt={tenantName} className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-200 dark:ring-gray-600" />
+          ) : (
+            <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+              {initials}
+            </div>
+          )}
           <span className="hidden sm:block text-sm text-gray-700 dark:text-gray-300">
             {userName}
           </span>
