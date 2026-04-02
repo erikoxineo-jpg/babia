@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { sendWhatsappMessage } from "@/lib/whatsapp";
 
 interface CreateNotificationInput {
   tenantId: string;
@@ -10,11 +11,7 @@ interface CreateNotificationInput {
 
 interface NotificationResult {
   id: string;
-  whatsappLink: string | null;
-}
-
-function formatPhone(phone: string): string {
-  return phone.replace(/\D/g, "");
+  sent: boolean;
 }
 
 function buildConfirmationMessage(data: {
@@ -24,7 +21,7 @@ function buildConfirmationMessage(data: {
   date: string;
   time: string;
 }): string {
-  return `Olá ${data.clientName}! Seu agendamento foi confirmado: ${data.serviceName} com ${data.professionalName} em ${data.date} às ${data.time}. Até lá!`;
+  return `✅ *Agendamento confirmado!*\n\nOlá ${data.clientName}!\n\nServiço: ${data.serviceName}\nProfissional: ${data.professionalName}\nData: ${data.date}\nHorário: ${data.time}\n\n_Até lá! 💈_`;
 }
 
 function buildReminderMessage(data: {
@@ -32,7 +29,7 @@ function buildReminderMessage(data: {
   serviceName: string;
   time: string;
 }): string {
-  return `Olá ${data.clientName}! Lembrete: você tem ${data.serviceName} hoje às ${data.time}. Te esperamos!`;
+  return `⏰ *Lembrete de agendamento!*\n\nOlá ${data.clientName}!\n\nVocê tem *${data.serviceName}* hoje às *${data.time}*.\n\n_Te esperamos! 💈_`;
 }
 
 export async function createConfirmationNotification(
@@ -53,6 +50,9 @@ export async function createConfirmationNotification(
     time: input.time,
   });
 
+  // Enviar WhatsApp via Evolution API
+  const result = await sendWhatsappMessage(input.clientPhone, message);
+
   const notification = await prisma.notification.create({
     data: {
       tenantId: input.tenantId,
@@ -60,17 +60,17 @@ export async function createConfirmationNotification(
       appointmentId: input.appointmentId,
       type: "confirmation",
       channel: "whatsapp",
-      status: "sent",
+      status: result.success ? "sent" : "failed",
       scheduledFor: input.scheduledFor ?? new Date(),
-      sentAt: new Date(),
+      sentAt: result.success ? new Date() : null,
     },
   });
 
-  const phone = formatPhone(input.clientPhone);
-  const encoded = encodeURIComponent(message);
-  const whatsappLink = phone ? `https://wa.me/${phone}?text=${encoded}` : null;
+  if (!result.success) {
+    console.error(`[Notification] WhatsApp failed for ${input.clientPhone}:`, result.error);
+  }
 
-  return { id: notification.id, whatsappLink };
+  return { id: notification.id, sent: result.success };
 }
 
 export async function createReminderNotification(
@@ -87,6 +87,9 @@ export async function createReminderNotification(
     time: input.time,
   });
 
+  // Enviar WhatsApp via Evolution API
+  const result = await sendWhatsappMessage(input.clientPhone, message);
+
   const notification = await prisma.notification.create({
     data: {
       tenantId: input.tenantId,
@@ -94,21 +97,21 @@ export async function createReminderNotification(
       appointmentId: input.appointmentId,
       type: "reminder",
       channel: "whatsapp",
-      status: "sent",
+      status: result.success ? "sent" : "failed",
       scheduledFor: input.scheduledFor ?? new Date(),
-      sentAt: new Date(),
+      sentAt: result.success ? new Date() : null,
     },
   });
 
-  const phone = formatPhone(input.clientPhone);
-  const encoded = encodeURIComponent(message);
-  const whatsappLink = phone ? `https://wa.me/${phone}?text=${encoded}` : null;
+  if (!result.success) {
+    console.error(`[Notification] WhatsApp reminder failed for ${input.clientPhone}:`, result.error);
+  }
 
-  return { id: notification.id, whatsappLink };
+  return { id: notification.id, sent: result.success };
 }
 
 export function buildWhatsappLink(phone: string, message: string): string | null {
-  const cleaned = formatPhone(phone);
+  const cleaned = phone.replace(/\D/g, "");
   if (!cleaned) return null;
   return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
 }
