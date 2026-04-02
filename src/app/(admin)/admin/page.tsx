@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react";
 import {
   Loader2,
   Shield,
@@ -13,6 +12,12 @@ import {
   ToggleRight,
   AlertTriangle,
   Crown,
+  LogOut,
+  Lock,
+  Mail,
+  KeyRound,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 interface TenantItem {
@@ -44,18 +49,114 @@ const PLAN_COLORS: Record<string, string> = {
   premium: "bg-yellow-50 text-yellow-700",
 };
 
-export default function AdminPage() {
-  const { status } = useSession();
-  const router = useRouter();
+function AdminLogin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (res?.error) {
+      setError("Credenciais inválidas.");
+      setLoading(false);
+    }
+    // If success, useSession will update and show the panel
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center mx-auto mb-4">
+            <Shield className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-xl font-bold text-white">Admin BabIA</h1>
+          <p className="text-sm text-gray-500 mt-1">Acesso restrito</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                required
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="relative">
+              <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Senha"
+                required
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-400"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </div>
+
+          {error && (
+            <div className="flex items-center gap-2 text-red-400 text-xs bg-red-900/20 border border-red-800/30 rounded-xl px-4 py-2.5">
+              <Lock size={14} />
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-white text-gray-900 font-medium py-3 rounded-xl text-sm hover:bg-gray-100 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                <Shield size={16} />
+                Entrar no Admin
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function AdminPanel() {
+  const { data: session } = useSession();
   const [tenants, setTenants] = useState<TenantItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [updatingPlanId, setUpdatingPlanId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (status === "unauthenticated") router.push("/login");
-  }, [status, router]);
+  const adminEmail = (session?.user as Record<string, unknown>)?.email as string;
 
   const fetchTenants = useCallback(async () => {
     setError(null);
@@ -77,8 +178,8 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (status === "authenticated") fetchTenants();
-  }, [status, fetchTenants]);
+    fetchTenants();
+  }, [fetchTenants]);
 
   const toggleStatus = async (tenant: TenantItem) => {
     const newStatus = tenant.status === "active" ? "suspended" : "active";
@@ -123,7 +224,7 @@ export default function AdminPage() {
     }
   };
 
-  if (status === "loading" || (status === "authenticated" && loading)) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
@@ -138,10 +239,10 @@ export default function AdminPage() {
           <AlertTriangle className="w-10 h-10 text-red-400 mx-auto mb-3" />
           <p className="text-sm text-gray-600">{error}</p>
           <button
-            onClick={fetchTenants}
+            onClick={() => signOut({ callbackUrl: "/admin" })}
             className="mt-4 px-4 py-2 text-sm bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-colors"
           >
-            Tentar novamente
+            Sair e tentar outra conta
           </button>
         </div>
       </div>
@@ -155,13 +256,25 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-gray-800 text-white flex items-center justify-center">
-            <Shield size={20} />
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gray-800 text-white flex items-center justify-center">
+              <Shield size={20} />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-800">Painel Admin</h1>
+              <p className="text-xs text-gray-400">Controle de acesso dos clientes BabIA</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-800">Painel Admin</h1>
-            <p className="text-xs text-gray-400">Controle de acesso dos clientes BabIA</p>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-400 hidden sm:block">{adminEmail}</span>
+            <button
+              onClick={() => signOut({ callbackUrl: "/admin" })}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Sair"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
         </div>
 
@@ -310,4 +423,22 @@ export default function AdminPage() {
       </div>
     </div>
   );
+}
+
+export default function AdminPage() {
+  const { status } = useSession();
+
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <Loader2 className="w-6 h-6 text-gray-500 animate-spin" />
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return <AdminLogin />;
+  }
+
+  return <AdminPanel />;
 }

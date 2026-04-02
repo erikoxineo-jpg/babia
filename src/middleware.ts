@@ -15,6 +15,7 @@ const PUBLIC_PATHS = [
   "/api/cron",
   "/api/whatsapp",
   "/agendar",
+  "/admin",
 ];
 
 /** Extensões estáticas permitidas (evita bypass via ".html" etc) */
