@@ -13,6 +13,9 @@ import {
   Camera,
   Trash2,
   Scissors,
+  Copy,
+  Link2,
+  ExternalLink,
 } from "lucide-react";
 
 interface TenantData {
@@ -60,6 +63,7 @@ export default function ConfiguracoesPage() {
   const [data, setData] = useState<TenantData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const [copiedLink, setCopiedLink] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoUploading, setLogoUploading] = useState(false);
@@ -351,11 +355,44 @@ export default function ConfiguracoesPage() {
             </div>
           </div>
 
+          {/* Booking Link */}
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Link2 size={14} className="text-primary-500" />
+              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Link de Agendamento</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 min-w-0 px-3 py-2 bg-white dark:bg-gray-800 rounded-xl text-xs text-gray-600 dark:text-gray-300 truncate border border-gray-200 dark:border-gray-600">
+                {`${typeof window !== "undefined" ? window.location.origin : ""}/agendar/${data.slug}`}
+              </div>
+              <a
+                href={`/agendar/${data.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 p-2 text-gray-400 hover:text-primary-500 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                title="Abrir link"
+              >
+                <ExternalLink size={14} />
+              </a>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/agendar/${data.slug}`);
+                  setCopiedLink(true);
+                  setTimeout(() => setCopiedLink(false), 2000);
+                }}
+                className={`shrink-0 px-3 py-2 rounded-xl text-xs font-medium transition-colors flex items-center gap-1 ${
+                  copiedLink
+                    ? "bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400"
+                    : "bg-primary-500 text-white hover:bg-primary-600"
+                }`}
+              >
+                {copiedLink ? <Check size={12} /> : <Copy size={12} />}
+                {copiedLink ? "Copiado!" : "Copiar"}
+              </button>
+            </div>
+          </div>
+
           <div className="flex items-center gap-2 pt-1">
-            <span className="text-xs text-gray-400">
-              Slug: <strong>{data.slug}</strong>
-            </span>
-            <span className="text-xs text-gray-300">|</span>
             <span className="text-xs text-gray-400">
               Plano: <strong>{data.plan}</strong>
             </span>

@@ -12,6 +12,9 @@ import {
   UserX,
   CalendarOff,
   Users,
+  Link2,
+  Check,
+  Copy,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -57,20 +60,34 @@ export function DashboardContent() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [slug, setSlug] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const bookingUrl = slug ? `${window.location.origin}/agendar/${slug}` : "";
+
+  function copyLink() {
+    if (!bookingUrl) return;
+    navigator.clipboard.writeText(bookingUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   async function load() {
     setLoading(true);
     setError(false);
     try {
-      const [summaryRes, alertsRes] = await Promise.all([
+      const [summaryRes, alertsRes, tenantRes] = await Promise.all([
         fetch("/api/dashboard/summary"),
         fetch("/api/dashboard/alerts"),
+        fetch("/api/tenant"),
       ]);
       const summaryJson = await summaryRes.json();
       const alertsJson = await alertsRes.json();
+      const tenantJson = await tenantRes.json();
       if (summaryJson.success) setData(summaryJson.data);
       else setError(true);
       if (alertsJson.success) setAlerts(alertsJson.data.alerts ?? []);
+      if (tenantJson.success) setSlug(tenantJson.data.slug);
     } catch {
       setError(true);
     } finally {
@@ -193,6 +210,35 @@ export function DashboardContent() {
           );
         })}
       </div>
+
+      {/* Booking Link */}
+      {slug && (
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-soft dark:shadow-none border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-8 h-8 bg-primary-50 dark:bg-primary-900/30 rounded-xl flex items-center justify-center">
+              <Link2 size={16} className="text-primary-500" />
+            </div>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Link de Agendamento</h2>
+          </div>
+          <p className="text-xs text-gray-400 mb-3">Compartilhe com seus clientes para agendarem online.</p>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 min-w-0 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm text-gray-600 dark:text-gray-300 truncate">
+              {bookingUrl}
+            </div>
+            <button
+              onClick={copyLink}
+              className={`shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                copied
+                  ? "bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400"
+                  : "bg-primary-500 text-white hover:bg-primary-600"
+              }`}
+            >
+              {copied ? <Check size={14} /> : <Copy size={14} />}
+              {copied ? "Copiado!" : "Copiar"}
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Next Appointment */}
